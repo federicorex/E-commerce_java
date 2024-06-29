@@ -26,6 +26,15 @@ public class Order {
 	
 	@Column(name = "secondHand", nullable = false, length = 50)
 	private String secondHand;
+	
+	public Order() {
+		
+	}
+	
+	public Order(User user, Product product) {
+		this.user = user;
+		this.product = product;
+	}
 
 	public Long getId() {
 		return id;
