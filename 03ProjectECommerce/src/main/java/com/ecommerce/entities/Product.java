@@ -31,6 +31,20 @@ public class Product {
 	@OneToMany(mappedBy = "product")
 	private List<Order> orders;
 	
+	public Product() {
+		
+	}
+	
+	public Product(String name, String brand, String type, int quantityInStock, String secondHand, List<Order> orders) {
+		super();
+		this.name = name;
+		this.brand = brand;
+		this.type = type;
+		this.quantityInStock = quantityInStock;
+		this.secondHand = secondHand;
+		this.orders = orders;
+	}
+
 	public Long getId() {
 		return id;
 	}

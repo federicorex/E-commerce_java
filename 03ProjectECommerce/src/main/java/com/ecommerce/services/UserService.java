@@ -6,8 +6,14 @@ import com.ecommerce.entities.User;
 
 public interface UserService {
 
+	/**
+	 * CRUD operations
+	 * @return
+	 */
+	
 	List<User> getAllUsers();
-	void addUser();
-	void updateUser();
-	void deleteUser();
+	User getUserById(Long id);
+	void addUser(User user);
+	void updateUser(User user);
+	void deleteUser(Long id);
 }
