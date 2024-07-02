@@ -1,5 +1,7 @@
 package com.ecommerce.entities;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,8 +26,8 @@ public class Order {
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
-	@Column(name = "secondHand", nullable = false, length = 50)
-	private String secondHand;
+	@Column(name = "deliveryDate", nullable = false, length = 20)
+	private Date deliveryDate;
 	
 	public Order() {
 		
@@ -60,11 +62,11 @@ public class Order {
 		this.product = product;
 	}
 
-	public String getSecondHand() {
-		return secondHand;
+	public Date getDeliveryDate() {
+		return deliveryDate;
 	}
 
-	public void setSecondHand(String secondHand) {
-		this.secondHand = secondHand;
+	public void setDeliveryDate(Date deliveryDate) {
+		this.deliveryDate = deliveryDate;
 	}
 }

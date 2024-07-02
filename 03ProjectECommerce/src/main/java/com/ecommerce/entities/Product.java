@@ -27,7 +27,7 @@ public class Product {
 	@Column(name = "quantityInStock", nullable = false)
 	private int quantityInStock;
 	@Column(name = "secondHand", nullable = false)
-	private String secondHand;
+	private boolean secondHand;
 	@OneToMany(mappedBy = "product")
 	private List<Order> orders;
 	
@@ -35,7 +35,7 @@ public class Product {
 		
 	}
 	
-	public Product(String name, String brand, String type, int quantityInStock, String secondHand, List<Order> orders) {
+	public Product(String name, String brand, String type, int quantityInStock, boolean secondHand, List<Order> orders) {
 		super();
 		this.name = name;
 		this.brand = brand;
@@ -85,11 +85,11 @@ public class Product {
 		this.quantityInStock = quantityInStock;
 	}
 	
-	public String getSecondHand() {
+	public boolean getSecondHand() {
 		return secondHand;
 	}
 	
-	public void setSecondHand(String secondHand) {
+	public void setSecondHand(boolean secondHand) {
 		this.secondHand = secondHand;
 	}
 
