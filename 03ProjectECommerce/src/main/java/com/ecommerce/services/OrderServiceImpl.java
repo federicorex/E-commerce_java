@@ -23,10 +23,12 @@ public class OrderServiceImpl implements OrderService {
 	private static final String LOGGER_GET_ALL_ORDERS = "Fetching all orders";
 	private static final String LOGGER_GET_ORDER_BY_ID = "Fetching the order with id: {}";
 	private static final String LOGGER_GET_ORDER_BY_ID_FAIL = "Fail, order not found";
-	private static final String LOGGER_ADD_ORDER_START = "Adding the order with userId: {} and productId: {}";
+	private static final String LOGGER_ADD_ORDER_START = "Adding the order with userId: {} and productId: {}...";
 	private static final String LOGGER_ADD_ORDER_SUCCESS = "Success, order added";
 	private static final String LOGGER_ADD_ORDER_FAIL = "Fail, order not added: user or product not found";
+	private static final String LOGGER_UPDATE_ORDER_START = "Updating order with id: {}...";
 	private static final String LOGGER_UPDATE_ORDER_SUCCESS = "Success, order with id: {} updated";
+	private static final String LOGGER_DELETE_ORDER_START = "Deleting order with id: {}...";
 	private static final String LOGGER_DELETE_ORDER_SUCCESS = "Success, order with id: {} deleted";
 	
 	private final UserDAO userDAORepository;
@@ -84,15 +86,17 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional
 	public void updateOrder(Order order) {
-		logger.info(LOGGER_UPDATE_ORDER_SUCCESS, order.getId());
+		logger.info(LOGGER_UPDATE_ORDER_START, order.getId());
 		orderDAORepository.save(order);
+		logger.info(LOGGER_UPDATE_ORDER_SUCCESS, order.getId());
 	}
 
 	@Override
 	@Transactional
 	public void deleteOrder(Long id) {
-		logger.info(LOGGER_DELETE_ORDER_SUCCESS, id);
+		logger.info(LOGGER_DELETE_ORDER_START, id);
 		orderDAORepository.deleteById(id);
+		logger.info(LOGGER_DELETE_ORDER_SUCCESS, id);
 	};
 	
 }

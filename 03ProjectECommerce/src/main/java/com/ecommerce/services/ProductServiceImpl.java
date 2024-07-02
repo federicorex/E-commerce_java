@@ -17,8 +17,11 @@ public class ProductServiceImpl implements ProductService {
 	private static final String LOGGER_GET_ALL_PRODUCTS = "Fetching all products";
 	private static final String LOGGER_GET_PRODUCT_BY_ID = "Fetching the product with id: {}";
 	private static final String LOGGER_GET_PRODUCT_BY_ID_FAIL = "Fail, product not found";
+	private static final String LOGGER_ADD_PRODUCT_START = "Adding product with id: {}...";
 	private static final String LOGGER_ADD_PRODUCT_SUCCESS = "Success, product with id: {} added";
+	private static final String LOGGER_UPDATE_PRODUCT_START = "Updating product with id: {}...";
 	private static final String LOGGER_UPDATE_PRODUCT_SUCCESS = "Success, product with id: {} updated";
+	private static final String LOGGER_DELETE_PRODUCT_START = "Deleting product with id: {}...";
 	private static final String LOGGER_DELETE_PRODUCT_SUCCESS = "Success, product with id: {} deleted";
 	
 	private final ProductDAO productDAOrepository;
@@ -35,9 +38,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product getProductById(Long id) {
-		logger.info(LOGGER_GET_PRODUCT_BY_ID);
-		logger.info(LOGGER_GET_PRODUCT_BY_ID_FAIL);
-		
 		Optional<Product> tempProduct = productDAOrepository.findById(id);
 		
 		if(tempProduct.isPresent()) {
@@ -54,22 +54,25 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public void addProduct(Product product) {
+		logger.info(LOGGER_ADD_PRODUCT_START, product.getId());
 		productDAOrepository.save(product);
-		logger.info(LOGGER_ADD_PRODUCT_SUCCESS);
+		logger.info(LOGGER_ADD_PRODUCT_SUCCESS, product.getId());
 	}
 
 	@Override
 	@Transactional
 	public void updateProduct(Product product) {
+		logger.info(LOGGER_UPDATE_PRODUCT_START, product.getId());
 		productDAOrepository.save(product);
-		logger.info(LOGGER_UPDATE_PRODUCT_SUCCESS);
+		logger.info(LOGGER_UPDATE_PRODUCT_SUCCESS, product.getId());
 	}
 
 	@Override
 	@Transactional
 	public void deleteProduct(Long id) {
+		logger.info(LOGGER_DELETE_PRODUCT_START, id);
 		productDAOrepository.deleteById(id);
-		logger.info(LOGGER_DELETE_PRODUCT_SUCCESS);
+		logger.info(LOGGER_DELETE_PRODUCT_SUCCESS, id);
 	}
 	
 }
