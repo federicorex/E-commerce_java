@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
 			return product;
 		} else {
 			logger.warn(LOGGER_GET_PRODUCT_BY_ID_FAIL, id);
-			throw new NoSuchElementException("Product with id: " + id + "found...");
+			throw new NoSuchElementException("Product with id: " + id + "not found...");
 		}
 	}
 
@@ -79,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
 			logger.info(LOGGER_DELETE_PRODUCT_SUCCESS, id);
 		} else {
 			logger.warn(LOGGER_GET_PRODUCT_BY_ID_FAIL, id);
-			throw new NoSuchElementException("Product with id: " + id + "found...");
+			throw new NoSuchElementException("Product with id: " + id + "not found...");
 		}
 	}
 	

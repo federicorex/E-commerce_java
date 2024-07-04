@@ -105,9 +105,7 @@ public class ProductServiceTest {
         when(productDAORepository.findById(id)).thenReturn(Optional.of(product));
 
         assertEquals(product, productServiceImpl.getProductById(id));
-    	
         doNothing().when(productDAORepository).deleteById(id);
-
         assertDoesNotThrow(() -> productServiceImpl.deleteProduct(id));
     }
 	
