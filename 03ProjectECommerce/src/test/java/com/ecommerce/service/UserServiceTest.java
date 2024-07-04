@@ -103,9 +103,7 @@ public class UserServiceTest {
         User user = new User();
         
         when(userDAORepository.findById(id)).thenReturn(Optional.of(user));
-
         assertEquals(user, userServiceImpl.getUserById(id));
-    	
         doNothing().when(userDAORepository).deleteById(id);
 
         assertDoesNotThrow(() -> userServiceImpl.deleteUser(id));

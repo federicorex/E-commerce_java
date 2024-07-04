@@ -31,9 +31,9 @@ public class OrderServiceImpl implements OrderService {
 	private static final String LOGGER_DELETE_ORDER_START = "Deleting order with id: {}...";
 	private static final String LOGGER_DELETE_ORDER_SUCCESS = "Success, order with id: {} deleted";
 	
-	private final UserDAO userDAORepository;
-    private final ProductDAO productDAORepository;
-    private final OrderDAO orderDAORepository;
+	private UserDAO userDAORepository;
+    private ProductDAO productDAORepository;
+    private OrderDAO orderDAORepository;
 
     public OrderServiceImpl(UserDAO userDAORepository, ProductDAO productDAORepository, OrderDAO orderDAORepository) {
         this.userDAORepository = userDAORepository;
@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
 			return order;
 		} else {
 			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, id);
-			throw new NoSuchElementException("Order with id: " + id + "found...");
+			throw new NoSuchElementException("Order with id: " + id + "not found...");
 		}
 	}
 
@@ -95,8 +95,16 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public void deleteOrder(Long id) {
 		logger.info(LOGGER_DELETE_ORDER_START, id);
-		orderDAORepository.deleteById(id);
-		logger.info(LOGGER_DELETE_ORDER_SUCCESS, id);
+		
+		Optional<Order> tempOrder = orderDAORepository.findById(id);
+		
+		if(tempOrder.isPresent()) {
+			orderDAORepository.deleteById(id);
+			logger.info(LOGGER_DELETE_ORDER_SUCCESS, id);
+		} else {
+			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, id);
+			throw new NoSuchElementException("Order with id: " + id + "not found...");
+		}
 	};
 	
 }

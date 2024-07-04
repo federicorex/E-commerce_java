@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 			return user;
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, id);
-			throw new NoSuchElementException("User with id: " + id + "found...");
+			throw new NoSuchElementException("User with id: " + id + "not found...");
 		}
 	}
 
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
 			logger.info(LOGGER_DELETE_USER_SUCCESS, id);
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, id);
-			throw new NoSuchElementException("User with id: " + id + "found...");
+			throw new NoSuchElementException("User with id: " + id + "not found...");
 		}
 	}
 	
