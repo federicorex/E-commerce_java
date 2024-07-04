@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 	private static final String LOGGER_DELETE_USER_START = "Deleting user with id: {}...";
 	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, user with id: {} deleted";
 	
-	private final UserDAO userDAORepository;
+	private UserDAO userDAORepository;
 
     public UserServiceImpl(UserDAO userDAORepository) {
         this.userDAORepository = userDAORepository;
@@ -71,8 +71,16 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void deleteUser(Long id) {
 		logger.info(LOGGER_DELETE_USER_START, id);
-		userDAORepository.deleteById(id);
-		logger.info(LOGGER_DELETE_USER_SUCCESS, id);
+		
+		Optional<User> tempUser = userDAORepository.findById(id);
+		
+		if(tempUser.isPresent()) {	
+			userDAORepository.deleteById(id);
+			logger.info(LOGGER_DELETE_USER_SUCCESS, id);
+		} else {
+			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, id);
+			throw new NoSuchElementException("User with id: " + id + "found...");
+		}
 	}
 	
 }
