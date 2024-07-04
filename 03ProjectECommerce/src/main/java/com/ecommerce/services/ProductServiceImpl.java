@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
 	private static final String LOGGER_DELETE_PRODUCT_START = "Deleting product with id: {}...";
 	private static final String LOGGER_DELETE_PRODUCT_SUCCESS = "Success, product with id: {} deleted";
 	
-	private final ProductDAO productDAOrepository;
+	private ProductDAO productDAOrepository;
 	
 	public ProductServiceImpl(ProductDAO productDAO) {
 		this.productDAOrepository = productDAO;
@@ -70,9 +70,17 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public void deleteProduct(Long id) {
-		logger.info(LOGGER_DELETE_PRODUCT_START, id);
-		productDAOrepository.deleteById(id);
-		logger.info(LOGGER_DELETE_PRODUCT_SUCCESS, id);
+		logger.info(LOGGER_DELETE_PRODUCT_START, id);		
+		
+		Optional<Product> tempProduct = productDAOrepository.findById(id);
+		
+		if(tempProduct.isPresent()) {
+			productDAOrepository.deleteById(id);
+			logger.info(LOGGER_DELETE_PRODUCT_SUCCESS, id);
+		} else {
+			logger.warn(LOGGER_GET_PRODUCT_BY_ID_FAIL, id);
+			throw new NoSuchElementException("Product with id: " + id + "found...");
+		}
 	}
 	
 }
