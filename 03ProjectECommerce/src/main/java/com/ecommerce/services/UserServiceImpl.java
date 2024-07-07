@@ -63,8 +63,16 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void updateUser(User user) {
 		logger.info(LOGGER_UPDATE_USER_START, user.getId());
-		userDAORepository.save(user);
-		logger.info(LOGGER_UPDATE_USER_SUCCESS, user.getId());
+		
+		Optional<User> tempUser = userDAORepository.findById(user.getId());
+		
+		if(tempUser.isPresent()) {
+			userDAORepository.save(user);
+			logger.info(LOGGER_UPDATE_USER_SUCCESS, user.getId());
+		} else {
+			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, user.getId());
+			throw new NoSuchElementException("User with id: " + user.getId() + "not found...");
+		}
 	}
 
 	@Override
