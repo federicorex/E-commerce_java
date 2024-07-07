@@ -63,8 +63,16 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional
 	public void updateProduct(Product product) {
 		logger.info(LOGGER_UPDATE_PRODUCT_START, product.getId());
-		productDAOrepository.save(product);
-		logger.info(LOGGER_UPDATE_PRODUCT_SUCCESS, product.getId());
+		
+		Optional<Product> tempProduct = productDAOrepository.findById(product.getId());
+		
+		if(tempProduct.isPresent()) {
+			productDAOrepository.save(product);
+			logger.info(LOGGER_UPDATE_PRODUCT_SUCCESS, product.getId());
+		} else {
+			logger.warn(LOGGER_GET_PRODUCT_BY_ID_FAIL, product.getId());
+			throw new NoSuchElementException("Product with id: " + product.getId() + "not found...");
+		}
 	}
 
 	@Override

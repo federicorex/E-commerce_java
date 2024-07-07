@@ -41,8 +41,12 @@ public class OrderREST {
 	
 	@PostMapping("orders")
 	public ResponseEntity<Void> addOrderREST(@PathVariable("id") Long orderId, @PathVariable("id") Long productId) {
-		orderService.addOrder(orderId, productId);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		try {
+			orderService.addOrder(orderId, productId);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		} catch(NoSuchElementException noSuchElementException) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);									
+		}
 	}
 	
 	@PutMapping("orders")
