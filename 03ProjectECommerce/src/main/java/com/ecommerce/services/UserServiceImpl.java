@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ecommerce.dal.UserDAO;
+import com.ecommerce.dal.UserDAORepository;
 import com.ecommerce.entities.User;
 
 public class UserServiceImpl implements UserService {
@@ -24,9 +24,9 @@ public class UserServiceImpl implements UserService {
 	private static final String LOGGER_DELETE_USER_START = "Deleting user with id: {}...";
 	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, user with id: {} deleted";
 	
-	private UserDAO userDAORepository;
+	private UserDAORepository userDAORepository;
 
-    public UserServiceImpl(UserDAO userDAORepository) {
+    public UserServiceImpl(UserDAORepository userDAORepository) {
         this.userDAORepository = userDAORepository;
     }
 
