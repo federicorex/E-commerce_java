@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ecommerce.dal.ProductDAO;
+import com.ecommerce.dal.ProductDAORepository;
 import com.ecommerce.entities.Product;
 
 public class ProductServiceImpl implements ProductService {
@@ -24,9 +24,9 @@ public class ProductServiceImpl implements ProductService {
 	private static final String LOGGER_DELETE_PRODUCT_START = "Deleting product with id: {}...";
 	private static final String LOGGER_DELETE_PRODUCT_SUCCESS = "Success, product with id: {} deleted";
 	
-	private ProductDAO productDAOrepository;
+	private ProductDAORepository productDAOrepository;
 	
-	public ProductServiceImpl(ProductDAO productDAO) {
+	public ProductServiceImpl(ProductDAORepository productDAO) {
 		this.productDAOrepository = productDAO;
 	}
 

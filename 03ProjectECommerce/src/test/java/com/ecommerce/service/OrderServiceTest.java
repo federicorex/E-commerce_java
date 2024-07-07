@@ -21,9 +21,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.ecommerce.dal.OrderDAO;
-import com.ecommerce.dal.ProductDAO;
-import com.ecommerce.dal.UserDAO;
+import com.ecommerce.dal.OrderDAORepository;
+import com.ecommerce.dal.ProductDAORepository;
+import com.ecommerce.dal.UserDAORepository;
 import com.ecommerce.entities.Order;
 import com.ecommerce.entities.Product;
 import com.ecommerce.entities.User;
@@ -36,13 +36,13 @@ public class OrderServiceTest {
     private OrderServiceImpl orderServiceImpl;
 
     @Mock
-    private OrderDAO orderDAORepository;
+    private OrderDAORepository orderDAORepository;
     
     @Mock
-    private UserDAO userDAORepository;
+    private UserDAORepository userDAORepository;
     
     @Mock
-    private ProductDAO productDAORepository;
+    private ProductDAORepository productDAORepository;
 
     @BeforeEach
     void setup() {

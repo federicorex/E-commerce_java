@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.ecommerce.dal.UserDAO;
+import com.ecommerce.dal.UserDAORepository;
 import com.ecommerce.entities.User;
 import com.ecommerce.services.UserServiceImpl;
 
@@ -32,7 +32,7 @@ public class UserServiceTest {
     private UserServiceImpl userServiceImpl;
 
     @Mock
-    private UserDAO userDAORepository;
+    private UserDAORepository userDAORepository;
 
     @BeforeEach
     void setup() {

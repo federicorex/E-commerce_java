@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.ecommerce.dal.ProductDAO;
+import com.ecommerce.dal.ProductDAORepository;
 import com.ecommerce.entities.Product;
 import com.ecommerce.services.ProductServiceImpl;
 
@@ -32,7 +32,7 @@ public class ProductServiceTest {
     private ProductServiceImpl productServiceImpl;
 
     @Mock
-    private ProductDAO productDAORepository;
+    private ProductDAORepository productDAORepository;
 
     @BeforeEach
     void setup() {

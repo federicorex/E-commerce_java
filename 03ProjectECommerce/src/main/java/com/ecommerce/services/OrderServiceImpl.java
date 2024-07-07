@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ecommerce.dal.OrderDAO;
-import com.ecommerce.dal.ProductDAO;
-import com.ecommerce.dal.UserDAO;
+import com.ecommerce.dal.OrderDAORepository;
+import com.ecommerce.dal.ProductDAORepository;
+import com.ecommerce.dal.UserDAORepository;
 import com.ecommerce.entities.Order;
 import com.ecommerce.entities.Product;
 import com.ecommerce.entities.User;
@@ -31,11 +31,11 @@ public class OrderServiceImpl implements OrderService {
 	private static final String LOGGER_DELETE_ORDER_START = "Deleting order with id: {}...";
 	private static final String LOGGER_DELETE_ORDER_SUCCESS = "Success, order with id: {} deleted";
 	
-	private UserDAO userDAORepository;
-    private ProductDAO productDAORepository;
-    private OrderDAO orderDAORepository;
+	private UserDAORepository userDAORepository;
+    private ProductDAORepository productDAORepository;
+    private OrderDAORepository orderDAORepository;
 
-    public OrderServiceImpl(UserDAO userDAORepository, ProductDAO productDAORepository, OrderDAO orderDAORepository) {
+    public OrderServiceImpl(UserDAORepository userDAORepository, ProductDAORepository productDAORepository, OrderDAORepository orderDAORepository) {
         this.userDAORepository = userDAORepository;
         this.productDAORepository = productDAORepository;
         this.orderDAORepository = orderDAORepository;
