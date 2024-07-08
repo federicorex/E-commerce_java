@@ -35,6 +35,7 @@ public class User {
 	private List<Order> orders;
 	
 	public User() {
+		
 	}
 	
 	public User(String name, String surname, String password, Date dateOfBirth, String address, String email,

@@ -24,7 +24,7 @@ public class UserTest {
 	@Test
 	void testConstructor() {
 		Date date = new Date(946681200000L);
-		Order order = new Order(new User(), new Product());
+		Order order = new Order(new User(), new Product(), null);
 		List<Order> orderList = new LinkedList<>();
 		orderList.add(order);
 		User newUser = new User("John", "Black", "12345", date, "Baker street", "example@gmail.com", orderList);
@@ -83,7 +83,7 @@ public class UserTest {
 	
 	@Test
 	void testGetOrders() {
-		Order order = new Order(new User(), new Product());
+		Order order = new Order(new User(), new Product(), null);
 		List<Order> orderList = new LinkedList<>();
 		
 		orderList.add(order);

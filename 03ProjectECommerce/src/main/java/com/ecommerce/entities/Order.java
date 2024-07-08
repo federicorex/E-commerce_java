@@ -33,9 +33,10 @@ public class Order {
 		
 	}
 	
-	public Order(User user, Product product) {
+	public Order(User user, Product product, Date deliveryDate) {
 		this.user = user;
 		this.product = product;
+		this.deliveryDate = deliveryDate;
 	}
 
 	public Long getId() {

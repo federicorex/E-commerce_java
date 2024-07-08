@@ -6,11 +6,14 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.dal.ProductDAORepository;
 import com.ecommerce.entities.Product;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
@@ -24,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
 	private static final String LOGGER_DELETE_PRODUCT_START = "Deleting product with id: {}...";
 	private static final String LOGGER_DELETE_PRODUCT_SUCCESS = "Success, product with id: {} deleted";
 	
+	@Autowired
 	private ProductDAORepository productDAOrepository;
 	
 	public ProductServiceImpl(ProductDAORepository productDAO) {

@@ -6,11 +6,14 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.dal.UserDAORepository;
 import com.ecommerce.entities.User;
 
+@Service
 public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -24,6 +27,7 @@ public class UserServiceImpl implements UserService {
 	private static final String LOGGER_DELETE_USER_START = "Deleting user with id: {}...";
 	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, user with id: {} deleted";
 	
+	@Autowired
 	private UserDAORepository userDAORepository;
 
     public UserServiceImpl(UserDAORepository userDAORepository) {
