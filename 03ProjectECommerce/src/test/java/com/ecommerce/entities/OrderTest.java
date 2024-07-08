@@ -23,7 +23,7 @@ public class OrderTest {
 	void testConstructor() {
 		User user = new User();
 		Product product = new Product();
-		Order newOrder = new Order(user, product);
+		Order newOrder = new Order(user, product, null);
 		Date date = new Date(1733007600000L);
 		
 		newOrder.setDeliveryDate(date);

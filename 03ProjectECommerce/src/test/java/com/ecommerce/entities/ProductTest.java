@@ -22,7 +22,7 @@ public class ProductTest {
 	
 	@Test
 	void testConstructor() {
-		Order order = new Order(new User(), new Product());
+		Order order = new Order(new User(), new Product(), null);
 		List<Order> orderList = new LinkedList<>();
 		orderList.add(order);
 		Product newProduct = new Product("F2 Pro", "Poco", "Smartphone", 6, false, orderList);
@@ -73,7 +73,7 @@ public class ProductTest {
 	
 	@Test
 	void testGetOrders() {
-		Order order = new Order(new User(), new Product());
+		Order order = new Order(new User(), new Product(), null);
 		List<Order> orderList = new LinkedList<>();
 		
 		orderList.add(order);

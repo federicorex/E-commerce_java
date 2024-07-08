@@ -1,6 +1,12 @@
 package com.ecommerce;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import com.ecommerce.dal.OrderDAORepository;
 import com.ecommerce.dal.ProductDAORepository;
@@ -9,10 +15,14 @@ import com.ecommerce.entities.Order;
 import com.ecommerce.entities.Product;
 import com.ecommerce.entities.User;
 
+@Component
 public class DatabaseSeeder implements CommandLineRunner {
 
+	@Autowired
 	private UserDAORepository userDAORepository;
+	@Autowired
 	private ProductDAORepository productDAORepository;
+	@Autowired
 	private OrderDAORepository orderDAORepository;
 	
 	private String DATABASE_SEEDED = "Success, Database seeded!";
@@ -22,43 +32,38 @@ public class DatabaseSeeder implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		if(userDAORepository.count() == 0 || productDAORepository.count() == 0) {
-			User user1 = new User(null, null, null, null, null, null, null);
-			User user2 = new User(null, null, null, null, null, null, null);
-			User user3 = new User(null, null, null, null, null, null, null);
-			User user4 = new User(null, null, null, null, null, null, null);
-			User user5 = new User(null, null, null, null, null, null, null);
-			Product product1 = new Product(null, null, null, 0, false, null);
-			Product product2 = new Product(null, null, null, 0, false, null);
-			Product product3 = new Product(null, null, null, 0, false, null);
-			Product product4 = new Product(null, null, null, 0, false, null);
-			Product product5 = new Product(null, null, null, 0, false, null);
-			Order order1 = new Order(user1, product1);
-			Order order2 = new Order(user2, product2);
-			Order order3 = new Order(user3, product3);
-			Order order4 = new Order(user4, product4);
-			Order order5 = new Order(user5, product5);
+			List<User> userTempList = Arrays.asList(
+					new User("John", "Doe", "password123", new Date(631148400000L), "123 Main St", "john@example.com", null),
+					new User("Jane", "Doe", "password456", new Date(703288800000L), "456 Elm St", "jane@example.com", null),
+					new User("Alice", "Smith", "password789", new Date(803599200000L), "789 Oak St", "alice@example.com", null),
+					new User("Bob", "Brown", "password101", new Date(591577200000L), "101 Pine St", "bob@example.com", null),
+					new User("Charlie", "Davis", "password202", new Date(476406000000L), "202 Maple St", "charlie@example.com", null)			
+					);
 			
-			userDAORepository.save(user1);
-			userDAORepository.save(user2);
-			userDAORepository.save(user3);
-			userDAORepository.save(user4);
-			userDAORepository.save(user5);
-			productDAORepository.save(product1);
-			productDAORepository.save(product2);
-			productDAORepository.save(product3);
-			productDAORepository.save(product4);
-			productDAORepository.save(product5);
-			orderDAORepository.save(order1);
-			orderDAORepository.save(order2);
-			orderDAORepository.save(order3);
-			orderDAORepository.save(order4);
-			orderDAORepository.save(order5);
+			List<Product> productTempList = Arrays.asList(
+            new Product("Laptop", "Dell", "Electronics", 10, false, null),
+            new Product("Smartphone", "Samsung", "Electronics", 20, false, null),
+            new Product("Headphones", "Sony", "Electronics", 15, true, null),
+            new Product("Monitor", "LG", "Electronics", 5, false, null),
+            new Product("Keyboard", "Logitech", "Electronics", 25, true, null)
+            		);
+	
+			List<Order> orderTempList = Arrays.asList(
+	                new Order(userTempList.get(0), productTempList.get(0), new Date(1725141600000L)),
+	                new Order(userTempList.get(1), productTempList.get(1), new Date(1725314400000L)),
+	                new Order(userTempList.get(2), productTempList.get(2), new Date(1725487200000L)),
+	                new Order(userTempList.get(3), productTempList.get(3), new Date(1725919200000L)),
+	                new Order(userTempList.get(4), productTempList.get(4), new Date(1726437600000L))
+	                );
+			
+			userDAORepository.saveAll(userTempList);
+			productDAORepository.saveAll(productTempList);
+			orderDAORepository.saveAll(orderTempList);
 			
 			System.out.println(DATABASE_SEEDED);
 		} else {
 			System.out.println(DATABASE_NOT_SEEDED);
 		}
-		
 	}
 	
 }

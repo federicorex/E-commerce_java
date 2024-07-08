@@ -125,11 +125,23 @@ public class OrderServiceTest {
     }
     
     @Test
+    void testUpdateEmptyOrder() {
+        Order order = new Order();
+        order.setId(6L);
+
+        when(orderDAORepository.findById(order.getId())).thenReturn(Optional.empty());
+        
+        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.updateOrder(order));
+    }
+    
+    @Test
     void testUpdateOrder() {
         Order order = new Order();
+        order.setId(6L);
 
-        when(orderDAORepository.save(order)).thenReturn(null);
-
+        when(orderDAORepository.findById(order.getId())).thenReturn(Optional.of(order));
+        when(orderDAORepository.save(order)).thenReturn(order);
+        
         assertDoesNotThrow(() -> orderServiceImpl.updateOrder(order));
     }
     
