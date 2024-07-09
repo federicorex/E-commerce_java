@@ -1,7 +1,7 @@
 package com.ecommerce;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +33,11 @@ public class DatabaseSeeder implements CommandLineRunner {
 
 		if(userDAORepository.count() == 0 || productDAORepository.count() == 0) {
 			List<User> userTempList = Arrays.asList(
-					new User("John", "Doe", "password123", new Date(631148400000L), "123 Main St", "john@example.com", null),
-					new User("Jane", "Doe", "password456", new Date(703288800000L), "456 Elm St", "jane@example.com", null),
-					new User("Alice", "Smith", "password789", new Date(803599200000L), "789 Oak St", "alice@example.com", null),
-					new User("Bob", "Brown", "password101", new Date(591577200000L), "101 Pine St", "bob@example.com", null),
-					new User("Charlie", "Davis", "password202", new Date(476406000000L), "202 Maple St", "charlie@example.com", null)			
+					new User("John", "Doe", "password123", LocalDate.of(1990, 1, 1), "123 Main St", "john@example.com", null),
+					new User("Jane", "Doe", "password456", LocalDate.of(1992, 4, 15), "456 Elm St", "jane@example.com", null),
+					new User("Alice", "Smith", "password789", LocalDate.of(1995, 6, 20), "789 Oak St", "alice@example.com", null),
+					new User("Bob", "Brown", "password101", LocalDate.of(1998, 9, 30), "101 Pine St", "bob@example.com", null),
+					new User("Charlie", "Davis", "password202", LocalDate.of(1985, 2, 5), "202 Maple St", "charlie@example.com", null)			
 					);
 			
 			List<Product> productTempList = Arrays.asList(
@@ -49,11 +49,11 @@ public class DatabaseSeeder implements CommandLineRunner {
             		);
 	
 			List<Order> orderTempList = Arrays.asList(
-	                new Order(userTempList.get(0), productTempList.get(0), new Date(1725141600000L)),
-	                new Order(userTempList.get(1), productTempList.get(1), new Date(1725314400000L)),
-	                new Order(userTempList.get(2), productTempList.get(2), new Date(1725487200000L)),
-	                new Order(userTempList.get(3), productTempList.get(3), new Date(1725919200000L)),
-	                new Order(userTempList.get(4), productTempList.get(4), new Date(1726437600000L))
+	                new Order(userTempList.get(0), productTempList.get(0), LocalDate.of(2024, 9, 1)),
+	                new Order(userTempList.get(1), productTempList.get(1), LocalDate.of(2024, 9, 3)),
+	                new Order(userTempList.get(2), productTempList.get(2), LocalDate.of(2024, 9, 5)),
+	                new Order(userTempList.get(3), productTempList.get(3), LocalDate.of(2024, 9, 10)),
+	                new Order(userTempList.get(4), productTempList.get(4), LocalDate.of(2024, 9, 16))
 	                );
 			
 			userDAORepository.saveAll(userTempList);

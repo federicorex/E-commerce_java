@@ -2,6 +2,8 @@ package com.ecommerce.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,14 +22,20 @@ public class Product {
 	
 	@Column(name = "name", nullable = false, length = 45)
 	private String name;
+	
 	@Column(name = "brand", nullable = false, length = 45)
 	private String brand;
+	
 	@Column(name = "type", nullable = false, length = 45)
 	private String type;
+	
 	@Column(name = "quantityInStock", nullable = false)
 	private int quantityInStock;
+	
 	@Column(name = "secondHand", nullable = false)
 	private boolean secondHand;
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<Order> orders;
 	

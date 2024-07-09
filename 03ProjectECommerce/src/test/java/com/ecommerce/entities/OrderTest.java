@@ -2,7 +2,7 @@ package com.ecommerce.entities;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class OrderTest {
 		User user = new User();
 		Product product = new Product();
 		Order newOrder = new Order(user, product, null);
-		Date date = new Date(1733007600000L);
+		LocalDate date = LocalDate.of(2024, 12, 1);
 		
 		newOrder.setDeliveryDate(date);
 		assertEquals(user, newOrder.getUser());
@@ -56,7 +56,7 @@ public class OrderTest {
 	
 	@Test
 	void testGetDeliveryDate() {
-		Date date = new Date(1733007600000L);
+		LocalDate date = LocalDate.of(2024, 12, 1);
 		
 		order.setDeliveryDate(date);
 		assertEquals(date, order.getDeliveryDate());
