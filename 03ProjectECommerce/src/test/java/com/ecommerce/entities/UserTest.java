@@ -2,7 +2,7 @@ package com.ecommerce.entities;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class UserTest {
 	
 	@Test
 	void testConstructor() {
-		Date date = new Date(946681200000L);
+		LocalDate date = LocalDate.of(2000, 1, 1);
 		Order order = new Order(new User(), new Product(), null);
 		List<Order> orderList = new LinkedList<>();
 		orderList.add(order);
@@ -41,43 +41,50 @@ public class UserTest {
 	@Test
 	void testGetId() {
 		user.setId(6L);
+		
 		assertEquals(6L, user.getId().longValue());
 	}
 	
 	@Test
 	void testGetName() {
 		user.setName("John");
+		
 		assertEquals("John", user.getName());
 	}
 	
 	@Test
 	void testGetSurname() {
 		user.setSurname("Black");
+		
 		assertEquals("Black", user.getSurname());
 	}
 	
 	@Test
 	void testGetPassword() {
 		user.setPassword("12345");
+		
 		assertEquals("12345", user.getPassword());
 	}
 	
 	@Test
 	void testGetDateOfBirth() {
-		Date date = new Date(946681200000L);
+		LocalDate date = LocalDate.of(2000, 1, 1);
 		user.setDateOfBirth(date);
+		
 		assertEquals(date, user.getDateOfBirth());
 	}
 	
 	@Test
 	void testGetAddress() {
 		user.setAddress("Baker street");
+		
 		assertEquals("Baker street", user.getAddress());
 	}
 	
 	@Test
 	void testGetEmail() {
 		user.setEmail("example@gmail.com");
+
 		assertEquals("example@gmail.com", user.getEmail());
 	}
 	
@@ -85,9 +92,9 @@ public class UserTest {
 	void testGetOrders() {
 		Order order = new Order(new User(), new Product(), null);
 		List<Order> orderList = new LinkedList<>();
-		
 		orderList.add(order);
 		user.setOrders(orderList);
+		
 		assertEquals(orderList, user.getOrders());
 	}
 	

@@ -1,6 +1,6 @@
 package com.ecommerce.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,18 +22,20 @@ public class Order {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
-	@Column(name = "deliveryDate", nullable = false, length = 20)
-	private Date deliveryDate;
+	//@UpdateTimestamp
+	@Column(name = "deliveryDate", nullable = false)
+	private LocalDate deliveryDate;
 	
 	public Order() {
 		
 	}
 	
-	public Order(User user, Product product, Date deliveryDate) {
+	public Order(User user, Product product, LocalDate deliveryDate) {
 		this.user = user;
 		this.product = product;
 		this.deliveryDate = deliveryDate;
@@ -63,11 +65,11 @@ public class Order {
 		this.product = product;
 	}
 
-	public Date getDeliveryDate() {
+	public LocalDate getDeliveryDate() {
 		return deliveryDate;
 	}
 
-	public void setDeliveryDate(Date deliveryDate) {
+	public void setDeliveryDate(LocalDate deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 }

@@ -38,36 +38,42 @@ public class ProductTest {
 	@Test
 	void testGetId() {
 		product.setId(6L);
+		
 		assertEquals(6L, product.getId().longValue());
 	}
 	
 	@Test
 	void testGetName() {
 		product.setName("F2 Pro");
+		
 		assertEquals("F2 Pro", product.getName());
 	}
 	
 	@Test
 	void testGetBrand() {
 		product.setBrand("Poco");
+		
 		assertEquals("Poco", product.getBrand());
 	}
 	
 	@Test
 	void testGetType() {
 		product.setType("Smartphone");
+		
 		assertEquals("Smartphone", product.getType());
 	}
 	
 	@Test
 	void testGetQuantityInStock() {
 		product.setQuantityInStock(6);
+		
 		assertEquals(6, product.getQuantityInStock());
 	}
 	
 	@Test
 	void testGetSecondHand() {
 		product.setSecondHand(false);
+		
 		assertEquals(false, product.getSecondHand());
 	}
 	
@@ -75,9 +81,9 @@ public class ProductTest {
 	void testGetOrders() {
 		Order order = new Order(new User(), new Product(), null);
 		List<Order> orderList = new LinkedList<>();
-		
 		orderList.add(order);
 		product.setOrders(orderList);
+		
 		assertEquals(orderList, product.getOrders());
 	}
 	
