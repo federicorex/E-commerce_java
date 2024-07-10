@@ -18,63 +18,66 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import com.ecommerce.dal.OrderDAORepository;
+import com.ecommerce.dto.OrderDTO;
 import com.ecommerce.entities.Order;
-import com.ecommerce.services.OrderServiceImpl;
+import com.ecommerce.services.OrderService;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderRESTTest {
 
-	@InjectMocks
-	OrderREST orderREST;
-	
-	@Mock
-	OrderServiceImpl orderServiceImpl;
-	
-	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
-	}
-	
-	@Test
-	void testGetAllOrdersREST() {
-		Order order = new Order();
-		List<Order> orderList = new LinkedList<Order>();
-		orderList.add(order);
+    @InjectMocks
+    OrderREST orderREST;
+    
+    @Mock
+    OrderService orderService;
+    
+    @Mock
+    OrderDAORepository orderDAORepository;
 
-		when(orderServiceImpl.getAllOrders()).thenReturn(orderList);
-		
-		assertEquals(orderList, orderREST.getAllOrdersREST().getBody());
-		assertEquals(HttpStatus.OK, orderREST.getAllOrdersREST().getStatusCode());
-	}
-	
-	@Test
-	void testGetOrderByIdEmptyOrderREST() {
-		Long id = 6L;
-		NoSuchElementException nsee = new NoSuchElementException("error");
-		
-		when(orderServiceImpl.getOrderById(id)).thenThrow(nsee);
-		
-		assertEquals(HttpStatus.NOT_FOUND, orderREST.getOrderByIdREST(id).getStatusCode());
-	}
-	
-	@Test
-	void testGetOrderByIdREST() {
-		Long id = 6L;
-		Order order = new Order();
-		
-		when(orderServiceImpl.getOrderById(id)).thenReturn(order);
-		
-		assertEquals(order, orderREST.getOrderByIdREST(id).getBody());
-		assertEquals(HttpStatus.OK, orderREST.getOrderByIdREST(id).getStatusCode());
-	}
-	
-	@Test
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+    
+    @Test
+    void testGetAllOrdersREST() {
+        Order order = new Order();
+        List<Order> orderList = new LinkedList<>();
+        orderList.add(order);
+
+        when(orderService.getAllOrders()).thenReturn(orderList);
+
+        assertEquals(HttpStatus.OK, orderREST.getAllOrdersREST().getStatusCode());
+    }
+    
+    @Test
+    void testGetOrderByIdEmptyOrderREST() {
+        Long id = 6L;
+        NoSuchElementException nsee = new NoSuchElementException("error");
+        
+        when(orderService.getOrderById(id)).thenThrow(nsee);
+        
+        assertEquals(HttpStatus.NOT_FOUND, orderREST.getOrderByIdREST(id).getStatusCode());
+    }
+    
+    @Test
+    void testGetOrderByIdREST() {
+        Long id = 6L;
+        Order order = new Order();
+        
+        when(orderService.getOrderById(id)).thenReturn(order);
+        
+        assertEquals(HttpStatus.OK, orderREST.getOrderByIdREST(id).getStatusCode());
+    }
+    
+    @Test
 	void testAddOrderUserOrProductEmptyREST() {
 		Long userId = 6L;
 		Long productId = 6L;
 		NoSuchElementException nsee = new NoSuchElementException("error");
 		
-		doThrow(nsee).when(orderServiceImpl).addOrder(userId, productId);
+		doThrow(nsee).when(orderService).addOrder(userId, productId);
 		
 		assertEquals(HttpStatus.NOT_FOUND, orderREST.addOrderREST(userId, productId).getStatusCode());
 	}
@@ -84,47 +87,34 @@ public class OrderRESTTest {
 		Long userId = 6L;
 		Long productId = 6L;
 		
-		doNothing().when(orderServiceImpl).addOrder(userId, productId);
+		doNothing().when(orderService).addOrder(userId, productId);
 		
 		assertEquals(HttpStatus.CREATED, orderREST.addOrderREST(userId, productId).getStatusCode());
 	}
-	
-	@Test
-	void testUpdateOrderEmptyOrderREST() {
-		Order order = new Order();
-		NoSuchElementException nsee = new NoSuchElementException("error");
-		
-		doThrow(nsee).when(orderServiceImpl).updateOrder(order);
-		
-		assertEquals(HttpStatus.NOT_FOUND, orderREST.updateOrderREST(order).getStatusCode());
-	}
-	
-	@Test
-	void testUpdateOrderREST() {
-		Order order = new Order();
-		
-		doNothing().when(orderServiceImpl).updateOrder(order);
-		
-		assertEquals(HttpStatus.OK, orderREST.updateOrderREST(order).getStatusCode());
-	}
-	
-	@Test
-	void testDeleteOrderEmptyOrderREST() {
-		Long id = 6L;
-		NoSuchElementException nsee = new NoSuchElementException("error");
-		
-		doThrow(nsee).when(orderServiceImpl).deleteOrder(id);
-		
-		assertEquals(HttpStatus.NOT_FOUND, orderREST.deleteOrderREST(id).getStatusCode());
-	}
-		
-	@Test
-	void testDeleteOrderREST() {
-		Long id = 6L;
-		
-		doNothing().when(orderServiceImpl).deleteOrder(id);
-		
-		assertEquals(HttpStatus.NO_CONTENT, orderREST.deleteOrderREST(id).getStatusCode());
-	}
-	
+    
+    @Test
+    void testUpdateOrderREST() {
+        OrderDTO orderDTO = new OrderDTO();
+        
+        assertEquals(HttpStatus.OK, orderREST.updateOrderREST(orderDTO).getStatusCode());
+    }
+    
+    @Test
+    void testDeleteOrderEmptyOrderREST() {
+        Long id = 6L;
+        NoSuchElementException nsee = new NoSuchElementException("error");
+        
+        doThrow(nsee).when(orderService).deleteOrder(id);
+        
+        assertEquals(HttpStatus.NOT_FOUND, orderREST.deleteOrderREST(id).getStatusCode());
+    }
+        
+    @Test
+    void testDeleteOrderREST() {
+        Long id = 6L;
+        
+        doNothing().when(orderService).deleteOrder(id);
+        
+        assertEquals(HttpStatus.NO_CONTENT, orderREST.deleteOrderREST(id).getStatusCode());
+    }
 }

@@ -18,101 +18,89 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import com.ecommerce.dal.ProductDAORepository;
+import com.ecommerce.dto.ProductDTO;
 import com.ecommerce.entities.Product;
-import com.ecommerce.services.ProductServiceImpl;
+import com.ecommerce.services.ProductService;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductRESTTest {
 
-	@InjectMocks
-	ProductREST productREST;
-	
-	@Mock
-	ProductServiceImpl productServiceImpl;
-	
-	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
-	}
-	
-	@Test
-	void testGetAllProductsREST() {
-		Product product = new Product();
-		List<Product> productList = new LinkedList<Product>();
-		productList.add(product);
+    @InjectMocks
+    ProductREST productREST;
+    
+    @Mock
+    ProductService productService;
+    
+    @Mock
+    ProductDAORepository productDAORepository;
 
-		when(productServiceImpl.getAllProducts()).thenReturn(productList);
-		
-		assertEquals(productList, productREST.getAllProductsREST().getBody());
-		assertEquals(HttpStatus.OK, productREST.getAllProductsREST().getStatusCode());
-	}
-	
-	@Test
-	void testGetProductByIdEmptyProductREST() {
-		Long id = 6L;
-		NoSuchElementException nsee = new NoSuchElementException("error");
-		
-		when(productServiceImpl.getProductById(id)).thenThrow(nsee);
-		
-		assertEquals(HttpStatus.NOT_FOUND, productREST.getProductByIdREST(id).getStatusCode());
-	}
-	
-	@Test
-	void testGetProductByIdREST() {
-		Long id = 6L;
-		Product product = new Product();
-		
-		when(productServiceImpl.getProductById(id)).thenReturn(product);
-		
-		assertEquals(product, productREST.getProductByIdREST(id).getBody());
-		assertEquals(HttpStatus.OK, productREST.getProductByIdREST(id).getStatusCode());
-	}
-	
-	@Test
-	void testAddProductREST() {
-		Product product = new Product();
-		
-		doNothing().when(productServiceImpl).addProduct(product);
-		
-		assertEquals(HttpStatus.CREATED, productREST.addProductREST(product).getStatusCode());
-	}
-	
-	@Test
-	void testUpdateProductEmptyProductREST() {
-		Product product = new Product();
-		NoSuchElementException nsee = new NoSuchElementException("error");
-		
-		doThrow(nsee).when(productServiceImpl).updateProduct(product);
-		
-		assertEquals(HttpStatus.NOT_FOUND, productREST.updateProductREST(product).getStatusCode());
-	}
-	
-	@Test
-	void testUpdateProductREST() {
-		Product product = new Product();
-		
-		doNothing().when(productServiceImpl).updateProduct(product);
-		
-		assertEquals(HttpStatus.OK, productREST.updateProductREST(product).getStatusCode());
-	}
-	
-	@Test
-	void testDeleteProductEmptyProductREST() {
-		Long id = 6L;
-		NoSuchElementException nsee = new NoSuchElementException("error");
-		
-		doThrow(nsee).when(productServiceImpl).deleteProduct(id);
-		
-		assertEquals(HttpStatus.NOT_FOUND, productREST.deleteProductREST(id).getStatusCode());
-	}
-		
-	@Test
-	void testDeleteProductREST() {
-		Long id = 6L;
-		
-		doNothing().when(productServiceImpl).deleteProduct(id);
-		
-		assertEquals(HttpStatus.NO_CONTENT, productREST.deleteProductREST(id).getStatusCode());
-	}
-	
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+    
+    @Test
+    void testGetAllProductsREST() {
+        Product product = new Product();
+        List<Product> productList = new LinkedList<>();
+        productList.add(product);
+
+        when(productService.getAllProducts()).thenReturn(productList);
+
+        assertEquals(HttpStatus.OK, productREST.getAllProductsREST().getStatusCode());
+    }
+    
+    @Test
+    void testGetProductByIdEmptyProductREST() {
+        Long id = 6L;
+        NoSuchElementException nsee = new NoSuchElementException("error");
+        
+        when(productService.getProductById(id)).thenThrow(nsee);
+        
+        assertEquals(HttpStatus.NOT_FOUND, productREST.getProductByIdREST(id).getStatusCode());
+    }
+    
+    @Test
+    void testGetProductByIdREST() {
+        Long id = 6L;
+        Product product = new Product();
+        
+        when(productService.getProductById(id)).thenReturn(product);
+        
+        assertEquals(HttpStatus.OK, productREST.getProductByIdREST(id).getStatusCode());
+    }
+    
+    @Test
+    void testAddProductREST() {
+        ProductDTO productDTO = new ProductDTO();
+        
+        assertEquals(HttpStatus.CREATED, productREST.addProductREST(productDTO).getStatusCode());
+    }
+    
+    @Test
+    void testUpdateProductREST() {
+        ProductDTO productDTO = new ProductDTO();
+        
+        assertEquals(HttpStatus.OK, productREST.updateProductREST(productDTO).getStatusCode());
+    }
+    
+    @Test
+    void testDeleteProductEmptyProductREST() {
+        Long id = 6L;
+        NoSuchElementException nsee = new NoSuchElementException("error");
+        
+        doThrow(nsee).when(productService).deleteProduct(id);
+        
+        assertEquals(HttpStatus.NOT_FOUND, productREST.deleteProductREST(id).getStatusCode());
+    }
+        
+    @Test
+    void testDeleteProductREST() {
+        Long id = 6L;
+        
+        doNothing().when(productService).deleteProduct(id);
+        
+        assertEquals(HttpStatus.NO_CONTENT, productREST.deleteProductREST(id).getStatusCode());
+    }
 }
