@@ -91,16 +91,8 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public void updateOrder(Order order) {
 		logger.info(LOGGER_UPDATE_ORDER_START, order.getId());
-		
-		Optional<Order> tempOrder = orderDAORepository.findById(order.getId());
-		
-		if(tempOrder.isPresent()) {
-			orderDAORepository.save(order);
-			logger.info(LOGGER_UPDATE_ORDER_SUCCESS, order.getId());
-		} else {
-			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, order.getId());
-			throw new NoSuchElementException("Order with id: " + order.getId() + "not found...");
-		}
+		orderDAORepository.save(order);
+		logger.info(LOGGER_UPDATE_ORDER_SUCCESS, order.getId());
 	}
 
 	@Override

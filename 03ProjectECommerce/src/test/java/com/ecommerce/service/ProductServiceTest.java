@@ -80,22 +80,10 @@ public class ProductServiceTest {
     }
     
     @Test
-    void testUpdateEmptyProduct() {
-        Product product = new Product();
-        product.setId(6L);
-
-        when(productDAORepository.findById(product.getId())).thenReturn(Optional.empty());
-        
-        assertThrows(NoSuchElementException.class, () -> productServiceImpl.updateProduct(product));
-    }
-    
-    @Test
     void testUpdateProduct() {
         Product product = new Product();
-        product.setId(6L);
 
-        when(productDAORepository.findById(product.getId())).thenReturn(Optional.of(product));
-        when(productDAORepository.save(product)).thenReturn(product);
+        when(productDAORepository.save(product)).thenReturn(null);
         
         assertDoesNotThrow(() -> productServiceImpl.updateProduct(product));
     }

@@ -80,22 +80,10 @@ public class UserServiceTest {
     }
     
     @Test
-    void testUpdateEmptyUser() {
-        User user = new User();
-        user.setId(6L);
-
-        when(userDAORepository.findById(user.getId())).thenReturn(Optional.empty());
-        
-        assertThrows(NoSuchElementException.class, () -> userServiceImpl.updateUser(user));
-    }
-    
-    @Test
     void testUpdateUser() {
         User user = new User();
-        user.setId(6L);
 
-        when(userDAORepository.findById(user.getId())).thenReturn(Optional.of(user));
-        when(userDAORepository.save(user)).thenReturn(user);
+        when(userDAORepository.save(user)).thenReturn(null);
         
         assertDoesNotThrow(() -> userServiceImpl.updateUser(user));
     }
