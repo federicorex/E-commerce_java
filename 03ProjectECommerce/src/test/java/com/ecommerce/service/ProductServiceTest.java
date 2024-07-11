@@ -28,7 +28,7 @@ import com.ecommerce.services.ProductServiceImpl;
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
-	@InjectMocks
+    @InjectMocks
     private ProductServiceImpl productServiceImpl;
 
     @Mock
@@ -53,21 +53,21 @@ public class ProductServiceTest {
 
     @Test
     void testGetProductByIdEmptyProduct() {
-        Long id = 6L;
+        Long productId = 6L;
         
-        when(productDAORepository.findById(id)).thenReturn(Optional.empty());
+        when(productDAORepository.findById(productId)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> productServiceImpl.getProductById(id));
+        assertThrows(NoSuchElementException.class, () -> productServiceImpl.getProductById(productId));
     }
     
     @Test
     void testGetProductByIdExistingProduct() {
-        Long id = 6L;
+        Long productId = 6L;
         Product product = new Product();
         
-        when(productDAORepository.findById(id)).thenReturn(Optional.of(product));
+        when(productDAORepository.findById(productId)).thenReturn(Optional.of(product));
 
-        assertEquals(product, productServiceImpl.getProductById(id));
+        assertEquals(product, productServiceImpl.getProductById(productId));
     }
     
     @Test
@@ -80,9 +80,23 @@ public class ProductServiceTest {
     }
     
     @Test
+    void testUpdateEmptyProduct() {
+        Product product = new Product();
+        Long productId = 6L;
+        product.setId(productId);
+
+        when(productDAORepository.findById(product.getId())).thenReturn(Optional.empty());
+        
+        assertThrows(NoSuchElementException.class, () -> productServiceImpl.updateProduct(product));
+    }
+    
+    @Test
     void testUpdateProduct() {
         Product product = new Product();
+        Long productId = 6L;
+        product.setId(productId);
 
+        when(productDAORepository.findById(product.getId())).thenReturn(Optional.of(product));
         when(productDAORepository.save(product)).thenReturn(null);
         
         assertDoesNotThrow(() -> productServiceImpl.updateProduct(product));
@@ -90,23 +104,23 @@ public class ProductServiceTest {
     
     @Test
     void testDeleteProductEmptyProduct() {
-        Long id = 6L;
+        Long productId = 6L;
         
-        when(productDAORepository.findById(id)).thenReturn(Optional.empty());
+        when(productDAORepository.findById(productId)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> productServiceImpl.deleteProduct(id));
+        assertThrows(NoSuchElementException.class, () -> productServiceImpl.deleteProduct(productId));
     }
     
     @Test
     void testDeleteProduct() {
-    	Long id = 6L;
+    	Long productId = 6L;
         Product product = new Product();
         
-        when(productDAORepository.findById(id)).thenReturn(Optional.of(product));
+        when(productDAORepository.findById(productId)).thenReturn(Optional.of(product));
+        assertEquals(product, productServiceImpl.getProductById(productId));
+        doNothing().when(productDAORepository).deleteById(productId);
 
-        assertEquals(product, productServiceImpl.getProductById(id));
-        doNothing().when(productDAORepository).deleteById(id);
-        assertDoesNotThrow(() -> productServiceImpl.deleteProduct(id));
+        assertDoesNotThrow(() -> productServiceImpl.deleteProduct(productId));
     }
-	
+    
 }

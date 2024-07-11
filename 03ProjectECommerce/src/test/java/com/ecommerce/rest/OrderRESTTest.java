@@ -53,22 +53,22 @@ public class OrderRESTTest {
     
     @Test
     void testGetOrderByIdEmptyOrderREST() {
-        Long id = 6L;
+        Long orderId = 6L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
-        when(orderService.getOrderById(id)).thenThrow(nsee);
+        when(orderService.getOrderById(orderId)).thenThrow(nsee);
         
-        assertEquals(HttpStatus.NOT_FOUND, orderREST.getOrderByIdREST(id).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, orderREST.getOrderByIdREST(orderId).getStatusCode());
     }
     
     @Test
     void testGetOrderByIdREST() {
-        Long id = 6L;
+        Long orderId = 6L;
         Order order = new Order();
         
-        when(orderService.getOrderById(id)).thenReturn(order);
+        when(orderService.getOrderById(orderId)).thenReturn(order);
         
-        assertEquals(HttpStatus.OK, orderREST.getOrderByIdREST(id).getStatusCode());
+        assertEquals(HttpStatus.OK, orderREST.getOrderByIdREST(orderId).getStatusCode());
     }
     
     @Test
@@ -95,26 +95,26 @@ public class OrderRESTTest {
     @Test
     void testUpdateOrderREST() {
         OrderDTO orderDTO = new OrderDTO();
-        
+
         assertEquals(HttpStatus.OK, orderREST.updateOrderREST(orderDTO).getStatusCode());
     }
     
     @Test
     void testDeleteOrderEmptyOrderREST() {
-        Long id = 6L;
+        Long orderId = 6L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
-        doThrow(nsee).when(orderService).deleteOrder(id);
+        doThrow(nsee).when(orderService).deleteOrder(orderId);
         
-        assertEquals(HttpStatus.NOT_FOUND, orderREST.deleteOrderREST(id).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, orderREST.deleteOrderREST(orderId).getStatusCode());
     }
         
     @Test
     void testDeleteOrderREST() {
-        Long id = 6L;
+        Long orderId = 6L;
         
-        doNothing().when(orderService).deleteOrder(id);
+        doNothing().when(orderService).deleteOrder(orderId);
         
-        assertEquals(HttpStatus.NO_CONTENT, orderREST.deleteOrderREST(id).getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, orderREST.deleteOrderREST(orderId).getStatusCode());
     }
 }

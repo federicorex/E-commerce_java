@@ -35,29 +35,15 @@ public class UserREST {
 		return new ResponseEntity<>(userDTOList, HttpStatus.OK);
 	}
 	
-//	@GetMapping("users")
-//	public ResponseEntity<List<User>> getAllUsersREST() {
-//		return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
-//	}
-	
-	@GetMapping("users/{id}")
-	public ResponseEntity<UserDTO> getUserByIdREST(@PathVariable("id") Long id) {
+	@GetMapping("users/{userId}")
+	public ResponseEntity<UserDTO> getUserByIdREST(@PathVariable("userId") Long userId) {
 		try {
-			UserDTO userDTO = UserMapper.fromUserToUserDTO(userService.getUserById(id));
+			UserDTO userDTO = UserMapper.fromUserToUserDTO(userService.getUserById(userId));
 			return new ResponseEntity<>(userDTO, HttpStatus.OK);			
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
 		}
 	}
-	
-//	@GetMapping("users/{id}")
-//	public ResponseEntity<User> getUserByIdREST(@PathVariable("id") Long id) {
-//		try {
-//			return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);			
-//		} catch(NoSuchElementException noSuchElementException) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
-//		}
-//	}
 	
 	@PostMapping("users")
 	public ResponseEntity<Void> addUserREST(@RequestBody UserDTO userDTO) {
@@ -65,35 +51,23 @@ public class UserREST {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-//	@PostMapping("users")
-//	public ResponseEntity<Void> addUserREST(@RequestBody User user) {
-//		userService.addUser(user);
-//		return new ResponseEntity<>(HttpStatus.CREATED);
-//	}
-	
 	@PutMapping("users")
 	public ResponseEntity<Void> updateUserREST(@RequestBody UserDTO userDTO) {
-		userService.updateUser(UserMapper.fromUserDTOToUser(userDTO));
-		return new ResponseEntity<>(HttpStatus.OK);
+		try {
+			userService.updateUser(UserMapper.fromUserDTOToUser(userDTO));
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch(NoSuchElementException noSuchElementException) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
+		}
 	}
 	
-//	@PutMapping("users")
-//	public ResponseEntity<Void> updateUserREST(@RequestBody User user) {
-//		try {
-//			userService.updateUser(user);
-//			return new ResponseEntity<>(HttpStatus.OK);			
-//		} catch(NoSuchElementException noSuchElementException) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);									
-//		}
-//	}
-	
-	@DeleteMapping("users")
-	public ResponseEntity<Void> deleteUserREST(@PathVariable("id") Long id) {
+	@DeleteMapping("users/{userId}")
+	public ResponseEntity<Void> deleteUserREST(@PathVariable("userId") Long userId) {
 		try {
-			userService.deleteUser(id);
+			userService.deleteUser(userId);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(NoSuchElementException noSuchElementException) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);									
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
 		}
 	}
 }

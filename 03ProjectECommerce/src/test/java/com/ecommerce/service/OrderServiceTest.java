@@ -63,21 +63,21 @@ public class OrderServiceTest {
 
     @Test
     void testGetOrderByIdEmptyOrder() {
-        Long id = 6L;
+        Long orderId = 6L;
         
-        when(orderDAORepository.findById(id)).thenReturn(Optional.empty());
+        when(orderDAORepository.findById(orderId)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.getOrderById(id));
+        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.getOrderById(orderId));
     }
     
     @Test
     void testGetOrderByIdExistingOrder() {
-        Long id = 6L;
+        Long orderId = 6L;
         Order order = new Order();
         
-        when(orderDAORepository.findById(id)).thenReturn(Optional.of(order));
+        when(orderDAORepository.findById(orderId)).thenReturn(Optional.of(order));
 
-        assertEquals(order, orderServiceImpl.getOrderById(id));
+        assertEquals(order, orderServiceImpl.getOrderById(orderId));
     }
     
     @Test
@@ -91,23 +91,23 @@ public class OrderServiceTest {
     }
     
     @Test
-    void testAddOrderEmptyUser() {
-    	Long id = 6L;
-    	Product product = new Product();
-
-        when(userDAORepository.findById(id)).thenReturn(Optional.empty());
-        when(productDAORepository.findById(id)).thenReturn(Optional.of(product));
-
-        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.addOrder(id, id));
-    }
-    
-    @Test
     void testAddOrderEmptyProduct() {
     	Long id = 6L;
     	User user = new User();
 
         when(userDAORepository.findById(id)).thenReturn(Optional.of(user));
         when(productDAORepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.addOrder(id, id));
+    }
+    
+    @Test
+    void testAddOrderEmptyUser() {
+    	Long id = 6L;
+    	Product product = new Product();
+
+        when(productDAORepository.findById(id)).thenReturn(Optional.of(product));
+        when(userDAORepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> orderServiceImpl.addOrder(id, id));
     }
@@ -125,9 +125,23 @@ public class OrderServiceTest {
     }
     
     @Test
+    void testUpdateEmptyOrder() {
+        Order order = new Order();
+        Long orderId = 6L;
+        order.setId(orderId);
+
+        when(orderDAORepository.findById(order.getId())).thenReturn(Optional.empty());
+        
+        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.updateOrder(order));
+    }
+    
+    @Test
     void testUpdateOrder() {
         Order order = new Order();
+        Long orderId = 6L;
+        order.setId(orderId);
 
+        when(orderDAORepository.findById(order.getId())).thenReturn(Optional.of(order));
         when(orderDAORepository.save(order)).thenReturn(null);
         
         assertDoesNotThrow(() -> orderServiceImpl.updateOrder(order));
@@ -135,23 +149,23 @@ public class OrderServiceTest {
     
     @Test
     void testDeleteOrderEmptyOrder() {
-        Long id = 6L;
+        Long orderId = 6L;
         
-        when(orderDAORepository.findById(id)).thenReturn(Optional.empty());
+        when(orderDAORepository.findById(orderId)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.deleteOrder(id));
+        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.deleteOrder(orderId));
     }
     
     @Test
     void testDeleteOrder() {
-    	Long id = 6L;
+    	Long orderId = 6L;
         Order order = new Order();
         
-        when(orderDAORepository.findById(id)).thenReturn(Optional.of(order));
-        assertEquals(order, orderServiceImpl.getOrderById(id));
-        doNothing().when(orderDAORepository).deleteById(id);
+        when(orderDAORepository.findById(orderId)).thenReturn(Optional.of(order));
+        assertEquals(order, orderServiceImpl.getOrderById(orderId));
+        doNothing().when(orderDAORepository).deleteById(orderId);
 
-        assertDoesNotThrow(() -> orderServiceImpl.deleteOrder(id));
+        assertDoesNotThrow(() -> orderServiceImpl.deleteOrder(orderId));
     }
-	
+    
 }

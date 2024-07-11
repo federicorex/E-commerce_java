@@ -53,54 +53,54 @@ public class ProductRESTTest {
     
     @Test
     void testGetProductByIdEmptyProductREST() {
-        Long id = 6L;
+        Long productId = 6L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
-        when(productService.getProductById(id)).thenThrow(nsee);
+        when(productService.getProductById(productId)).thenThrow(nsee);
         
-        assertEquals(HttpStatus.NOT_FOUND, productREST.getProductByIdREST(id).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, productREST.getProductByIdREST(productId).getStatusCode());
     }
     
     @Test
     void testGetProductByIdREST() {
-        Long id = 6L;
+        Long productId = 6L;
         Product product = new Product();
         
-        when(productService.getProductById(id)).thenReturn(product);
+        when(productService.getProductById(productId)).thenReturn(product);
         
-        assertEquals(HttpStatus.OK, productREST.getProductByIdREST(id).getStatusCode());
+        assertEquals(HttpStatus.OK, productREST.getProductByIdREST(productId).getStatusCode());
     }
     
     @Test
     void testAddProductREST() {
         ProductDTO productDTO = new ProductDTO();
-        
+
         assertEquals(HttpStatus.CREATED, productREST.addProductREST(productDTO).getStatusCode());
     }
     
     @Test
     void testUpdateProductREST() {
         ProductDTO productDTO = new ProductDTO();
-        
+
         assertEquals(HttpStatus.OK, productREST.updateProductREST(productDTO).getStatusCode());
     }
     
     @Test
     void testDeleteProductEmptyProductREST() {
-        Long id = 6L;
+        Long productId = 6L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
-        doThrow(nsee).when(productService).deleteProduct(id);
+        doThrow(nsee).when(productService).deleteProduct(productId);
         
-        assertEquals(HttpStatus.NOT_FOUND, productREST.deleteProductREST(id).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, productREST.deleteProductREST(productId).getStatusCode());
     }
         
     @Test
     void testDeleteProductREST() {
-        Long id = 6L;
+        Long productId = 6L;
         
-        doNothing().when(productService).deleteProduct(id);
+        doNothing().when(productService).deleteProduct(productId);
         
-        assertEquals(HttpStatus.NO_CONTENT, productREST.deleteProductREST(id).getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, productREST.deleteProductREST(productId).getStatusCode());
     }
 }
