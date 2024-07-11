@@ -35,10 +35,10 @@ public class ProductREST {
 		return new ResponseEntity<>(productDTOList, HttpStatus.OK);
 	}
 	
-	@GetMapping("products/{id}")
-	public ResponseEntity<ProductDTO> getProductByIdREST(@PathVariable("id") Long id) {
+	@GetMapping("products/{productId}")
+	public ResponseEntity<ProductDTO> getProductByIdREST(@PathVariable("productId") Long productId) {
 		try {
-			ProductDTO productDTO = ProductMapper.fromProductToProductDTO(productService.getProductById(id));
+			ProductDTO productDTO = ProductMapper.fromProductToProductDTO(productService.getProductById(productId));
 			return new ResponseEntity<>(productDTO, HttpStatus.OK);			
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
@@ -53,17 +53,21 @@ public class ProductREST {
 	
 	@PutMapping("products")
 	public ResponseEntity<Void> updateProductREST(@RequestBody ProductDTO productDTO) {
-		productService.updateProduct(ProductMapper.fromProductDTOToProduct(productDTO));
-		return new ResponseEntity<>(HttpStatus.OK);
+		try {
+			productService.updateProduct(ProductMapper.fromProductDTOToProduct(productDTO));
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch(NoSuchElementException noSuchElementException) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
+		}
 	}
 	
-	@DeleteMapping("products")
-	public ResponseEntity<Void> deleteProductREST(@PathVariable("id") Long id) {
+	@DeleteMapping("products/{productId}")
+	public ResponseEntity<Void> deleteProductREST(@PathVariable("productId") Long productId) {
 		try {
-			productService.deleteProduct(id);
+			productService.deleteProduct(productId);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(NoSuchElementException noSuchElementException) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);									
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
 		}
 	}
 }

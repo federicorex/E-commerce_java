@@ -18,14 +18,14 @@ public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	private static final String LOGGER_GET_ALL_USERS = "Fetching all users";
-	private static final String LOGGER_GET_USER_BY_ID = "Fetching the user with id: {}";
+	private static final String LOGGER_GET_USER_BY_ID = "Fetching the user with userId: {}";
 	private static final String LOGGER_GET_USER_BY_ID_FAIL = "Fail, user not found";
-	private static final String LOGGER_ADD_USER_START = "Adding user with id: {}...";
-	private static final String LOGGER_ADD_USER_SUCCESS = "Success, user with id: {} added";
-	private static final String LOGGER_UPDATE_USER_START = "Updating user with id: {}...";
-	private static final String LOGGER_UPDATE_USER_SUCCESS = "Success, user with id: {} updated";
-	private static final String LOGGER_DELETE_USER_START = "Deleting user with id: {}...";
-	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, user with id: {} deleted";
+	private static final String LOGGER_ADD_USER_START = "Adding user with userId: {}...";
+	private static final String LOGGER_ADD_USER_SUCCESS = "Success, user with userId: {} added";
+	private static final String LOGGER_UPDATE_USER_START = "Updating user with userId: {}...";
+	private static final String LOGGER_UPDATE_USER_SUCCESS = "Success, user with userId: {} updated";
+	private static final String LOGGER_DELETE_USER_START = "Deleting user with userId: {}...";
+	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, user with userId: {} deleted";
 	
 	@Autowired
 	private UserDAORepository userDAORepository;
@@ -41,17 +41,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUserById(Long id) {		
-		Optional<User> tempUser = userDAORepository.findById(id);
+	public User getUserById(Long userId) {		
+		Optional<User> tempUser = userDAORepository.findById(userId);
 		
 		if(tempUser.isPresent()) {
 			User user = tempUser.get();
 			
-			logger.info(LOGGER_GET_USER_BY_ID, id);
+			logger.info(LOGGER_GET_USER_BY_ID, userId);
 			return user;
 		} else {
-			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, id);
-			throw new NoSuchElementException("User with id: " + id + "not found...");
+			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userId);
+			throw new NoSuchElementException("User with userId: " + userId + "not found...");
 		}
 	}
 
@@ -67,23 +67,31 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void updateUser(User user) {
 		logger.info(LOGGER_UPDATE_USER_START, user.getId());
-		userDAORepository.save(user);
-		logger.info(LOGGER_UPDATE_USER_SUCCESS, user.getId());
+		
+		Optional<User> tempUser = userDAORepository.findById(user.getId());
+
+		if(tempUser.isPresent()) {	
+			userDAORepository.save(user);
+			logger.info(LOGGER_UPDATE_USER_SUCCESS, user.getId());
+		} else {
+			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, user.getId());
+			throw new NoSuchElementException("User with userId: " + user.getId() + "not found...");
+		}
 	}
 
 	@Override
 	@Transactional
-	public void deleteUser(Long id) {
-		logger.info(LOGGER_DELETE_USER_START, id);
+	public void deleteUser(Long userId) {
+		logger.info(LOGGER_DELETE_USER_START, userId);
 		
-		Optional<User> tempUser = userDAORepository.findById(id);
+		Optional<User> tempUser = userDAORepository.findById(userId);
 		
 		if(tempUser.isPresent()) {	
-			userDAORepository.deleteById(id);
-			logger.info(LOGGER_DELETE_USER_SUCCESS, id);
+			userDAORepository.deleteById(userId);
+			logger.info(LOGGER_DELETE_USER_SUCCESS, userId);
 		} else {
-			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, id);
-			throw new NoSuchElementException("User with id: " + id + "not found...");
+			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userId);
+			throw new NoSuchElementException("User with userId: " + userId + "not found...");
 		}
 	}
 	

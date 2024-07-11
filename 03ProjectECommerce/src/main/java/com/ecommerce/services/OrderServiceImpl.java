@@ -19,18 +19,18 @@ import com.ecommerce.entities.User;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 	private static final String LOGGER_GET_ALL_ORDERS = "Fetching all orders";
-	private static final String LOGGER_GET_ORDER_BY_ID = "Fetching the order with id: {}";
+	private static final String LOGGER_GET_ORDER_BY_ID = "Fetching the order with orderId: {}";
 	private static final String LOGGER_GET_ORDER_BY_ID_FAIL = "Fail, order not found";
-	private static final String LOGGER_ADD_ORDER_START = "Adding the order with userId: {} and productId: {}...";
-	private static final String LOGGER_ADD_ORDER_SUCCESS = "Success, order added";
+	private static final String LOGGER_ADD_ORDER_START = "Adding order with orderId: {}...";
+	private static final String LOGGER_ADD_ORDER_SUCCESS = "Success, order with orderId: {} added";
 	private static final String LOGGER_ADD_ORDER_FAIL = "Fail, order not added: user or product not found";
-	private static final String LOGGER_UPDATE_ORDER_START = "Updating order with id: {}...";
-	private static final String LOGGER_UPDATE_ORDER_SUCCESS = "Success, order with id: {} updated";
-	private static final String LOGGER_DELETE_ORDER_START = "Deleting order with id: {}...";
-	private static final String LOGGER_DELETE_ORDER_SUCCESS = "Success, order with id: {} deleted";
+	private static final String LOGGER_UPDATE_ORDER_START = "Updating order with orderId: {}...";
+	private static final String LOGGER_UPDATE_ORDER_SUCCESS = "Success, order with orderId: {} updated";
+	private static final String LOGGER_DELETE_ORDER_START = "Deleting order with orderId: {}...";
+	private static final String LOGGER_DELETE_ORDER_SUCCESS = "Success, order with orderId: {} deleted";
 	
 	@Autowired
 	private UserDAORepository userDAORepository;
@@ -52,17 +52,17 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Order getOrderById(Long id) {
-		Optional<Order> tempOrder = orderDAORepository.findById(id);
+	public Order getOrderById(Long orderId) {		
+		Optional<Order> tempOrder = orderDAORepository.findById(orderId);
 		
 		if(tempOrder.isPresent()) {
 			Order order = tempOrder.get();
 			
-			logger.info(LOGGER_GET_ORDER_BY_ID, id);
+			logger.info(LOGGER_GET_ORDER_BY_ID, orderId);
 			return order;
 		} else {
-			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, id);
-			throw new NoSuchElementException("Order with id: " + id + "not found...");
+			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, orderId);
+			throw new NoSuchElementException("Order with orderId: " + orderId + "not found...");
 		}
 	}
 
@@ -91,24 +91,32 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public void updateOrder(Order order) {
 		logger.info(LOGGER_UPDATE_ORDER_START, order.getId());
-		orderDAORepository.save(order);
-		logger.info(LOGGER_UPDATE_ORDER_SUCCESS, order.getId());
+		
+		Optional<Order> tempOrder = orderDAORepository.findById(order.getId());
+
+		if(tempOrder.isPresent()) {	
+			orderDAORepository.save(order);
+			logger.info(LOGGER_UPDATE_ORDER_SUCCESS, order.getId());
+		} else {
+			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, order.getId());
+			throw new NoSuchElementException("Order with orderId: " + order.getId() + "not found...");
+		}
 	}
 
 	@Override
 	@Transactional
-	public void deleteOrder(Long id) {
-		logger.info(LOGGER_DELETE_ORDER_START, id);
+	public void deleteOrder(Long orderId) {
+		logger.info(LOGGER_DELETE_ORDER_START, orderId);
 		
-		Optional<Order> tempOrder = orderDAORepository.findById(id);
+		Optional<Order> tempOrder = orderDAORepository.findById(orderId);
 		
-		if(tempOrder.isPresent()) {
-			orderDAORepository.deleteById(id);
-			logger.info(LOGGER_DELETE_ORDER_SUCCESS, id);
+		if(tempOrder.isPresent()) {	
+			orderDAORepository.deleteById(orderId);
+			logger.info(LOGGER_DELETE_ORDER_SUCCESS, orderId);
 		} else {
-			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, id);
-			throw new NoSuchElementException("Order with id: " + id + "not found...");
+			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, orderId);
+			throw new NoSuchElementException("Order with orderId: " + orderId + "not found...");
 		}
-	};
+	}
 	
 }

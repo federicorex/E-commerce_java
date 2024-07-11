@@ -53,54 +53,54 @@ public class UserRESTTest {
     
     @Test
     void testGetUserByIdEmptyUserREST() {
-        Long id = 6L;
+        Long userId = 6L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
-        when(userService.getUserById(id)).thenThrow(nsee);
+        when(userService.getUserById(userId)).thenThrow(nsee);
         
-        assertEquals(HttpStatus.NOT_FOUND, userREST.getUserByIdREST(id).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, userREST.getUserByIdREST(userId).getStatusCode());
     }
     
     @Test
     void testGetUserByIdREST() {
-        Long id = 6L;
+        Long userId = 6L;
         User user = new User();
         
-        when(userService.getUserById(id)).thenReturn(user);
+        when(userService.getUserById(userId)).thenReturn(user);
         
-        assertEquals(HttpStatus.OK, userREST.getUserByIdREST(id).getStatusCode());
+        assertEquals(HttpStatus.OK, userREST.getUserByIdREST(userId).getStatusCode());
     }
     
     @Test
     void testAddUserREST() {
         UserDTO userDTO = new UserDTO();
-        
+
         assertEquals(HttpStatus.CREATED, userREST.addUserREST(userDTO).getStatusCode());
     }
     
     @Test
     void testUpdateUserREST() {
         UserDTO userDTO = new UserDTO();
-        
+
         assertEquals(HttpStatus.OK, userREST.updateUserREST(userDTO).getStatusCode());
     }
     
     @Test
     void testDeleteUserEmptyUserREST() {
-        Long id = 6L;
+        Long userId = 6L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
-        doThrow(nsee).when(userService).deleteUser(id);
+        doThrow(nsee).when(userService).deleteUser(userId);
         
-        assertEquals(HttpStatus.NOT_FOUND, userREST.deleteUserREST(id).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, userREST.deleteUserREST(userId).getStatusCode());
     }
         
     @Test
     void testDeleteUserREST() {
-        Long id = 6L;
+        Long userId = 6L;
         
-        doNothing().when(userService).deleteUser(id);
+        doNothing().when(userService).deleteUser(userId);
         
-        assertEquals(HttpStatus.NO_CONTENT, userREST.deleteUserREST(id).getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, userREST.deleteUserREST(userId).getStatusCode());
     }
 }

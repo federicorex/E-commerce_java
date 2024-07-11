@@ -17,73 +17,81 @@ import com.ecommerce.entities.Product;
 public class ProductServiceImpl implements ProductService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
-	private static final String LOGGER_GET_ALL_PRODUCTS = "Fetching all products";
-	private static final String LOGGER_GET_PRODUCT_BY_ID = "Fetching the product with id: {}";
-	private static final String LOGGER_GET_PRODUCT_BY_ID_FAIL = "Fail, product not found";
-	private static final String LOGGER_ADD_PRODUCT_START = "Adding product with id: {}...";
-	private static final String LOGGER_ADD_PRODUCT_SUCCESS = "Success, product with id: {} added";
-	private static final String LOGGER_UPDATE_PRODUCT_START = "Updating product with id: {}...";
-	private static final String LOGGER_UPDATE_PRODUCT_SUCCESS = "Success, product with id: {} updated";
-	private static final String LOGGER_DELETE_PRODUCT_START = "Deleting product with id: {}...";
-	private static final String LOGGER_DELETE_PRODUCT_SUCCESS = "Success, product with id: {} deleted";
+	private static final String LOGGER_GET_ALL_USERS = "Fetching all products";
+	private static final String LOGGER_GET_USER_BY_ID = "Fetching the product with productId: {}";
+	private static final String LOGGER_GET_USER_BY_ID_FAIL = "Fail, product not found";
+	private static final String LOGGER_ADD_USER_START = "Adding product with productId: {}...";
+	private static final String LOGGER_ADD_USER_SUCCESS = "Success, product with productId: {} added";
+	private static final String LOGGER_UPDATE_USER_START = "Updating product with productId: {}...";
+	private static final String LOGGER_UPDATE_USER_SUCCESS = "Success, product with productId: {} updated";
+	private static final String LOGGER_DELETE_USER_START = "Deleting product with productId: {}...";
+	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, product with productId: {} deleted";
 	
 	@Autowired
-	private ProductDAORepository productDAOrepository;
-	
-	public ProductServiceImpl(ProductDAORepository productDAO) {
-		this.productDAOrepository = productDAO;
-	}
+	private ProductDAORepository productDAORepository;
+
+    public ProductServiceImpl(ProductDAORepository productDAORepository) {
+        this.productDAORepository = productDAORepository;
+    }
 
 	@Override
 	public List<Product> getAllProducts() {
-		logger.info(LOGGER_GET_ALL_PRODUCTS);
-		return productDAOrepository.findAll();
+		logger.info(LOGGER_GET_ALL_USERS);
+		return productDAORepository.findAll();
 	}
 
 	@Override
-	public Product getProductById(Long id) {
-		Optional<Product> tempProduct = productDAOrepository.findById(id);
+	public Product getProductById(Long productId) {		
+		Optional<Product> tempProduct = productDAORepository.findById(productId);
 		
 		if(tempProduct.isPresent()) {
 			Product product = tempProduct.get();
 			
-			logger.info(LOGGER_GET_PRODUCT_BY_ID, id);
+			logger.info(LOGGER_GET_USER_BY_ID, productId);
 			return product;
 		} else {
-			logger.warn(LOGGER_GET_PRODUCT_BY_ID_FAIL, id);
-			throw new NoSuchElementException("Product with id: " + id + "not found...");
+			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, productId);
+			throw new NoSuchElementException("Product with productId: " + productId + "not found...");
 		}
 	}
 
 	@Override
 	@Transactional
 	public void addProduct(Product product) {
-		logger.info(LOGGER_ADD_PRODUCT_START, product.getId());
-		productDAOrepository.save(product);
-		logger.info(LOGGER_ADD_PRODUCT_SUCCESS, product.getId());
+		logger.info(LOGGER_ADD_USER_START, product.getId());
+		productDAORepository.save(product);
+		logger.info(LOGGER_ADD_USER_SUCCESS, product.getId());
 	}
 
 	@Override
 	@Transactional
 	public void updateProduct(Product product) {
-		logger.info(LOGGER_UPDATE_PRODUCT_START, product.getId());
-		productDAOrepository.save(product);
-		logger.info(LOGGER_UPDATE_PRODUCT_SUCCESS, product.getId());
+		logger.info(LOGGER_UPDATE_USER_START, product.getId());
+		
+		Optional<Product> tempProduct = productDAORepository.findById(product.getId());
+
+		if(tempProduct.isPresent()) {	
+			productDAORepository.save(product);
+			logger.info(LOGGER_UPDATE_USER_SUCCESS, product.getId());
+		} else {
+			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, product.getId());
+			throw new NoSuchElementException("Product with productId: " + product.getId() + "not found...");
+		}
 	}
 
 	@Override
 	@Transactional
-	public void deleteProduct(Long id) {
-		logger.info(LOGGER_DELETE_PRODUCT_START, id);		
+	public void deleteProduct(Long productId) {
+		logger.info(LOGGER_DELETE_USER_START, productId);
 		
-		Optional<Product> tempProduct = productDAOrepository.findById(id);
+		Optional<Product> tempProduct = productDAORepository.findById(productId);
 		
-		if(tempProduct.isPresent()) {
-			productDAOrepository.deleteById(id);
-			logger.info(LOGGER_DELETE_PRODUCT_SUCCESS, id);
+		if(tempProduct.isPresent()) {	
+			productDAORepository.deleteById(productId);
+			logger.info(LOGGER_DELETE_USER_SUCCESS, productId);
 		} else {
-			logger.warn(LOGGER_GET_PRODUCT_BY_ID_FAIL, id);
-			throw new NoSuchElementException("Product with id: " + id + "not found...");
+			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, productId);
+			throw new NoSuchElementException("Product with productId: " + productId + "not found...");
 		}
 	}
 	

@@ -53,21 +53,21 @@ public class UserServiceTest {
 
     @Test
     void testGetUserByIdEmptyUser() {
-        Long id = 6L;
+        Long userId = 6L;
         
-        when(userDAORepository.findById(id)).thenReturn(Optional.empty());
+        when(userDAORepository.findById(userId)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> userServiceImpl.getUserById(id));
+        assertThrows(NoSuchElementException.class, () -> userServiceImpl.getUserById(userId));
     }
     
     @Test
     void testGetUserByIdExistingUser() {
-        Long id = 6L;
+        Long userId = 6L;
         User user = new User();
         
-        when(userDAORepository.findById(id)).thenReturn(Optional.of(user));
+        when(userDAORepository.findById(userId)).thenReturn(Optional.of(user));
 
-        assertEquals(user, userServiceImpl.getUserById(id));
+        assertEquals(user, userServiceImpl.getUserById(userId));
     }
     
     @Test
@@ -80,9 +80,23 @@ public class UserServiceTest {
     }
     
     @Test
+    void testUpdateEmptyUser() {
+        User user = new User();
+        Long userId = 6L;
+        user.setId(userId);
+
+        when(userDAORepository.findById(user.getId())).thenReturn(Optional.empty());
+        
+        assertThrows(NoSuchElementException.class, () -> userServiceImpl.updateUser(user));
+    }
+    
+    @Test
     void testUpdateUser() {
         User user = new User();
+        Long userId = 6L;
+        user.setId(userId);
 
+        when(userDAORepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(userDAORepository.save(user)).thenReturn(null);
         
         assertDoesNotThrow(() -> userServiceImpl.updateUser(user));
@@ -90,23 +104,23 @@ public class UserServiceTest {
     
     @Test
     void testDeleteUserEmptyUser() {
-        Long id = 6L;
+        Long userId = 6L;
         
-        when(userDAORepository.findById(id)).thenReturn(Optional.empty());
+        when(userDAORepository.findById(userId)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> userServiceImpl.deleteUser(id));
+        assertThrows(NoSuchElementException.class, () -> userServiceImpl.deleteUser(userId));
     }
     
     @Test
     void testDeleteUser() {
-    	Long id = 6L;
+    	Long userId = 6L;
         User user = new User();
         
-        when(userDAORepository.findById(id)).thenReturn(Optional.of(user));
-        assertEquals(user, userServiceImpl.getUserById(id));
-        doNothing().when(userDAORepository).deleteById(id);
+        when(userDAORepository.findById(userId)).thenReturn(Optional.of(user));
+        assertEquals(user, userServiceImpl.getUserById(userId));
+        doNothing().when(userDAORepository).deleteById(userId);
 
-        assertDoesNotThrow(() -> userServiceImpl.deleteUser(id));
+        assertDoesNotThrow(() -> userServiceImpl.deleteUser(userId));
     }
     
 }
