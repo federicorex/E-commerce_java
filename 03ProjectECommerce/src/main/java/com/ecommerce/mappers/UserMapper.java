@@ -1,4 +1,4 @@
-package com.ecommerce.mapper;
+package com.ecommerce.mappers;
 
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.entities.User;

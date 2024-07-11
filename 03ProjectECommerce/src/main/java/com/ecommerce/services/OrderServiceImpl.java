@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService {
 		if(tempUser.isPresent() && tempProduct.isPresent()) {
 			User user = tempUser.get();
 			Product product = tempProduct.get();
-			Order order = new Order(user, product, null);
+			Order order = new Order(user, product);
 			
 			orderDAORepository.save(order);
 			logger.info(LOGGER_ADD_ORDER_SUCCESS);

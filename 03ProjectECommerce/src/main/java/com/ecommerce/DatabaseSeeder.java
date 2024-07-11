@@ -65,5 +65,4 @@ public class DatabaseSeeder implements CommandLineRunner {
 			System.out.println(DATABASE_NOT_SEEDED);
 		}
 	}
-	
 }

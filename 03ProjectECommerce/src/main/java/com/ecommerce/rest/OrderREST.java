@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.dto.OrderDTO;
-import com.ecommerce.mapper.OrderMapper;
+import com.ecommerce.mappers.OrderMapper;
 import com.ecommerce.services.OrderService;
 
 @RestController
@@ -45,10 +45,10 @@ public class OrderREST {
 		}
 	}
 	
-	@PostMapping("orders")
-	public ResponseEntity<Void> addOrderREST(@PathVariable("id") Long orderId, @PathVariable("id") Long productId) {
+	@PostMapping("orders/users/{userId}/products/{productId}")
+	public ResponseEntity<Void> addOrderREST(@PathVariable("userId") Long userId, @PathVariable("productId") Long productId) {
 		try {
-			orderService.addOrder(orderId, productId);
+			orderService.addOrder(userId, productId);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);									

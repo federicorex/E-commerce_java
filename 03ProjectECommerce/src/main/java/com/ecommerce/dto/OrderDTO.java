@@ -12,6 +12,22 @@ public class OrderDTO {
 	private Product product;
 	private LocalDate deliveryDate;
 	
+	public OrderDTO() {
+		
+	}
+	
+	public OrderDTO(User user, Product product) {
+		this.user = user;
+		this.product = product;
+		this.deliveryDate = LocalDate.now().plusDays(5);
+	}
+
+	public OrderDTO(User user, Product product, LocalDate deliveryDate) {
+		this.user = user;
+		this.product = product;
+		this.deliveryDate = deliveryDate;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -42,5 +58,9 @@ public class OrderDTO {
 	
 	public void setDeliveryDate(LocalDate deliveryDate) {
 		this.deliveryDate = deliveryDate;
+	}
+	
+	public void setDefaultDeliveryDate() {
+		this.deliveryDate = LocalDate.now().plusDays(5);
 	}
 }

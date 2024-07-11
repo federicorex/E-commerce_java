@@ -16,6 +16,21 @@ public class UserDTO {
 	private String email;
 	private List<Order> orders;
 	
+	public UserDTO() {
+		
+	}
+
+	public UserDTO(String name, String surname, String password, LocalDate dateOfBirth, String address, String email,
+			List<Order> orders) {
+		this.name = name;
+		this.surname = surname;
+		this.password = password;
+		this.dateOfBirth = dateOfBirth;
+		this.address = address;
+		this.email = email;
+		this.orders = orders;
+	}
+
 	public Long getId() {
 		return id;
 	}

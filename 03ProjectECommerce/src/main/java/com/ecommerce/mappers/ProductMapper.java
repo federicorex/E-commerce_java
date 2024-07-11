@@ -1,4 +1,4 @@
-package com.ecommerce.mapper;
+package com.ecommerce.mappers;
 
 import com.ecommerce.dto.ProductDTO;
 import com.ecommerce.entities.Product;

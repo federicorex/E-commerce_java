@@ -13,7 +13,21 @@ public class ProductDTO {
 	private int quantityInStock;
 	private boolean secondHand;
 	private List<Order> orders;
-	
+
+	public ProductDTO() {
+		
+	}
+
+	public ProductDTO(String name, String brand, String type, int quantityInStock, boolean secondHand,
+			List<Order> orders) {
+		this.name = name;
+		this.brand = brand;
+		this.type = type;
+		this.quantityInStock = quantityInStock;
+		this.secondHand = secondHand;
+		this.orders = orders;
+	}
+
 	public Long getId() {
 		return id;
 	}

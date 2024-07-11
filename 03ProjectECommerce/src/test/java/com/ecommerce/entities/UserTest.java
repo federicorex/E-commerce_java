@@ -97,5 +97,4 @@ public class UserTest {
 		
 		assertEquals(orderList, user.getOrders());
 	}
-	
 }
