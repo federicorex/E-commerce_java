@@ -25,8 +25,8 @@ public class OrderTest {
 		Product product = new Product();
 		Order newOrder = new Order(user, product, null);
 		LocalDate date = LocalDate.of(2024, 12, 1);
-		
 		newOrder.setDeliveryDate(date);
+		
 		assertEquals(user, newOrder.getUser());
 		assertEquals(product, newOrder.getProduct());
 		assertEquals(date, newOrder.getDeliveryDate());
@@ -35,31 +35,38 @@ public class OrderTest {
 	@Test
 	void testGetId() {
 		order.setId(6L);
+		
 		assertEquals(6L, order.getId().longValue());
 	}
 	
 	@Test
 	void testGetUser() {
 		User user = new User();
-		
 		order.setUser(user);
+		
 		assertEquals(user, order.getUser());
 	}
 	
 	@Test
 	void testGetProduct() {
 		Product product = new Product();
-		
 		order.setProduct(product);
+		
 		assertEquals(product, order.getProduct());
 	}
 	
 	@Test
 	void testGetDeliveryDate() {
 		LocalDate date = LocalDate.of(2024, 12, 1);
-		
 		order.setDeliveryDate(date);
+		
 		assertEquals(date, order.getDeliveryDate());
 	}
 	
+	@Test
+	void testGetDefaultDeliveryDate() {
+		order.setDefaultDeliveryDate();
+		
+		assertEquals(LocalDate.now().plusDays(5), order.getDeliveryDate());
+	}
 }

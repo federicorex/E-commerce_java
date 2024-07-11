@@ -86,5 +86,4 @@ public class ProductTest {
 		
 		assertEquals(orderList, product.getOrders());
 	}
-	
 }

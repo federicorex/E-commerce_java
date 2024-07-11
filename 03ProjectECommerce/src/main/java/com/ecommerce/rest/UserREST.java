@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.dto.UserDTO;
-import com.ecommerce.mapper.UserMapper;
+import com.ecommerce.mappers.UserMapper;
 import com.ecommerce.services.UserService;
 
 @RestController

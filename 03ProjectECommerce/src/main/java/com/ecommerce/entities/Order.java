@@ -27,12 +27,17 @@ public class Order {
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
-	//@UpdateTimestamp
 	@Column(name = "deliveryDate", nullable = false)
 	private LocalDate deliveryDate;
 	
 	public Order() {
 		
+	}
+	
+	public Order(User user, Product product) {
+		this.user = user;
+		this.product = product;
+		this.deliveryDate = LocalDate.now().plusDays(5);
 	}
 	
 	public Order(User user, Product product, LocalDate deliveryDate) {
@@ -71,5 +76,9 @@ public class Order {
 
 	public void setDeliveryDate(LocalDate deliveryDate) {
 		this.deliveryDate = deliveryDate;
+	}
+	
+	public void setDefaultDeliveryDate() {
+		this.deliveryDate = LocalDate.now().plusDays(5);
 	}
 }
