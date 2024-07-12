@@ -1,1 +1,1 @@
-Small e-commerce in Java (Spring Boot) and SQL (MySQL)
+Small e-commerce (back-end) in Java (Spring Boot) and SQL (MySQL)
