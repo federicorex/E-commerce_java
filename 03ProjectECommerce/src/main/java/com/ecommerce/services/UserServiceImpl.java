@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,6 @@ public class UserServiceImpl implements UserService {
 	private static final String LOGGER_DELETE_USER_START = "Deleting user with userId: {}...";
 	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, user with userId: {} deleted";
 	
-	@Autowired
 	private UserDAORepository userDAORepository;
 
     public UserServiceImpl(UserDAORepository userDAORepository) {

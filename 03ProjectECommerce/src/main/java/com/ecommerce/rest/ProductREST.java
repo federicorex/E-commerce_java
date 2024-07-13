@@ -24,9 +24,9 @@ import com.ecommerce.services.ProductService;
 @RequestMapping("api")
 public class ProductREST {
 
-	@Autowired
 	private ProductService productService;
 	
+	@Autowired
 	@GetMapping("products")
 	public ResponseEntity<List<ProductDTO>> getAllProductsREST() {
 		List<ProductDTO> productDTOList = productService.getAllProducts()
@@ -35,6 +35,7 @@ public class ProductREST {
 		return new ResponseEntity<>(productDTOList, HttpStatus.OK);
 	}
 	
+	@Autowired
 	@GetMapping("products/{productId}")
 	public ResponseEntity<ProductDTO> getProductByIdREST(@PathVariable("productId") Long productId) {
 		try {
@@ -45,12 +46,14 @@ public class ProductREST {
 		}
 	}
 	
+	@Autowired
 	@PostMapping("products")
 	public ResponseEntity<Void> addProductREST(@RequestBody ProductDTO productDTO) {
 		productService.addProduct(ProductMapper.fromProductDTOToProduct(productDTO));
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
+	@Autowired
 	@PutMapping("products")
 	public ResponseEntity<Void> updateProductREST(@RequestBody ProductDTO productDTO) {
 		try {
@@ -61,6 +64,7 @@ public class ProductREST {
 		}
 	}
 	
+	@Autowired
 	@DeleteMapping("products/{productId}")
 	public ResponseEntity<Void> deleteProductREST(@PathVariable("productId") Long productId) {
 		try {

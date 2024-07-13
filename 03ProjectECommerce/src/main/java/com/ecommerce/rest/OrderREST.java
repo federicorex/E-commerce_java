@@ -24,9 +24,9 @@ import com.ecommerce.services.OrderService;
 @RequestMapping("api")
 public class OrderREST {
 
-	@Autowired
 	private OrderService orderService;
 	
+	@Autowired
 	@GetMapping("orders")
 	public ResponseEntity<List<OrderDTO>> getAllOrdersREST() {
 		List<OrderDTO> orderDTOList = orderService.getAllOrders()
@@ -35,6 +35,7 @@ public class OrderREST {
 		return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
 	}
 	
+	@Autowired
 	@GetMapping("orders/{orderId}")
 	public ResponseEntity<OrderDTO> getOrderByIdREST(@PathVariable("orderId") Long orderId) {
 		try {
@@ -45,6 +46,7 @@ public class OrderREST {
 		}
 	}
 	
+	@Autowired
 	@PostMapping("orders/users/{userId}/products/{productId}")
 	public ResponseEntity<Void> addOrderREST(@PathVariable("userId") Long userId, @PathVariable("productId") Long productId) {
 		try {
@@ -55,6 +57,7 @@ public class OrderREST {
 		}
 	}
 	
+	@Autowired
 	@PutMapping("orders")
 	public ResponseEntity<Void> updateOrderREST(@RequestBody OrderDTO orderDTO) {
 		try {
@@ -65,6 +68,7 @@ public class OrderREST {
 		}
 	}
 	
+	@Autowired
 	@DeleteMapping("orders/{orderId}")
 	public ResponseEntity<Void> deleteOrderREST(@PathVariable("orderId") Long orderId) {
 		try {

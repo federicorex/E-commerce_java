@@ -24,9 +24,9 @@ import com.ecommerce.services.UserService;
 @RequestMapping("api")
 public class UserREST {
 
-	@Autowired
 	private UserService userService;
 	
+	@Autowired
 	@GetMapping("users")
 	public ResponseEntity<List<UserDTO>> getAllUsersREST() {
 		List<UserDTO> userDTOList = userService.getAllUsers()
@@ -35,6 +35,7 @@ public class UserREST {
 		return new ResponseEntity<>(userDTOList, HttpStatus.OK);
 	}
 	
+	@Autowired
 	@GetMapping("users/{userId}")
 	public ResponseEntity<UserDTO> getUserByIdREST(@PathVariable("userId") Long userId) {
 		try {
@@ -45,12 +46,14 @@ public class UserREST {
 		}
 	}
 	
+	@Autowired
 	@PostMapping("users")
 	public ResponseEntity<Void> addUserREST(@RequestBody UserDTO userDTO) {
 		userService.addUser(UserMapper.fromUserDTOToUser(userDTO));
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
+	@Autowired
 	@PutMapping("users")
 	public ResponseEntity<Void> updateUserREST(@RequestBody UserDTO userDTO) {
 		try {
@@ -61,6 +64,7 @@ public class UserREST {
 		}
 	}
 	
+	@Autowired
 	@DeleteMapping("users/{userId}")
 	public ResponseEntity<Void> deleteUserREST(@PathVariable("userId") Long userId) {
 		try {

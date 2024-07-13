@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,11 +31,8 @@ public class OrderServiceImpl implements OrderService {
 	private static final String LOGGER_DELETE_ORDER_START = "Deleting order with orderId: {}...";
 	private static final String LOGGER_DELETE_ORDER_SUCCESS = "Success, order with orderId: {} deleted";
 	
-	@Autowired
 	private UserDAORepository userDAORepository;
-	@Autowired
     private ProductDAORepository productDAORepository;
-	@Autowired
     private OrderDAORepository orderDAORepository;
 
     public OrderServiceImpl(UserDAORepository userDAORepository, ProductDAORepository productDAORepository, OrderDAORepository orderDAORepository) {
