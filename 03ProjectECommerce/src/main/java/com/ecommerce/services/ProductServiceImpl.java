@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,6 @@ public class ProductServiceImpl implements ProductService {
 	private static final String LOGGER_DELETE_USER_START = "Deleting product with productId: {}...";
 	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, product with productId: {} deleted";
 	
-	@Autowired
 	private ProductDAORepository productDAORepository;
 
     public ProductServiceImpl(ProductDAORepository productDAORepository) {
