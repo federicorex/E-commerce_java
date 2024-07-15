@@ -94,4 +94,10 @@ public class UserDTO {
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
 	}
+
+	@Override
+	public String toString() {
+		return "UserDTO [id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
+				+ ", address=" + address + ", email=" + email + ", orders=" + orders + "]";
+	}
 }

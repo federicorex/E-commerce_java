@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +25,10 @@ public class UserREST {
 
 	private UserService userService;
 	
-	@Autowired
+	public UserREST(UserService userService) {
+		this.userService = userService;
+	}
+
 	@GetMapping("users")
 	public ResponseEntity<List<UserDTO>> getAllUsersREST() {
 		List<UserDTO> userDTOList = userService.getAllUsers()
@@ -35,7 +37,6 @@ public class UserREST {
 		return new ResponseEntity<>(userDTOList, HttpStatus.OK);
 	}
 	
-	@Autowired
 	@GetMapping("users/{userId}")
 	public ResponseEntity<UserDTO> getUserByIdREST(@PathVariable("userId") Long userId) {
 		try {
@@ -46,14 +47,12 @@ public class UserREST {
 		}
 	}
 	
-	@Autowired
 	@PostMapping("users")
-	public ResponseEntity<Void> addUserREST(@RequestBody UserDTO userDTO) {
+	public ResponseEntity<String> addUserREST(@RequestBody UserDTO userDTO) {
 		userService.addUser(UserMapper.fromUserDTOToUser(userDTO));
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(userDTO.toString(), HttpStatus.CREATED);
 	}
 	
-	@Autowired
 	@PutMapping("users")
 	public ResponseEntity<Void> updateUserREST(@RequestBody UserDTO userDTO) {
 		try {
@@ -64,7 +63,6 @@ public class UserREST {
 		}
 	}
 	
-	@Autowired
 	@DeleteMapping("users/{userId}")
 	public ResponseEntity<Void> deleteUserREST(@PathVariable("userId") Long userId) {
 		try {

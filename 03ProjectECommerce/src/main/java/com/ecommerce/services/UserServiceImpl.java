@@ -55,10 +55,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void addUser(User user) {
+	public User addUser(User user) {
 		logger.info(LOGGER_ADD_USER_START, user.getId());
 		userDAORepository.save(user);
 		logger.info(LOGGER_ADD_USER_SUCCESS, user.getId());
+		
+		return user;
 	}
 
 	@Override
