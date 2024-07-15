@@ -74,8 +74,10 @@ public class UserServiceTest {
     void testAddUser() {
         User user = new User();
 
-        when(userDAORepository.save(user)).thenReturn(null);
+        when(userDAORepository.save(user)).thenReturn(user);
+        
 
+        assertEquals(user, userServiceImpl.addUser(user));
         assertDoesNotThrow(() -> userServiceImpl.addUser(user));
     }
     

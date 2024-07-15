@@ -122,4 +122,10 @@ public class User {
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
+				+ ", address=" + address + ", email=" + email + ", orders=" + orders + "]";
+	}
 }

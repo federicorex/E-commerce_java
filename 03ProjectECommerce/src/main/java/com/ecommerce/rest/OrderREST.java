@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +25,10 @@ public class OrderREST {
 
 	private OrderService orderService;
 	
-	@Autowired
+	public OrderREST(OrderService orderService) {
+		this.orderService = orderService;
+	}
+
 	@GetMapping("orders")
 	public ResponseEntity<List<OrderDTO>> getAllOrdersREST() {
 		List<OrderDTO> orderDTOList = orderService.getAllOrders()
@@ -35,7 +37,6 @@ public class OrderREST {
 		return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
 	}
 	
-	@Autowired
 	@GetMapping("orders/{orderId}")
 	public ResponseEntity<OrderDTO> getOrderByIdREST(@PathVariable("orderId") Long orderId) {
 		try {
@@ -46,7 +47,6 @@ public class OrderREST {
 		}
 	}
 	
-	@Autowired
 	@PostMapping("orders/users/{userId}/products/{productId}")
 	public ResponseEntity<Void> addOrderREST(@PathVariable("userId") Long userId, @PathVariable("productId") Long productId) {
 		try {
@@ -57,7 +57,6 @@ public class OrderREST {
 		}
 	}
 	
-	@Autowired
 	@PutMapping("orders")
 	public ResponseEntity<Void> updateOrderREST(@RequestBody OrderDTO orderDTO) {
 		try {
@@ -68,7 +67,6 @@ public class OrderREST {
 		}
 	}
 	
-	@Autowired
 	@DeleteMapping("orders/{orderId}")
 	public ResponseEntity<Void> deleteOrderREST(@PathVariable("orderId") Long orderId) {
 		try {
