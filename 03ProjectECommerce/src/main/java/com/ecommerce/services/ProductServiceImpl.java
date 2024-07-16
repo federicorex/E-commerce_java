@@ -35,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> getAllProducts() {
 		logger.info(LOGGER_GET_ALL_USERS);
+		
 		return productDAORepository.findAll();
 	}
 
@@ -46,24 +47,28 @@ public class ProductServiceImpl implements ProductService {
 			Product product = tempProduct.get();
 			
 			logger.info(LOGGER_GET_USER_BY_ID, productId);
+			
 			return product;
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, productId);
+			
 			throw new NoSuchElementException("Product with productId: " + productId + "not found...");
 		}
 	}
 
 	@Override
 	@Transactional
-	public void addProduct(Product product) {
+	public Product addProduct(Product product) {
 		logger.info(LOGGER_ADD_USER_START, product.getId());
 		productDAORepository.save(product);
 		logger.info(LOGGER_ADD_USER_SUCCESS, product.getId());
+		
+		return product;
 	}
 
 	@Override
 	@Transactional
-	public void updateProduct(Product product) {
+	public Product updateProduct(Product product) {
 		logger.info(LOGGER_UPDATE_USER_START, product.getId());
 		
 		Optional<Product> tempProduct = productDAORepository.findById(product.getId());
@@ -71,26 +76,33 @@ public class ProductServiceImpl implements ProductService {
 		if(tempProduct.isPresent()) {	
 			productDAORepository.save(product);
 			logger.info(LOGGER_UPDATE_USER_SUCCESS, product.getId());
+			
+			return product;
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, product.getId());
+			
 			throw new NoSuchElementException("Product with productId: " + product.getId() + "not found...");
 		}
 	}
 
 	@Override
 	@Transactional
-	public void deleteProduct(Long productId) {
+	public Product deleteProduct(Long productId) {
 		logger.info(LOGGER_DELETE_USER_START, productId);
 		
 		Optional<Product> tempProduct = productDAORepository.findById(productId);
 		
-		if(tempProduct.isPresent()) {	
+		if(tempProduct.isPresent()) {
+			Product product = tempProduct.get();
+			
 			productDAORepository.deleteById(productId);
 			logger.info(LOGGER_DELETE_USER_SUCCESS, productId);
+			
+			return product;
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, productId);
+			
 			throw new NoSuchElementException("Product with productId: " + productId + "not found...");
 		}
 	}
-	
 }

@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
 			User user = tempUser.get();
 			
 			logger.info(LOGGER_GET_USER_BY_ID, userId);
+			
 			return user;
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userId);
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void updateUser(User user) {
+	public User updateUser(User user) {
 		logger.info(LOGGER_UPDATE_USER_START, user.getId());
 		
 		Optional<User> tempUser = userDAORepository.findById(user.getId());
@@ -73,26 +74,33 @@ public class UserServiceImpl implements UserService {
 		if(tempUser.isPresent()) {	
 			userDAORepository.save(user);
 			logger.info(LOGGER_UPDATE_USER_SUCCESS, user.getId());
+			
+			return user;
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, user.getId());
+			
 			throw new NoSuchElementException("User with userId: " + user.getId() + "not found...");
 		}
 	}
 
 	@Override
 	@Transactional
-	public void deleteUser(Long userId) {
+	public User deleteUser(Long userId) {
 		logger.info(LOGGER_DELETE_USER_START, userId);
 		
 		Optional<User> tempUser = userDAORepository.findById(userId);
 		
-		if(tempUser.isPresent()) {	
+		if(tempUser.isPresent()) {
+			User user = tempUser.get();
+			
 			userDAORepository.deleteById(userId);
 			logger.info(LOGGER_DELETE_USER_SUCCESS, userId);
+			
+			return user;
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userId);
+			
 			throw new NoSuchElementException("User with userId: " + userId + "not found...");
 		}
 	}
-	
 }

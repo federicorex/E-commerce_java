@@ -34,6 +34,7 @@ public class UserREST {
 		List<UserDTO> userDTOList = userService.getAllUsers()
 				.stream().map(user -> UserMapper.fromUserToUserDTO(user))
 				.collect(Collectors.toList());
+		
 		return new ResponseEntity<>(userDTOList, HttpStatus.OK);
 	}
 	
@@ -41,6 +42,7 @@ public class UserREST {
 	public ResponseEntity<UserDTO> getUserByIdREST(@PathVariable("userId") Long userId) {
 		try {
 			UserDTO userDTO = UserMapper.fromUserToUserDTO(userService.getUserById(userId));
+			
 			return new ResponseEntity<>(userDTO, HttpStatus.OK);			
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
@@ -50,23 +52,26 @@ public class UserREST {
 	@PostMapping("users")
 	public ResponseEntity<String> addUserREST(@RequestBody UserDTO userDTO) {
 		userService.addUser(UserMapper.fromUserDTOToUser(userDTO));
+		
 		return new ResponseEntity<>(userDTO.toString(), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("users")
-	public ResponseEntity<Void> updateUserREST(@RequestBody UserDTO userDTO) {
+	public ResponseEntity<String> updateUserREST(@RequestBody UserDTO userDTO) {
 		try {
 			userService.updateUser(UserMapper.fromUserDTOToUser(userDTO));
-			return new ResponseEntity<>(HttpStatus.OK);
+			
+			return new ResponseEntity<>(userDTO.toString(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
 		}
 	}
 	
 	@DeleteMapping("users/{userId}")
-	public ResponseEntity<Void> deleteUserREST(@PathVariable("userId") Long userId) {
+	public ResponseEntity<String> deleteUserREST(@PathVariable("userId") Long userId) {
 		try {
 			userService.deleteUser(userId);
+			
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
