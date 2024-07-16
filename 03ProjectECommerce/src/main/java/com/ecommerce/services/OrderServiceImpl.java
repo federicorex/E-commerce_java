@@ -44,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<Order> getAllOrders() {
 		logger.info(LOGGER_GET_ALL_ORDERS);
+		
 		return orderDAORepository.findAll();
 	}
 
@@ -55,16 +56,18 @@ public class OrderServiceImpl implements OrderService {
 			Order order = tempOrder.get();
 			
 			logger.info(LOGGER_GET_ORDER_BY_ID, orderId);
+			
 			return order;
 		} else {
 			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, orderId);
+			
 			throw new NoSuchElementException("Order with orderId: " + orderId + "not found...");
 		}
 	}
 
 	@Override
 	@Transactional
-	public void addOrder(Long userId, Long productId) {
+	public Order addOrder(Long userId, Long productId) {
 		logger.info(LOGGER_ADD_ORDER_START, userId, productId);
 		
 		Optional<User> tempUser = userDAORepository.findById(userId);
@@ -77,15 +80,18 @@ public class OrderServiceImpl implements OrderService {
 			
 			orderDAORepository.save(order);
 			logger.info(LOGGER_ADD_ORDER_SUCCESS);
+			
+			return order;
 		} else {
 			logger.warn(LOGGER_ADD_ORDER_FAIL);
+			
 			throw new NoSuchElementException("User with id: " + userId + " or product with id: " + productId + " not found...");
 		}
 	}
 
 	@Override
 	@Transactional
-	public void updateOrder(Order order) {
+	public Order updateOrder(Order order) {
 		logger.info(LOGGER_UPDATE_ORDER_START, order.getId());
 		
 		Optional<Order> tempOrder = orderDAORepository.findById(order.getId());
@@ -93,26 +99,33 @@ public class OrderServiceImpl implements OrderService {
 		if(tempOrder.isPresent()) {	
 			orderDAORepository.save(order);
 			logger.info(LOGGER_UPDATE_ORDER_SUCCESS, order.getId());
+			
+			return order;
 		} else {
 			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, order.getId());
+			
 			throw new NoSuchElementException("Order with orderId: " + order.getId() + "not found...");
 		}
 	}
 
 	@Override
 	@Transactional
-	public void deleteOrder(Long orderId) {
+	public Order deleteOrder(Long orderId) {
 		logger.info(LOGGER_DELETE_ORDER_START, orderId);
 		
 		Optional<Order> tempOrder = orderDAORepository.findById(orderId);
 		
 		if(tempOrder.isPresent()) {	
+			Order order = tempOrder.get();
+			
 			orderDAORepository.deleteById(orderId);
 			logger.info(LOGGER_DELETE_ORDER_SUCCESS, orderId);
+			
+			return order;
 		} else {
 			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, orderId);
+			
 			throw new NoSuchElementException("Order with orderId: " + orderId + "not found...");
 		}
 	}
-	
 }

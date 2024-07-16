@@ -13,7 +13,7 @@ public interface OrderService {
 	
 	List<Order> getAllOrders();
 	Order getOrderById(Long id);
-	void addOrder(Long userId, Long productId);
-	void updateOrder(Order order);
-	void deleteOrder(Long id);
+	Order addOrder(Long userId, Long productId);
+	Order updateOrder(Order order);
+	Order deleteOrder(Long id);
 }
