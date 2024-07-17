@@ -64,9 +64,8 @@ public class OrderDTO {
 		this.deliveryDate = LocalDate.now().plusDays(5);
 	}
 
-	@Override
-	public String toString() {
-		return "OrderDTO [id=" + id + ", user=" + user + ", product=" + product + ", deliveryDate=" + deliveryDate
-				+ "]";
+	public String toStringOrderCreatedOrUpdated() {
+		return "The order with id=" + id + ", user=" + user + ", product=" + product + ", deliveryDate=" + deliveryDate
+				+ " is created or updated successfully";
 	}
 }

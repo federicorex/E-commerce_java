@@ -53,7 +53,7 @@ public class UserREST {
 	public ResponseEntity<String> addUserREST(@RequestBody UserDTO userDTO) {
 		userService.addUser(UserMapper.fromUserDTOToUser(userDTO));
 		
-		return new ResponseEntity<>(userDTO.toString(), HttpStatus.CREATED);
+		return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("users")
@@ -61,14 +61,14 @@ public class UserREST {
 		try {
 			userService.updateUser(UserMapper.fromUserDTOToUser(userDTO));
 			
-			return new ResponseEntity<>(userDTO.toString(), HttpStatus.OK);
+			return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
 		}
 	}
 	
 	@DeleteMapping("users/{userId}")
-	public ResponseEntity<String> deleteUserREST(@PathVariable("userId") Long userId) {
+	public ResponseEntity<Void> deleteUserREST(@PathVariable("userId") Long userId) {
 		try {
 			userService.deleteUser(userId);
 			

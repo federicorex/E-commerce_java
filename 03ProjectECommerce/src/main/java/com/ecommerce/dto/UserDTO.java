@@ -95,9 +95,8 @@ public class UserDTO {
 		this.orders = orders;
 	}
 
-	@Override
-	public String toString() {
-		return "UserDTO [id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
-				+ ", address=" + address + ", email=" + email + ", orders=" + orders + "]";
+	public String toStringUserCreatedOrUpdated() {
+		return "The user with id=" + id + ", name=" + name + ", surname=" + surname + ", dateOfBirth=" + dateOfBirth
+				+ ", address=" + address + ", email=" + email + ", orders=" + orders + " is created or updated successfully";
 	}
 }

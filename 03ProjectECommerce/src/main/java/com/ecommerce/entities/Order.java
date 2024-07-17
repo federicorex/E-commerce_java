@@ -81,9 +81,4 @@ public class Order {
 	public void setDefaultDeliveryDate() {
 		this.deliveryDate = LocalDate.now().plusDays(5);
 	}
-
-	@Override
-	public String toString() {
-		return "Order [id=" + id + ", user=" + user + ", product=" + product + ", deliveryDate=" + deliveryDate + "]";
-	}
 }

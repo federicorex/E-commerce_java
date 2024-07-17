@@ -23,8 +23,8 @@ public class OrderServiceImpl implements OrderService {
 	private static final String LOGGER_GET_ALL_ORDERS = "Fetching all orders";
 	private static final String LOGGER_GET_ORDER_BY_ID = "Fetching the order with orderId: {}";
 	private static final String LOGGER_GET_ORDER_BY_ID_FAIL = "Fail, order not found";
-	private static final String LOGGER_ADD_ORDER_START = "Adding order with orderId: {}...";
-	private static final String LOGGER_ADD_ORDER_SUCCESS = "Success, order with orderId: {} added";
+	private static final String LOGGER_ADD_ORDER_START = "Adding order with userId: {} and productId: {}...";
+	private static final String LOGGER_ADD_ORDER_SUCCESS = "Success, order with orderId: {}, userId: {} and productId: {} added";
 	private static final String LOGGER_ADD_ORDER_FAIL = "Fail, order not added: user or product not found";
 	private static final String LOGGER_UPDATE_ORDER_START = "Updating order with orderId: {}...";
 	private static final String LOGGER_UPDATE_ORDER_SUCCESS = "Success, order with orderId: {} updated";
@@ -79,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
 			Order order = new Order(user, product);
 			
 			orderDAORepository.save(order);
-			logger.info(LOGGER_ADD_ORDER_SUCCESS);
+			logger.info(LOGGER_ADD_ORDER_SUCCESS, order.getId(), userId, productId);
 			
 			return order;
 		} else {

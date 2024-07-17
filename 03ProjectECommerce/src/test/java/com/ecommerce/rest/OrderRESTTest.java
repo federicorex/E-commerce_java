@@ -1,7 +1,6 @@
 package com.ecommerce.rest;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -86,8 +85,9 @@ public class OrderRESTTest {
 	void testAddOrderREST() {
 		Long userId = 6L;
 		Long productId = 6L;
+		Order order = new Order();
 		
-		doNothing().when(orderService).addOrder(userId, productId);
+		when(orderService.addOrder(userId, productId)).thenReturn(order);
 		
 		assertEquals(HttpStatus.CREATED, orderREST.addOrderREST(userId, productId).getStatusCode());
 	}
@@ -112,8 +112,9 @@ public class OrderRESTTest {
     @Test
     void testDeleteOrderREST() {
         Long orderId = 6L;
+        Order order = new Order();
         
-        doNothing().when(orderService).deleteOrder(orderId);
+        when(orderService.deleteOrder(orderId)).thenReturn(order);
         
         assertEquals(HttpStatus.NO_CONTENT, orderREST.deleteOrderREST(orderId).getStatusCode());
     }
