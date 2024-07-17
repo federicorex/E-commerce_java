@@ -84,9 +84,8 @@ public class ProductDTO {
 		this.orders = orders;
 	}
 
-	@Override
-	public String toString() {
-		return "ProductDTO [id=" + id + ", name=" + name + ", brand=" + brand + ", type=" + type + ", quantityInStock="
-				+ quantityInStock + ", secondHand=" + secondHand + ", orders=" + orders + "]";
+	public String toStringProductCreatedOrUpdated() {
+		return "The product with id=" + id + ", name=" + name + ", brand=" + brand + ", type=" + type + ", quantityInStock="
+				+ quantityInStock + ", secondHand=" + secondHand + ", orders=" + orders + " is created or updated successfully";
 	}
 }

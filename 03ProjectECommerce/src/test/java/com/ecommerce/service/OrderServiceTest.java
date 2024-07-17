@@ -82,46 +82,50 @@ public class OrderServiceTest {
     
     @Test
     void testAddOrderEmptyUserAndProduct() {
-    	Long id = 6L;
+    	Long userId = 5L;
+    	Long productId = 6L;
 
-        when(userDAORepository.findById(id)).thenReturn(Optional.empty());
-        when(productDAORepository.findById(id)).thenReturn(Optional.empty());
+        when(userDAORepository.findById(userId)).thenReturn(Optional.empty());
+        when(productDAORepository.findById(productId)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.addOrder(id, id));
+        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.addOrder(userId, productId));
     }
     
     @Test
     void testAddOrderEmptyProduct() {
-    	Long id = 6L;
+    	Long userId = 5L;
+    	Long productId = 6L;
     	User user = new User();
 
-        when(userDAORepository.findById(id)).thenReturn(Optional.of(user));
-        when(productDAORepository.findById(id)).thenReturn(Optional.empty());
+        when(userDAORepository.findById(userId)).thenReturn(Optional.of(user));
+        when(productDAORepository.findById(productId)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.addOrder(id, id));
+        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.addOrder(userId, productId));
     }
     
     @Test
     void testAddOrderEmptyUser() {
-    	Long id = 6L;
+    	Long userId = 5L;
+    	Long productId = 6L;
     	Product product = new Product();
 
-        when(productDAORepository.findById(id)).thenReturn(Optional.of(product));
-        when(userDAORepository.findById(id)).thenReturn(Optional.empty());
+        when(userDAORepository.findById(userId)).thenReturn(Optional.empty());
+        when(productDAORepository.findById(productId)).thenReturn(Optional.of(product));
 
-        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.addOrder(id, id));
+        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.addOrder(userId, productId));
     }
     
     @Test
     void testAddOrder() {
-    	Long id = 6L;
+    	Long userId = 5L;
+    	Long productId = 6L;
     	User user = new User();
     	Product product = new Product();
 
-        when(userDAORepository.findById(id)).thenReturn(Optional.of(user));
-        when(productDAORepository.findById(id)).thenReturn(Optional.of(product));
+        when(userDAORepository.findById(userId)).thenReturn(Optional.of(user));
+        when(productDAORepository.findById(productId)).thenReturn(Optional.of(product));
 
-        assertDoesNotThrow(() -> orderServiceImpl.addOrder(id, id));
+        assertDoesNotThrow(() -> orderServiceImpl.addOrder(userId, productId));
     }
     
     @Test

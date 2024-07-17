@@ -1,7 +1,6 @@
 package com.ecommerce.rest;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -98,8 +97,9 @@ public class UserRESTTest {
     @Test
     void testDeleteUserREST() {
         Long userId = 6L;
+        User user = new User();
         
-        doNothing().when(userService).deleteUser(userId);
+        when(userService.deleteUser(userId)).thenReturn(user);
         
         assertEquals(HttpStatus.NO_CONTENT, userREST.deleteUserREST(userId).getStatusCode());
     }

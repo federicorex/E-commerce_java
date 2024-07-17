@@ -48,20 +48,20 @@ public class OrderREST {
 	}
 	
 	@PostMapping("orders/users/{userId}/products/{productId}")
-	public ResponseEntity<Void> addOrderREST(@PathVariable("userId") Long userId, @PathVariable("productId") Long productId) {
+	public ResponseEntity<String> addOrderREST(@PathVariable("userId") Long userId, @PathVariable("productId") Long productId) {
 		try {
 			orderService.addOrder(userId, productId);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			return new ResponseEntity<>("Success, order with userId: "+ userId + " and productId: "+ productId +" added", HttpStatus.CREATED);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);									
 		}
 	}
 	
 	@PutMapping("orders")
-	public ResponseEntity<Void> updateOrderREST(@RequestBody OrderDTO orderDTO) {
+	public ResponseEntity<String> updateOrderREST(@RequestBody OrderDTO orderDTO) {
 		try {
 			orderService.updateOrder(OrderMapper.fromOrderDTOToOrder(orderDTO));
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(orderDTO.toStringOrderCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
 		}

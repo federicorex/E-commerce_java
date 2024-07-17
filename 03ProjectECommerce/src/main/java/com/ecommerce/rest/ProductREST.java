@@ -48,16 +48,16 @@ public class ProductREST {
 	}
 	
 	@PostMapping("products")
-	public ResponseEntity<Void> addProductREST(@RequestBody ProductDTO productDTO) {
+	public ResponseEntity<String> addProductREST(@RequestBody ProductDTO productDTO) {
 		productService.addProduct(ProductMapper.fromProductDTOToProduct(productDTO));
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(productDTO.toStringProductCreatedOrUpdated(), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("products")
-	public ResponseEntity<Void> updateProductREST(@RequestBody ProductDTO productDTO) {
+	public ResponseEntity<String> updateProductREST(@RequestBody ProductDTO productDTO) {
 		try {
 			productService.updateProduct(ProductMapper.fromProductDTOToProduct(productDTO));
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(productDTO.toStringProductCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
 		}
