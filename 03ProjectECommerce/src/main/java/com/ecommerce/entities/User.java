@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +41,8 @@ public class User {
 	@Column(name = "email", nullable = false, length = 45)
 	private String email;
 	
-	@JsonIgnore
+	@JsonManagedReference
+//	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Order> orders;
 	
