@@ -3,6 +3,7 @@ package com.ecommerce.entities;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +36,8 @@ public class Product {
 	@Column(name = "secondHand", nullable = false)
 	private boolean secondHand;
 	
-	@JsonIgnore
+	@JsonManagedReference
+//	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<Order> orders;
 	
