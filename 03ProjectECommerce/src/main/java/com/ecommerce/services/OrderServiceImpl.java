@@ -45,12 +45,12 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> getAllOrders() {
 		logger.info(LOGGER_GET_ALL_ORDERS);
 		
-		return orderDAORepository.findAll();
+		return this.orderDAORepository.findAll();
 	}
 
 	@Override
 	public Order getOrderById(Long orderId) {		
-		Optional<Order> tempOrder = orderDAORepository.findById(orderId);
+		Optional<Order> tempOrder = this.orderDAORepository.findById(orderId);
 		
 		if(tempOrder.isPresent()) {
 			Order order = tempOrder.get();
@@ -70,15 +70,15 @@ public class OrderServiceImpl implements OrderService {
 	public Order addOrder(Long userId, Long productId) {
 		logger.info(LOGGER_ADD_ORDER_START, userId, productId);
 		
-		Optional<User> tempUser = userDAORepository.findById(userId);
-		Optional <Product> tempProduct = productDAORepository.findById(productId);
+		Optional<User> tempUser = this.userDAORepository.findById(userId);
+		Optional <Product> tempProduct = this.productDAORepository.findById(productId);
 		
 		if(tempUser.isPresent() && tempProduct.isPresent()) {
 			User user = tempUser.get();
 			Product product = tempProduct.get();
 			Order order = new Order(user, product);
 			
-			orderDAORepository.save(order);
+			this.orderDAORepository.save(order);
 			logger.info(LOGGER_ADD_ORDER_SUCCESS, order.getId(), userId, productId);
 			
 			return order;
@@ -94,10 +94,10 @@ public class OrderServiceImpl implements OrderService {
 	public Order updateOrder(Order order) {
 		logger.info(LOGGER_UPDATE_ORDER_START, order.getId());
 		
-		Optional<Order> tempOrder = orderDAORepository.findById(order.getId());
+		Optional<Order> tempOrder = this.orderDAORepository.findById(order.getId());
 
 		if(tempOrder.isPresent()) {	
-			orderDAORepository.save(order);
+			this.orderDAORepository.save(order);
 			logger.info(LOGGER_UPDATE_ORDER_SUCCESS, order.getId());
 			
 			return order;
@@ -113,12 +113,12 @@ public class OrderServiceImpl implements OrderService {
 	public Order deleteOrder(Long orderId) {
 		logger.info(LOGGER_DELETE_ORDER_START, orderId);
 		
-		Optional<Order> tempOrder = orderDAORepository.findById(orderId);
+		Optional<Order> tempOrder = this.orderDAORepository.findById(orderId);
 		
 		if(tempOrder.isPresent()) {	
 			Order order = tempOrder.get();
 			
-			orderDAORepository.deleteById(orderId);
+			this.orderDAORepository.deleteById(orderId);
 			logger.info(LOGGER_DELETE_ORDER_SUCCESS, orderId);
 			
 			return order;

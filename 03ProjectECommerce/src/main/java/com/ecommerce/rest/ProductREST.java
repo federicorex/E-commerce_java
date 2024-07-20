@@ -31,7 +31,7 @@ public class ProductREST {
 
 	@GetMapping("products")
 	public ResponseEntity<List<ProductDTO>> getAllProductsREST() {
-		List<ProductDTO> productDTOList = productService.getAllProducts()
+		List<ProductDTO> productDTOList = this.productService.getAllProducts()
 				.stream().map(product -> ProductMapper.fromProductToProductDTO(product))
 				.collect(Collectors.toList());
 		return new ResponseEntity<>(productDTOList, HttpStatus.OK);
@@ -40,7 +40,7 @@ public class ProductREST {
 	@GetMapping("products/{productId}")
 	public ResponseEntity<ProductDTO> getProductByIdREST(@PathVariable("productId") Long productId) {
 		try {
-			ProductDTO productDTO = ProductMapper.fromProductToProductDTO(productService.getProductById(productId));
+			ProductDTO productDTO = ProductMapper.fromProductToProductDTO(this.productService.getProductById(productId));
 			return new ResponseEntity<>(productDTO, HttpStatus.OK);			
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
@@ -49,14 +49,14 @@ public class ProductREST {
 	
 	@PostMapping("products")
 	public ResponseEntity<String> addProductREST(@RequestBody ProductDTO productDTO) {
-		productService.addProduct(ProductMapper.fromProductDTOToProduct(productDTO));
+		this.productService.addProduct(ProductMapper.fromProductDTOToProduct(productDTO));
 		return new ResponseEntity<>(productDTO.toStringProductCreatedOrUpdated(), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("products")
 	public ResponseEntity<String> updateProductREST(@RequestBody ProductDTO productDTO) {
 		try {
-			productService.updateProduct(ProductMapper.fromProductDTOToProduct(productDTO));
+			this.productService.updateProduct(ProductMapper.fromProductDTOToProduct(productDTO));
 			return new ResponseEntity<>(productDTO.toStringProductCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
@@ -66,7 +66,7 @@ public class ProductREST {
 	@DeleteMapping("products/{productId}")
 	public ResponseEntity<Void> deleteProductREST(@PathVariable("productId") Long productId) {
 		try {
-			productService.deleteProduct(productId);
+			this.productService.deleteProduct(productId);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
