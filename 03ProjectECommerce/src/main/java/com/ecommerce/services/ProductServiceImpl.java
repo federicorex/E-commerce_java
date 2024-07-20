@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product getProductById(Long productId) {		
-		Optional<Product> tempProduct = productDAORepository.findById(productId);
+		Optional<Product> tempProduct = this.productDAORepository.findById(productId);
 		
 		if(tempProduct.isPresent()) {
 			Product product = tempProduct.get();
@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional
 	public Product addProduct(Product product) {
 		logger.info(LOGGER_ADD_USER_START, product.getId());
-		productDAORepository.save(product);
+		this.productDAORepository.save(product);
 		logger.info(LOGGER_ADD_USER_SUCCESS, product.getId());
 		
 		return product;
@@ -71,10 +71,10 @@ public class ProductServiceImpl implements ProductService {
 	public Product updateProduct(Product product) {
 		logger.info(LOGGER_UPDATE_USER_START, product.getId());
 		
-		Optional<Product> tempProduct = productDAORepository.findById(product.getId());
+		Optional<Product> tempProduct = this.productDAORepository.findById(product.getId());
 
 		if(tempProduct.isPresent()) {	
-			productDAORepository.save(product);
+			this.productDAORepository.save(product);
 			logger.info(LOGGER_UPDATE_USER_SUCCESS, product.getId());
 			
 			return product;
@@ -90,12 +90,12 @@ public class ProductServiceImpl implements ProductService {
 	public Product deleteProduct(Long productId) {
 		logger.info(LOGGER_DELETE_USER_START, productId);
 		
-		Optional<Product> tempProduct = productDAORepository.findById(productId);
+		Optional<Product> tempProduct = this.productDAORepository.findById(productId);
 		
 		if(tempProduct.isPresent()) {
 			Product product = tempProduct.get();
 			
-			productDAORepository.deleteById(productId);
+			this.productDAORepository.deleteById(productId);
 			logger.info(LOGGER_DELETE_USER_SUCCESS, productId);
 			
 			return product;

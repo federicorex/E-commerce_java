@@ -35,12 +35,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> getAllUsers() {
 		logger.info(LOGGER_GET_ALL_USERS);
-		return userDAORepository.findAll();
+		return this.userDAORepository.findAll();
 	}
 
 	@Override
 	public User getUserById(Long userId) {		
-		Optional<User> tempUser = userDAORepository.findById(userId);
+		Optional<User> tempUser = this.userDAORepository.findById(userId);
 		
 		if(tempUser.isPresent()) {
 			User user = tempUser.get();
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public User addUser(User user) {
 		logger.info(LOGGER_ADD_USER_START, user.getId());
-		userDAORepository.save(user);
+		this.userDAORepository.save(user);
 		logger.info(LOGGER_ADD_USER_SUCCESS, user.getId());
 		
 		return user;
@@ -69,10 +69,10 @@ public class UserServiceImpl implements UserService {
 	public User updateUser(User user) {
 		logger.info(LOGGER_UPDATE_USER_START, user.getId());
 		
-		Optional<User> tempUser = userDAORepository.findById(user.getId());
+		Optional<User> tempUser = this.userDAORepository.findById(user.getId());
 
 		if(tempUser.isPresent()) {	
-			userDAORepository.save(user);
+			this.userDAORepository.save(user);
 			logger.info(LOGGER_UPDATE_USER_SUCCESS, user.getId());
 			
 			return user;
@@ -88,12 +88,12 @@ public class UserServiceImpl implements UserService {
 	public User deleteUser(Long userId) {
 		logger.info(LOGGER_DELETE_USER_START, userId);
 		
-		Optional<User> tempUser = userDAORepository.findById(userId);
+		Optional<User> tempUser = this.userDAORepository.findById(userId);
 		
 		if(tempUser.isPresent()) {
 			User user = tempUser.get();
 			
-			userDAORepository.deleteById(userId);
+			this.userDAORepository.deleteById(userId);
 			logger.info(LOGGER_DELETE_USER_SUCCESS, userId);
 			
 			return user;
