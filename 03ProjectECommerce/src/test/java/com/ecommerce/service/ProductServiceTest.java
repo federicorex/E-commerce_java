@@ -1,7 +1,8 @@
 package com.ecommerce.service;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 //import static org.junit.Assert.assertEquals;
 //import static org.junit.Assert.assertThrows;
@@ -22,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ecommerce.dal.ProductDAORepository;
+import com.ecommerce.dto.ProductDTO;
 import com.ecommerce.entities.Product;
 import com.ecommerce.services.ProductServiceImpl;
 
@@ -46,9 +48,10 @@ public class ProductServiceTest {
         productList.add(product);
 
         when(productDAORepository.findAll()).thenReturn(productList);
-        List<Product> result = productServiceImpl.getAllProducts();
+        List<ProductDTO> productDTOList = new ArrayList<>();
 
-        assertEquals(productList, result);
+        assertNotNull(productServiceImpl.getAllProducts());
+        assertTrue(productDTOList.getClass().equals(productServiceImpl.getAllProducts().getClass()));
     }
 
     @Test
@@ -61,45 +64,47 @@ public class ProductServiceTest {
     }
     
     @Test
-    void testGetProductByIdExistingProduct() {
+    void testGetProductById() {
         Long productId = 6L;
         Product product = new Product();
+        ProductDTO productDTO = new ProductDTO();
         
         when(productDAORepository.findById(productId)).thenReturn(Optional.of(product));
 
-        assertEquals(product, productServiceImpl.getProductById(productId));
+        assertDoesNotThrow(() -> productServiceImpl.getProductById(productId));
+        assertNotNull(productServiceImpl.getProductById(productId));
+        assertTrue(productDTO.getClass().equals(productServiceImpl.getProductById(productId).getClass()));
     }
     
     @Test
     void testAddProduct() {
-        Product product = new Product();
+        ProductDTO productDTO = new ProductDTO();
 
-        when(productDAORepository.save(product)).thenReturn(null);
-
-        assertDoesNotThrow(() -> productServiceImpl.addProduct(product));
+        assertNotNull(productServiceImpl.addProduct(productDTO));
+        assertTrue(productDTO.getClass().equals(productServiceImpl.addProduct(productDTO).getClass()));
     }
     
     @Test
     void testUpdateEmptyProduct() {
-        Product product = new Product();
-        Long productId = 6L;
-        product.setId(productId);
-
-        when(productDAORepository.findById(product.getId())).thenReturn(Optional.empty());
+        ProductDTO productDTO = new ProductDTO();
         
-        assertThrows(NoSuchElementException.class, () -> productServiceImpl.updateProduct(product));
+        when(productDAORepository.findById(null)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> productServiceImpl.updateProduct(productDTO));
     }
     
     @Test
     void testUpdateProduct() {
+        ProductDTO productDTO = new ProductDTO();
         Product product = new Product();
-        Long productId = 6L;
-        product.setId(productId);
+        Long productDTOId = 6L;
+        productDTO.setId(productDTOId);
 
-        when(productDAORepository.findById(product.getId())).thenReturn(Optional.of(product));
-        when(productDAORepository.save(product)).thenReturn(null);
+        when(productDAORepository.findById(productDTO.getId())).thenReturn(Optional.of(product));
         
-        assertDoesNotThrow(() -> productServiceImpl.updateProduct(product));
+        assertDoesNotThrow(() -> productServiceImpl.updateProduct(productDTO));
+        assertNotNull(productServiceImpl.updateProduct(productDTO));
+        assertTrue(productDTO.getClass().equals(productServiceImpl.updateProduct(productDTO).getClass()));
     }
     
     @Test
@@ -115,12 +120,13 @@ public class ProductServiceTest {
     void testDeleteProduct() {
     	Long productId = 6L;
         Product product = new Product();
+        String messagge = "deletion";
         
         when(productDAORepository.findById(productId)).thenReturn(Optional.of(product));
-        assertEquals(product, productServiceImpl.getProductById(productId));
         doNothing().when(productDAORepository).deleteById(productId);
-
+        
         assertDoesNotThrow(() -> productServiceImpl.deleteProduct(productId));
+        assertNotNull(productServiceImpl.deleteProduct(productId));
+        assertTrue(messagge.getClass().equals(productServiceImpl.deleteProduct(productId).getClass()));
     }
-    
 }

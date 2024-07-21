@@ -41,7 +41,7 @@ public class User {
 	@Column(name = "email", nullable = false, length = 45)
 	private String email;
 	
-	@JsonManagedReference
+	@JsonManagedReference(value = "order-user")
 //	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Order> orders;

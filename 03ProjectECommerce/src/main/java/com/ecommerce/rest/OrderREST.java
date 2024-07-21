@@ -2,7 +2,6 @@ package com.ecommerce.rest;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.dto.OrderDTO;
-import com.ecommerce.mappers.OrderMapper;
 import com.ecommerce.services.OrderService;
 
 @RestController
@@ -31,17 +29,13 @@ public class OrderREST {
 
 	@GetMapping("orders")
 	public ResponseEntity<List<OrderDTO>> getAllOrdersREST() {
-		List<OrderDTO> orderDTOList = this.orderService.getAllOrders()
-				.stream().map(order -> OrderMapper.fromOrderToOrderDTO(order))
-				.collect(Collectors.toList());
-		return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
+		return new ResponseEntity<>(this.orderService.getAllOrders(), HttpStatus.OK);
 	}
 	
 	@GetMapping("orders/{orderId}")
 	public ResponseEntity<OrderDTO> getOrderByIdREST(@PathVariable("orderId") Long orderId) {
 		try {
-			OrderDTO orderDTO = OrderMapper.fromOrderToOrderDTO(this.orderService.getOrderById(orderId));
-			return new ResponseEntity<>(orderDTO, HttpStatus.OK);			
+			return new ResponseEntity<>(this.orderService.getOrderById(orderId), HttpStatus.OK);			
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
 		}
@@ -50,8 +44,8 @@ public class OrderREST {
 	@PostMapping("orders/users/{userId}/products/{productId}")
 	public ResponseEntity<String> addOrderREST(@PathVariable("userId") Long userId, @PathVariable("productId") Long productId) {
 		try {
-			this.orderService.addOrder(userId, productId);
-			return new ResponseEntity<>("Success, order with userId: "+ userId + " and productId: "+ productId +" added", HttpStatus.CREATED);
+			OrderDTO orderDTO = this.orderService.addOrder(userId, productId);
+			return new ResponseEntity<>(orderDTO.toStringOrderCreatedOrUpdated(), HttpStatus.CREATED);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);									
 		}
@@ -60,7 +54,8 @@ public class OrderREST {
 	@PutMapping("orders")
 	public ResponseEntity<String> updateOrderREST(@RequestBody OrderDTO orderDTO) {
 		try {
-			this.orderService.updateOrder(OrderMapper.fromOrderDTOToOrder(orderDTO));
+			this.orderService.updateOrder(orderDTO);
+			
 			return new ResponseEntity<>(orderDTO.toStringOrderCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
@@ -71,9 +66,10 @@ public class OrderREST {
 	public ResponseEntity<Void> deleteOrderREST(@PathVariable("orderId") Long orderId) {
 		try {
 			this.orderService.deleteOrder(orderId);
+			
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(NoSuchElementException noSuchElementException) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
 		}
 	}
 }

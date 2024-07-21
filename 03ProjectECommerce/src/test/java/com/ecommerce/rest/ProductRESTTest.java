@@ -1,10 +1,11 @@
 package com.ecommerce.rest;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doThrow;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -19,7 +20,6 @@ import org.springframework.http.HttpStatus;
 
 import com.ecommerce.dal.ProductDAORepository;
 import com.ecommerce.dto.ProductDTO;
-import com.ecommerce.entities.Product;
 import com.ecommerce.services.ProductService;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,46 +41,62 @@ public class ProductRESTTest {
     
     @Test
     void testGetAllProductsREST() {
-        Product product = new Product();
-        List<Product> productList = new LinkedList<>();
-        productList.add(product);
-
-        when(productService.getAllProducts()).thenReturn(productList);
-
+    	List<ProductDTO> productDTOList = new ArrayList<>();
+    	
+    	when(productService.getAllProducts()).thenReturn(productDTOList);    	
+    	
+    	assertTrue(productDTOList.getClass().equals(productREST.getAllProductsREST().getBody().getClass()));
         assertEquals(HttpStatus.OK, productREST.getAllProductsREST().getStatusCode());
     }
     
     @Test
     void testGetProductByIdEmptyProductREST() {
-        Long productId = 6L;
+        Long productId = null;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
         when(productService.getProductById(productId)).thenThrow(nsee);
         
+        assertNull(productREST.getProductByIdREST(productId).getBody());
         assertEquals(HttpStatus.NOT_FOUND, productREST.getProductByIdREST(productId).getStatusCode());
     }
     
     @Test
     void testGetProductByIdREST() {
         Long productId = 6L;
-        Product product = new Product();
+        ProductDTO productDTO = new ProductDTO();
         
-        when(productService.getProductById(productId)).thenReturn(product);
+        when(productService.getProductById(productId)).thenReturn(productDTO);
         
+        assertTrue(productDTO.getClass().equals(productREST.getProductByIdREST(productId).getBody().getClass()));
         assertEquals(HttpStatus.OK, productREST.getProductByIdREST(productId).getStatusCode());
     }
     
     @Test
     void testAddProductREST() {
         ProductDTO productDTO = new ProductDTO();
+        String messagge = "creation";
 
+        assertTrue(messagge.getClass().equals(productREST.addProductREST(productDTO).getBody().getClass()));
         assertEquals(HttpStatus.CREATED, productREST.addProductREST(productDTO).getStatusCode());
+    }
+    
+    @Test
+    void testUpdateProductemptyProductREST() {
+        ProductDTO productDTO = new ProductDTO();
+        NoSuchElementException nsee = new NoSuchElementException("error");
+        
+        when(productService.updateProduct(productDTO)).thenThrow(nsee);
+
+        assertNull(productREST.updateProductREST(productDTO).getBody());
+        assertEquals(HttpStatus.NOT_FOUND, productREST.updateProductREST(productDTO).getStatusCode());
     }
     
     @Test
     void testUpdateProductREST() {
         ProductDTO productDTO = new ProductDTO();
+        String messagge = "update";
 
+        assertTrue(messagge.getClass().equals(productREST.updateProductREST(productDTO).getBody().getClass()));
         assertEquals(HttpStatus.OK, productREST.updateProductREST(productDTO).getStatusCode());
     }
     
@@ -89,18 +105,17 @@ public class ProductRESTTest {
         Long productId = 6L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
-        doThrow(nsee).when(productService).deleteProduct(productId);
+        when(productService.deleteProduct(productId)).thenThrow(nsee);
         
+        assertNull(productREST.deleteProductREST(productId).getBody());
         assertEquals(HttpStatus.NOT_FOUND, productREST.deleteProductREST(productId).getStatusCode());
     }
         
     @Test
     void testDeleteProductREST() {
         Long productId = 6L;
-        Product product = new Product();
         
-        when(productService.deleteProduct(productId)).thenReturn(product);
-        
+        assertNull(productREST.deleteProductREST(productId).getBody());
         assertEquals(HttpStatus.NO_CONTENT, productREST.deleteProductREST(productId).getStatusCode());
     }
 }

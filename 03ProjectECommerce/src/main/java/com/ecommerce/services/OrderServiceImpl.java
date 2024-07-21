@@ -3,6 +3,7 @@ package com.ecommerce.services;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecommerce.dal.OrderDAORepository;
 import com.ecommerce.dal.ProductDAORepository;
 import com.ecommerce.dal.UserDAORepository;
+import com.ecommerce.dto.OrderDTO;
 import com.ecommerce.entities.Order;
 import com.ecommerce.entities.Product;
 import com.ecommerce.entities.User;
+import com.ecommerce.mappers.OrderMapper;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -41,33 +44,36 @@ public class OrderServiceImpl implements OrderService {
         this.orderDAORepository = orderDAORepository;
     }
 
-	@Override
-	public List<Order> getAllOrders() {
+    @Override
+	public List<OrderDTO> getAllOrders() {
 		logger.info(LOGGER_GET_ALL_ORDERS);
+		List<OrderDTO> orderDTOList = this.orderDAORepository.findAll()
+				.stream().map(order -> OrderMapper.fromOrderToOrderDTO(order))
+				.collect(Collectors.toList());
 		
-		return this.orderDAORepository.findAll();
+		return orderDTOList;
 	}
 
 	@Override
-	public Order getOrderById(Long orderId) {		
+	public OrderDTO getOrderById(Long orderId) {		
 		Optional<Order> tempOrder = this.orderDAORepository.findById(orderId);
 		
 		if(tempOrder.isPresent()) {
-			Order order = tempOrder.get();
+			OrderDTO orderDTO = OrderMapper.fromOrderToOrderDTO(tempOrder.get());
 			
 			logger.info(LOGGER_GET_ORDER_BY_ID, orderId);
 			
-			return order;
+			return orderDTO;
 		} else {
 			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, orderId);
 			
 			throw new NoSuchElementException("Order with orderId: " + orderId + "not found...");
 		}
 	}
-
+	
 	@Override
 	@Transactional
-	public Order addOrder(Long userId, Long productId) {
+	public OrderDTO addOrder(Long userId, Long productId) {
 		logger.info(LOGGER_ADD_ORDER_START, userId, productId);
 		
 		Optional<User> tempUser = this.userDAORepository.findById(userId);
@@ -77,11 +83,12 @@ public class OrderServiceImpl implements OrderService {
 			User user = tempUser.get();
 			Product product = tempProduct.get();
 			Order order = new Order(user, product);
+			OrderDTO orderDTO = OrderMapper.fromOrderToOrderDTO(order);
 			
 			this.orderDAORepository.save(order);
 			logger.info(LOGGER_ADD_ORDER_SUCCESS, order.getId(), userId, productId);
 			
-			return order;
+			return orderDTO;
 		} else {
 			logger.warn(LOGGER_ADD_ORDER_FAIL);
 			
@@ -91,37 +98,41 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	@Transactional
-	public Order updateOrder(Order order) {
-		logger.info(LOGGER_UPDATE_ORDER_START, order.getId());
+	public OrderDTO updateOrder(OrderDTO orderDTO) {
+		logger.info(LOGGER_UPDATE_ORDER_START, orderDTO.getId());
 		
-		Optional<Order> tempOrder = this.orderDAORepository.findById(order.getId());
+		Optional<Order> tempOrder = this.orderDAORepository.findById(orderDTO.getId());
 
 		if(tempOrder.isPresent()) {	
+			Order order = OrderMapper.fromOrderDTOToOrder(orderDTO);
+			
 			this.orderDAORepository.save(order);
 			logger.info(LOGGER_UPDATE_ORDER_SUCCESS, order.getId());
 			
-			return order;
+			return orderDTO;
 		} else {
-			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, order.getId());
+			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, orderDTO.getId());
 			
-			throw new NoSuchElementException("Order with orderId: " + order.getId() + "not found...");
+			throw new NoSuchElementException("Order with orderId: " + orderDTO.getId() + "not found...");
 		}
 	}
 
 	@Override
 	@Transactional
-	public Order deleteOrder(Long orderId) {
+	public String deleteOrder(Long orderId) {
 		logger.info(LOGGER_DELETE_ORDER_START, orderId);
 		
 		Optional<Order> tempOrder = this.orderDAORepository.findById(orderId);
 		
-		if(tempOrder.isPresent()) {	
-			Order order = tempOrder.get();
+		if(tempOrder.isPresent()) {
+			OrderDTO orderDTO = OrderMapper.fromOrderToOrderDTO(tempOrder.get());
+			String deletionMessage = orderDTO.toStringOrderDeleted();
 			
 			this.orderDAORepository.deleteById(orderId);
+			orderDTO = null;
 			logger.info(LOGGER_DELETE_ORDER_SUCCESS, orderId);
 			
-			return order;
+			return deletionMessage;
 		} else {
 			logger.warn(LOGGER_GET_ORDER_BY_ID_FAIL, orderId);
 			
