@@ -2,7 +2,7 @@ package com.ecommerce.services;
 
 import java.util.List;
 
-import com.ecommerce.entities.User;
+import com.ecommerce.dto.UserDTO;
 
 public interface UserService {
 
@@ -11,9 +11,9 @@ public interface UserService {
 	 * @return
 	 */
 	
-	List<User> getAllUsers();
-	User getUserById(Long id);
-	User addUser(User user);
-	User updateUser(User user);
-	User deleteUser(Long id);
+	List<UserDTO> getAllUsers();
+	UserDTO getUserById(Long id);
+	UserDTO addUser(UserDTO userDTO);
+	UserDTO updateUser(UserDTO userDTO);
+	String deleteUser(Long id);
 }

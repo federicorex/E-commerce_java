@@ -3,6 +3,7 @@ package com.ecommerce.services;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.dal.UserDAORepository;
+import com.ecommerce.dto.UserDTO;
 import com.ecommerce.entities.User;
+import com.ecommerce.mappers.UserMapper;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,7 +22,7 @@ public class UserServiceImpl implements UserService {
 	private static final String LOGGER_GET_ALL_USERS = "Fetching all users";
 	private static final String LOGGER_GET_USER_BY_ID = "Fetching the user with userId: {}";
 	private static final String LOGGER_GET_USER_BY_ID_FAIL = "Fail, user not found";
-	private static final String LOGGER_ADD_USER_START = "Adding user with userId: {}...";
+	private static final String LOGGER_ADD_USER_START = "Adding {}...";
 	private static final String LOGGER_ADD_USER_SUCCESS = "Success, user with userId: {} added";
 	private static final String LOGGER_UPDATE_USER_START = "Updating user with userId: {}...";
 	private static final String LOGGER_UPDATE_USER_SUCCESS = "Success, user with userId: {} updated";
@@ -33,70 +36,81 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public List<User> getAllUsers() {
+	public List<UserDTO> getAllUsers() {
 		logger.info(LOGGER_GET_ALL_USERS);
-		return this.userDAORepository.findAll();
+		List<UserDTO> userDTOList = this.userDAORepository.findAll()
+				.stream().map(user -> UserMapper.fromUserToUserDTO(user))
+				.collect(Collectors.toList());
+		
+		return userDTOList;
 	}
 
 	@Override
-	public User getUserById(Long userId) {		
+	public UserDTO getUserById(Long userId) {		
 		Optional<User> tempUser = this.userDAORepository.findById(userId);
 		
 		if(tempUser.isPresent()) {
-			User user = tempUser.get();
+			UserDTO userDTO = UserMapper.fromUserToUserDTO(tempUser.get());
 			
 			logger.info(LOGGER_GET_USER_BY_ID, userId);
 			
-			return user;
+			return userDTO;
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userId);
+			
 			throw new NoSuchElementException("User with userId: " + userId + "not found...");
 		}
 	}
 
 	@Override
 	@Transactional
-	public User addUser(User user) {
-		logger.info(LOGGER_ADD_USER_START, user.getId());
+	public UserDTO addUser(UserDTO userDTO) {
+		User user = UserMapper.fromUserDTOToUser(userDTO);
+		
+		logger.info(LOGGER_ADD_USER_START, userDTO.toString());
 		this.userDAORepository.save(user);
 		logger.info(LOGGER_ADD_USER_SUCCESS, user.getId());
 		
-		return user;
+		return userDTO;
 	}
 
 	@Override
 	@Transactional
-	public User updateUser(User user) {
-		logger.info(LOGGER_UPDATE_USER_START, user.getId());
+	public UserDTO updateUser(UserDTO userDTO) {
+		logger.info(LOGGER_UPDATE_USER_START, userDTO.getId());
 		
-		Optional<User> tempUser = this.userDAORepository.findById(user.getId());
+		Optional<User> tempUser = this.userDAORepository.findById(userDTO.getId());
 
 		if(tempUser.isPresent()) {	
+			User user = UserMapper.fromUserDTOToUser(userDTO);
+			
 			this.userDAORepository.save(user);
 			logger.info(LOGGER_UPDATE_USER_SUCCESS, user.getId());
 			
-			return user;
+			return userDTO;
 		} else {
-			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, user.getId());
+			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userDTO.getId());
 			
-			throw new NoSuchElementException("User with userId: " + user.getId() + "not found...");
+			throw new NoSuchElementException("User with userId: " + userDTO.getId() + "not found...");
 		}
 	}
 
 	@Override
 	@Transactional
-	public User deleteUser(Long userId) {
+	public String deleteUser(Long userId) {
 		logger.info(LOGGER_DELETE_USER_START, userId);
 		
 		Optional<User> tempUser = this.userDAORepository.findById(userId);
 		
 		if(tempUser.isPresent()) {
-			User user = tempUser.get();
+			UserDTO userDTO = UserMapper.fromUserToUserDTO(tempUser.get());
+			String deletionMessage = userDTO.toStringUserDeleted();
 			
 			this.userDAORepository.deleteById(userId);
+			userDTO = null;
 			logger.info(LOGGER_DELETE_USER_SUCCESS, userId);
 			
-			return user;
+			return deletionMessage;
 		} else {
 			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userId);
 			

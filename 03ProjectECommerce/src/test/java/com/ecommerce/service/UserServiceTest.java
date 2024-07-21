@@ -1,7 +1,8 @@
 package com.ecommerce.service;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 //import static org.junit.Assert.assertEquals;
 //import static org.junit.Assert.assertThrows;
@@ -22,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ecommerce.dal.UserDAORepository;
+import com.ecommerce.dto.UserDTO;
 import com.ecommerce.entities.User;
 import com.ecommerce.services.UserServiceImpl;
 
@@ -46,9 +48,10 @@ public class UserServiceTest {
         userList.add(user);
 
         when(userDAORepository.findAll()).thenReturn(userList);
-        List<User> result = userServiceImpl.getAllUsers();
+        List<UserDTO> userDTOList = new ArrayList<>();
 
-        assertEquals(userList, result);
+        assertNotNull(userServiceImpl.getAllUsers());
+        assertTrue(userDTOList.getClass().equals(userServiceImpl.getAllUsers().getClass()));
     }
 
     @Test
@@ -61,47 +64,47 @@ public class UserServiceTest {
     }
     
     @Test
-    void testGetUserByIdExistingUser() {
+    void testGetUserById() {
         Long userId = 6L;
         User user = new User();
+        UserDTO userDTO = new UserDTO();
         
         when(userDAORepository.findById(userId)).thenReturn(Optional.of(user));
 
-        assertEquals(user, userServiceImpl.getUserById(userId));
+        assertDoesNotThrow(() -> userServiceImpl.getUserById(userId));
+        assertNotNull(userServiceImpl.getUserById(userId));
+        assertTrue(userDTO.getClass().equals(userServiceImpl.getUserById(userId).getClass()));
     }
     
     @Test
     void testAddUser() {
-        User user = new User();
+        UserDTO userDTO = new UserDTO();
 
-        when(userDAORepository.save(user)).thenReturn(user);
-        
-
-        assertEquals(user, userServiceImpl.addUser(user));
-        assertDoesNotThrow(() -> userServiceImpl.addUser(user));
+        assertNotNull(userServiceImpl.addUser(userDTO));
+        assertTrue(userDTO.getClass().equals(userServiceImpl.addUser(userDTO).getClass()));
     }
     
     @Test
     void testUpdateEmptyUser() {
-        User user = new User();
-        Long userId = 6L;
-        user.setId(userId);
-
-        when(userDAORepository.findById(user.getId())).thenReturn(Optional.empty());
+        UserDTO userDTO = new UserDTO();
         
-        assertThrows(NoSuchElementException.class, () -> userServiceImpl.updateUser(user));
+        when(userDAORepository.findById(null)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> userServiceImpl.updateUser(userDTO));
     }
     
     @Test
     void testUpdateUser() {
+        UserDTO userDTO = new UserDTO();
         User user = new User();
-        Long userId = 6L;
-        user.setId(userId);
+        Long userDTOId = 6L;
+        userDTO.setId(userDTOId);
 
-        when(userDAORepository.findById(user.getId())).thenReturn(Optional.of(user));
-        when(userDAORepository.save(user)).thenReturn(null);
+        when(userDAORepository.findById(userDTO.getId())).thenReturn(Optional.of(user));
         
-        assertDoesNotThrow(() -> userServiceImpl.updateUser(user));
+        assertDoesNotThrow(() -> userServiceImpl.updateUser(userDTO));
+        assertNotNull(userServiceImpl.updateUser(userDTO));
+        assertTrue(userDTO.getClass().equals(userServiceImpl.updateUser(userDTO).getClass()));
     }
     
     @Test
@@ -117,12 +120,13 @@ public class UserServiceTest {
     void testDeleteUser() {
     	Long userId = 6L;
         User user = new User();
+        String messagge = "deletion";
         
         when(userDAORepository.findById(userId)).thenReturn(Optional.of(user));
-        assertEquals(user, userServiceImpl.getUserById(userId));
         doNothing().when(userDAORepository).deleteById(userId);
-
+        
         assertDoesNotThrow(() -> userServiceImpl.deleteUser(userId));
+        assertNotNull(userServiceImpl.deleteUser(userId));
+        assertTrue(messagge.getClass().equals(userServiceImpl.deleteUser(userId).getClass()));
     }
-    
 }

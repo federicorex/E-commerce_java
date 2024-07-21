@@ -2,7 +2,6 @@ package com.ecommerce.rest;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.dto.UserDTO;
-import com.ecommerce.mappers.UserMapper;
 import com.ecommerce.services.UserService;
 
 @RestController
@@ -31,19 +29,13 @@ public class UserREST {
 
 	@GetMapping("users")
 	public ResponseEntity<List<UserDTO>> getAllUsersREST() {
-		List<UserDTO> userDTOList = this.userService.getAllUsers()
-				.stream().map(user -> UserMapper.fromUserToUserDTO(user))
-				.collect(Collectors.toList());
-		
-		return new ResponseEntity<>(userDTOList, HttpStatus.OK);
+		return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
 	}
 	
 	@GetMapping("users/{userId}")
 	public ResponseEntity<UserDTO> getUserByIdREST(@PathVariable("userId") Long userId) {
 		try {
-			UserDTO userDTO = UserMapper.fromUserToUserDTO(this.userService.getUserById(userId));
-			
-			return new ResponseEntity<>(userDTO, HttpStatus.OK);			
+			return new ResponseEntity<>(this.userService.getUserById(userId), HttpStatus.OK);			
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
 		}
@@ -51,7 +43,7 @@ public class UserREST {
 	
 	@PostMapping("users")
 	public ResponseEntity<String> addUserREST(@RequestBody UserDTO userDTO) {
-		this.userService.addUser(UserMapper.fromUserDTOToUser(userDTO));
+		this.userService.addUser(userDTO);
 		
 		return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.CREATED);
 	}
@@ -59,7 +51,7 @@ public class UserREST {
 	@PutMapping("users")
 	public ResponseEntity<String> updateUserREST(@RequestBody UserDTO userDTO) {
 		try {
-			this.userService.updateUser(UserMapper.fromUserDTOToUser(userDTO));
+			this.userService.updateUser(userDTO);
 			
 			return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
@@ -74,7 +66,7 @@ public class UserREST {
 			
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(NoSuchElementException noSuchElementException) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 }

@@ -2,7 +2,7 @@ package com.ecommerce.services;
 
 import java.util.List;
 
-import com.ecommerce.entities.Product;
+import com.ecommerce.dto.ProductDTO;
 
 public interface ProductService {
 	
@@ -11,9 +11,9 @@ public interface ProductService {
 	 * @return
 	 */
 	
-	List<Product> getAllProducts();
-	Product getProductById(Long id);
-	Product addProduct(Product product);
-	Product updateProduct(Product product);
-	Product deleteProduct(Long id);
+	List<ProductDTO> getAllProducts();
+	ProductDTO getProductById(Long id);
+	ProductDTO addProduct(ProductDTO productDTO);
+	ProductDTO updateProduct(ProductDTO productDTO);
+	String deleteProduct(Long id);
 }

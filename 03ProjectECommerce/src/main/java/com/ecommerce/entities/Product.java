@@ -2,7 +2,6 @@ package com.ecommerce.entities;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -36,7 +35,7 @@ public class Product {
 	@Column(name = "secondHand", nullable = false)
 	private boolean secondHand;
 	
-	@JsonManagedReference
+	@JsonManagedReference(value = "order-product")
 //	@JsonIgnore
 	@OneToMany(mappedBy = "product")
 	private List<Order> orders;

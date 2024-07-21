@@ -2,7 +2,7 @@ package com.ecommerce.services;
 
 import java.util.List;
 
-import com.ecommerce.entities.Order;
+import com.ecommerce.dto.OrderDTO;
 
 public interface OrderService {
 
@@ -11,9 +11,9 @@ public interface OrderService {
 	 * @return
 	 */
 	
-	List<Order> getAllOrders();
-	Order getOrderById(Long id);
-	Order addOrder(Long userId, Long productId);
-	Order updateOrder(Order order);
-	Order deleteOrder(Long id);
+	List<OrderDTO> getAllOrders();
+	OrderDTO getOrderById(Long id);
+	OrderDTO addOrder(Long userId, Long productId);
+	OrderDTO updateOrder(OrderDTO orderDTO);
+	String deleteOrder(Long id);
 }

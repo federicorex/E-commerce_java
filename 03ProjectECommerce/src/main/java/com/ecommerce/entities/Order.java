@@ -22,12 +22,12 @@ public class Order {
 	private Long id;
 	
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value = "order-user")
 	@JoinColumn(name = "user_id")
 	private User user;
 	
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value = "order-product")
 	@JoinColumn(name = "product_id")
 	private Product product;
 	

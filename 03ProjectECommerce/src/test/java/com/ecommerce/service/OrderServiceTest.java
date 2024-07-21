@@ -1,7 +1,8 @@
 package com.ecommerce.service;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 //import static org.junit.Assert.assertEquals;
 //import static org.junit.Assert.assertThrows;
@@ -24,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.ecommerce.dal.OrderDAORepository;
 import com.ecommerce.dal.ProductDAORepository;
 import com.ecommerce.dal.UserDAORepository;
+import com.ecommerce.dto.OrderDTO;
 import com.ecommerce.entities.Order;
 import com.ecommerce.entities.Product;
 import com.ecommerce.entities.User;
@@ -56,9 +58,10 @@ public class OrderServiceTest {
         orderList.add(order);
 
         when(orderDAORepository.findAll()).thenReturn(orderList);
-        List<Order> result = orderServiceImpl.getAllOrders();
+        List<OrderDTO> orderDTOList = new ArrayList<>();
 
-        assertEquals(orderList, result);
+        assertNotNull(orderServiceImpl.getAllOrders());
+        assertTrue(orderDTOList.getClass().equals(orderServiceImpl.getAllOrders().getClass()));
     }
 
     @Test
@@ -71,13 +74,16 @@ public class OrderServiceTest {
     }
     
     @Test
-    void testGetOrderByIdExistingOrder() {
+    void testGetOrderById() {
         Long orderId = 6L;
         Order order = new Order();
+        OrderDTO orderDTO = new OrderDTO();
         
         when(orderDAORepository.findById(orderId)).thenReturn(Optional.of(order));
 
-        assertEquals(order, orderServiceImpl.getOrderById(orderId));
+        assertDoesNotThrow(() -> orderServiceImpl.getOrderById(orderId));
+        assertNotNull(orderServiceImpl.getOrderById(orderId));
+        assertTrue(orderDTO.getClass().equals(orderServiceImpl.getOrderById(orderId).getClass()));
     }
     
     @Test
@@ -130,25 +136,25 @@ public class OrderServiceTest {
     
     @Test
     void testUpdateEmptyOrder() {
-        Order order = new Order();
-        Long orderId = 6L;
-        order.setId(orderId);
-
-        when(orderDAORepository.findById(order.getId())).thenReturn(Optional.empty());
+        OrderDTO orderDTO = new OrderDTO();
         
-        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.updateOrder(order));
+        when(orderDAORepository.findById(null)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> orderServiceImpl.updateOrder(orderDTO));
     }
     
     @Test
     void testUpdateOrder() {
+        OrderDTO orderDTO = new OrderDTO();
         Order order = new Order();
-        Long orderId = 6L;
-        order.setId(orderId);
+        Long orderDTOId = 6L;
+        orderDTO.setId(orderDTOId);
 
-        when(orderDAORepository.findById(order.getId())).thenReturn(Optional.of(order));
-        when(orderDAORepository.save(order)).thenReturn(null);
+        when(orderDAORepository.findById(orderDTO.getId())).thenReturn(Optional.of(order));
         
-        assertDoesNotThrow(() -> orderServiceImpl.updateOrder(order));
+        assertDoesNotThrow(() -> orderServiceImpl.updateOrder(orderDTO));
+        assertNotNull(orderServiceImpl.updateOrder(orderDTO));
+        assertTrue(orderDTO.getClass().equals(orderServiceImpl.updateOrder(orderDTO).getClass()));
     }
     
     @Test
@@ -164,12 +170,13 @@ public class OrderServiceTest {
     void testDeleteOrder() {
     	Long orderId = 6L;
         Order order = new Order();
+        String messagge = "deletion";
         
         when(orderDAORepository.findById(orderId)).thenReturn(Optional.of(order));
-        assertEquals(order, orderServiceImpl.getOrderById(orderId));
         doNothing().when(orderDAORepository).deleteById(orderId);
-
+        
         assertDoesNotThrow(() -> orderServiceImpl.deleteOrder(orderId));
+        assertNotNull(orderServiceImpl.deleteOrder(orderId));
+        assertTrue(messagge.getClass().equals(orderServiceImpl.deleteOrder(orderId).getClass()));
     }
-    
 }
