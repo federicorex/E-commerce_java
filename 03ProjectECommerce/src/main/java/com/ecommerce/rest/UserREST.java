@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.customexceptions.LessThanEighteenYearsOldException;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.services.UserService;
 
@@ -45,9 +46,13 @@ public class UserREST {
 	
 	@PostMapping("users")
 	public ResponseEntity<String> addUserREST(@Valid @RequestBody UserDTO userDTO) {
-		this.userService.addUser(userDTO);
-		
-		return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.CREATED);
+		try {
+			this.userService.addUser(userDTO);
+			
+			return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.CREATED);
+		} catch(LessThanEighteenYearsOldException lessThanEighteenYearsOld) {
+			return new ResponseEntity<>(lessThanEighteenYearsOld.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@PutMapping("users")

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ecommerce.constants.GlobalConstants;
 import com.ecommerce.dal.ProductDAORepository;
 import com.ecommerce.dto.ProductDTO;
 import com.ecommerce.entities.Product;
@@ -19,15 +20,6 @@ import com.ecommerce.mappers.ProductMapper;
 public class ProductServiceImpl implements ProductService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
-	private static final String LOGGER_GET_ALL_USERS = "Fetching all products";
-	private static final String LOGGER_GET_USER_BY_ID = "Fetching the product with productId: {}";
-	private static final String LOGGER_GET_USER_BY_ID_FAIL = "Fail, product not found";
-	private static final String LOGGER_ADD_USER_START = "Adding {}...";
-	private static final String LOGGER_ADD_USER_SUCCESS = "Success, product with productId: {} added";
-	private static final String LOGGER_UPDATE_USER_START = "Updating product with productId: {}...";
-	private static final String LOGGER_UPDATE_USER_SUCCESS = "Success, product with productId: {} updated";
-	private static final String LOGGER_DELETE_USER_START = "Deleting product with productId: {}...";
-	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, product with productId: {} deleted";
 	
 	private ProductDAORepository productDAORepository;
 
@@ -37,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
 	public List<ProductDTO> getAllProducts() {
-		logger.info(LOGGER_GET_ALL_USERS);
+		logger.info(GlobalConstants.LOGGER_GET_ALL_PRODUCTS);
 		List<ProductDTO> productDTOList = this.productDAORepository.findAll()
 				.stream().map(product -> ProductMapper.fromProductToProductDTO(product))
 				.collect(Collectors.toList());
@@ -52,11 +44,11 @@ public class ProductServiceImpl implements ProductService {
 		if(tempProduct.isPresent()) {
 			ProductDTO productDTO = ProductMapper.fromProductToProductDTO(tempProduct.get());
 			
-			logger.info(LOGGER_GET_USER_BY_ID, productId);
+			logger.info(GlobalConstants.LOGGER_GET_PRODUCT_BY_ID, productId);
 			
 			return productDTO;
 		} else {
-			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, productId);
+			logger.error(GlobalConstants.LOGGER_GET_PRODUCT_BY_ID_FAIL, productId);
 			
 			throw new NoSuchElementException("Product with productId: " + productId + "not found...");
 		}
@@ -67,9 +59,9 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDTO addProduct(ProductDTO productDTO) {
 		Product product = ProductMapper.fromProductDTOToProduct(productDTO);
 		
-		logger.info(LOGGER_ADD_USER_START, productDTO.toString());
+		logger.info(GlobalConstants.LOGGER_ADD_PRODUCT_START, productDTO.toString());
 		this.productDAORepository.save(product);
-		logger.info(LOGGER_ADD_USER_SUCCESS, product.getId());
+		logger.info(GlobalConstants.LOGGER_ADD_PRODUCT_SUCCESS, product.getId());
 		
 		return productDTO;
 	}
@@ -77,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public ProductDTO updateProduct(ProductDTO productDTO) {
-		logger.info(LOGGER_UPDATE_USER_START, productDTO.getId());
+		logger.info(GlobalConstants.LOGGER_UPDATE_PRODUCT_START, productDTO.getId());
 		
 		Optional<Product> tempProduct = this.productDAORepository.findById(productDTO.getId());
 
@@ -85,11 +77,11 @@ public class ProductServiceImpl implements ProductService {
 			Product product = ProductMapper.fromProductDTOToProduct(productDTO);
 			
 			this.productDAORepository.save(product);
-			logger.info(LOGGER_UPDATE_USER_SUCCESS, product.getId());
+			logger.info(GlobalConstants.LOGGER_UPDATE_PRODUCT_SUCCESS, product.getId());
 			
 			return productDTO;
 		} else {
-			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, productDTO.getId());
+			logger.error(GlobalConstants.LOGGER_GET_PRODUCT_BY_ID_FAIL, productDTO.getId());
 			
 			throw new NoSuchElementException("Product with productId: " + productDTO.getId() + "not found...");
 		}
@@ -98,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public String deleteProduct(Long productId) {
-		logger.info(LOGGER_DELETE_USER_START, productId);
+		logger.info(GlobalConstants.LOGGER_DELETE_PRODUCT_START, productId);
 		
 		Optional<Product> tempProduct = this.productDAORepository.findById(productId);
 		
@@ -108,11 +100,11 @@ public class ProductServiceImpl implements ProductService {
 			
 			this.productDAORepository.deleteById(productId);
 			productDTO = null;
-			logger.info(LOGGER_DELETE_USER_SUCCESS, productId);
+			logger.info(GlobalConstants.LOGGER_DELETE_PRODUCT_SUCCESS, productId);
 			
 			return deletionMessage;
 		} else {
-			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, productId);
+			logger.error(GlobalConstants.LOGGER_GET_PRODUCT_BY_ID_FAIL, productId);
 			
 			throw new NoSuchElementException("Product with productId: " + productId + "not found...");
 		}

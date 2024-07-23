@@ -1,5 +1,8 @@
 package com.ecommerce.services;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -10,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ecommerce.constants.GlobalConstants;
+import com.ecommerce.customexceptions.LessThanEighteenYearsOldException;
 import com.ecommerce.dal.UserDAORepository;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.entities.User;
@@ -17,17 +22,8 @@ import com.ecommerce.mappers.UserMapper;
 
 @Service
 public class UserServiceImpl implements UserService {
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-	private static final String LOGGER_GET_ALL_USERS = "Fetching all users";
-	private static final String LOGGER_GET_USER_BY_ID = "Fetching the user with userId: {}";
-	private static final String LOGGER_GET_USER_BY_ID_FAIL = "Fail, user not found";
-	private static final String LOGGER_ADD_USER_START = "Adding {}...";
-	private static final String LOGGER_ADD_USER_SUCCESS = "Success, user with userId: {} added";
-	private static final String LOGGER_UPDATE_USER_START = "Updating user with userId: {}...";
-	private static final String LOGGER_UPDATE_USER_SUCCESS = "Success, user with userId: {} updated";
-	private static final String LOGGER_DELETE_USER_START = "Deleting user with userId: {}...";
-	private static final String LOGGER_DELETE_USER_SUCCESS = "Success, user with userId: {} deleted";
 	
 	private UserDAORepository userDAORepository;
 
@@ -37,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDTO> getAllUsers() {
-		logger.info(LOGGER_GET_ALL_USERS);
+		logger.info(GlobalConstants.LOGGER_GET_ALL_USERS);
 		List<UserDTO> userDTOList = this.userDAORepository.findAll()
 				.stream().map(user -> UserMapper.fromUserToUserDTO(user))
 				.collect(Collectors.toList());
@@ -52,11 +48,11 @@ public class UserServiceImpl implements UserService {
 		if(tempUser.isPresent()) {
 			UserDTO userDTO = UserMapper.fromUserToUserDTO(tempUser.get());
 			
-			logger.info(LOGGER_GET_USER_BY_ID, userId);
+			logger.info(GlobalConstants.LOGGER_GET_USER_BY_ID, userId);
 			
 			return userDTO;
 		} else {
-			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userId);
+			logger.error(GlobalConstants.LOGGER_GET_USER_BY_ID_FAIL, userId);
 			
 			throw new NoSuchElementException("User with userId: " + userId + "not found...");
 		}
@@ -65,19 +61,28 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public UserDTO addUser(UserDTO userDTO) {
+		Long eighteenYearsOldLong = 568025136000L;
+		Long todayDateLong = Instant.now().toEpochMilli();
+		Long userDateOfBirthLong = LocalDate.parse(userDTO.getDateOfBirth().toString()).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
 		User user = UserMapper.fromUserDTOToUser(userDTO);
 		
-		logger.info(LOGGER_ADD_USER_START, userDTO.toString());
-		this.userDAORepository.save(user);
-		logger.info(LOGGER_ADD_USER_SUCCESS, user.getId());
-		
-		return userDTO;
+		if(todayDateLong - userDateOfBirthLong >= eighteenYearsOldLong) {
+			logger.info(GlobalConstants.LOGGER_ADD_USER_START, userDTO.toString());
+			this.userDAORepository.save(user);
+			logger.info(GlobalConstants.LOGGER_ADD_USER_SUCCESS, user.getId());
+			
+			return userDTO;
+		} else {
+			logger.error(GlobalConstants.LOGGER_ADD_USER_FAIL, user.getId());
+			
+			throw new LessThanEighteenYearsOldException(GlobalConstants.INVALID_DATE_OF_BIRTH_YOUNGER_THAN_18);
+		}
 	}
 
 	@Override
 	@Transactional
 	public UserDTO updateUser(UserDTO userDTO) {
-		logger.info(LOGGER_UPDATE_USER_START, userDTO.getId());
+		logger.info(GlobalConstants.LOGGER_UPDATE_USER_START, userDTO.getId());
 		
 		Optional<User> tempUser = this.userDAORepository.findById(userDTO.getId());
 
@@ -85,11 +90,11 @@ public class UserServiceImpl implements UserService {
 			User user = UserMapper.fromUserDTOToUser(userDTO);
 			
 			this.userDAORepository.save(user);
-			logger.info(LOGGER_UPDATE_USER_SUCCESS, user.getId());
+			logger.info(GlobalConstants.LOGGER_UPDATE_USER_SUCCESS, user.getId());
 			
 			return userDTO;
 		} else {
-			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userDTO.getId());
+			logger.error(GlobalConstants.LOGGER_GET_USER_BY_ID_FAIL, userDTO.getId());
 			
 			throw new NoSuchElementException("User with userId: " + userDTO.getId() + "not found...");
 		}
@@ -98,7 +103,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public String deleteUser(Long userId) {
-		logger.info(LOGGER_DELETE_USER_START, userId);
+		logger.info(GlobalConstants.LOGGER_DELETE_USER_START, userId);
 		
 		Optional<User> tempUser = this.userDAORepository.findById(userId);
 		
@@ -108,11 +113,11 @@ public class UserServiceImpl implements UserService {
 			
 			this.userDAORepository.deleteById(userId);
 			userDTO = null;
-			logger.info(LOGGER_DELETE_USER_SUCCESS, userId);
+			logger.info(GlobalConstants.LOGGER_DELETE_USER_SUCCESS, userId);
 			
 			return deletionMessage;
 		} else {
-			logger.warn(LOGGER_GET_USER_BY_ID_FAIL, userId);
+			logger.error(GlobalConstants.LOGGER_GET_USER_BY_ID_FAIL, userId);
 			
 			throw new NoSuchElementException("User with userId: " + userId + "not found...");
 		}

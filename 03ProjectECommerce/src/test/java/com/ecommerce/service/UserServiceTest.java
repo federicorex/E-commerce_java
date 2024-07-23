@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.ecommerce.customexceptions.LessThanEighteenYearsOldException;
 import com.ecommerce.dal.UserDAORepository;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.entities.User;
@@ -77,9 +79,18 @@ public class UserServiceTest {
     }
     
     @Test
+    void testAddUserLessThan18YearsOld() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setDateOfBirth(LocalDate.of(2010, 5, 10));
+
+        assertThrows(LessThanEighteenYearsOldException.class, () -> userServiceImpl.addUser(userDTO));
+    }
+    
+    @Test
     void testAddUser() {
         UserDTO userDTO = new UserDTO();
-
+        userDTO.setDateOfBirth(LocalDate.of(2000, 5, 10));
+        
         assertNotNull(userServiceImpl.addUser(userDTO));
         assertTrue(userDTO.getClass().equals(userServiceImpl.addUser(userDTO).getClass()));
     }
