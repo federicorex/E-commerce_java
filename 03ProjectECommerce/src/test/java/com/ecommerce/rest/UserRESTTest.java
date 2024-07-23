@@ -18,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import com.ecommerce.customexceptions.LessThanEighteenYearsOldException;
 import com.ecommerce.dal.UserDAORepository;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.services.UserService;
@@ -72,6 +73,17 @@ public class UserRESTTest {
     }
     
     @Test
+    void testAddUserLessThan18YearsOld() {
+    	UserDTO userDTO = new UserDTO();
+    	LessThanEighteenYearsOldException lteyoe = new LessThanEighteenYearsOldException("error");
+    	
+    	when(userService.addUser(userDTO)).thenThrow(lteyoe);
+    	
+    	assertTrue("".getClass().equals(userREST.addUserREST(userDTO).getBody().getClass()));
+    	assertEquals(HttpStatus.BAD_REQUEST, userREST.addUserREST(userDTO).getStatusCode());
+    }
+    
+    @Test
     void testAddUserREST() {
         UserDTO userDTO = new UserDTO();
         String messagge = "creation";
@@ -81,7 +93,7 @@ public class UserRESTTest {
     }
     
     @Test
-    void testUpdateUseremptyUserREST() {
+    void testUpdateUserEmptyUserREST() {
         UserDTO userDTO = new UserDTO();
         NoSuchElementException nsee = new NoSuchElementException("error");
         
