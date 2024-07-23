@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.dto.ProductDTO;
 import com.ecommerce.services.ProductService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("api")
 public class ProductREST {
@@ -42,14 +44,14 @@ public class ProductREST {
 	}
 	
 	@PostMapping("products")
-	public ResponseEntity<String> addProductREST(@RequestBody ProductDTO productDTO) {
+	public ResponseEntity<String> addProductREST(@Valid @RequestBody ProductDTO productDTO) {
 		this.productService.addProduct(productDTO);
 		
 		return new ResponseEntity<>(productDTO.toStringProductCreatedOrUpdated(), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("products")
-	public ResponseEntity<String> updateProductREST(@RequestBody ProductDTO productDTO) {
+	public ResponseEntity<String> updateProductREST(@Valid @RequestBody ProductDTO productDTO) {
 		try {
 			this.productService.updateProduct(productDTO);
 			

@@ -31,8 +31,8 @@ public class ProductDTOTest {
 		assertEquals("F2 Pro", newProductDTO.getName());
 		assertEquals("Poco", newProductDTO.getBrand());
 		assertEquals("Smartphone", newProductDTO.getType());
-		assertEquals(6, newProductDTO.getQuantityInStock());
-		assertEquals(false, newProductDTO.isSecondHand());
+		assertEquals(Integer.valueOf(6), newProductDTO.getQuantityInStock());
+		assertEquals(Boolean.FALSE, newProductDTO.isSecondHand());
 		assertEquals(orderList, newProductDTO.getOrders());
 	}
 	
@@ -66,16 +66,16 @@ public class ProductDTOTest {
 	
 	@Test
 	void testGetQuantityInStock() {
-		productDTO.setQuantityInStock(6);
+		productDTO.setQuantityInStock(Integer.valueOf(6));
 		
-		assertEquals(6, productDTO.getQuantityInStock());
+		assertEquals(Integer.valueOf(6), productDTO.getQuantityInStock());
 	}
 	
 	@Test
 	void testGetSecondHand() {
-		productDTO.setSecondHand(false);
+		productDTO.setSecondHand(Boolean.FALSE);
 		
-		assertEquals(false, productDTO.isSecondHand());
+		assertEquals(Boolean.FALSE, productDTO.isSecondHand());
 	}
 	
 	@Test

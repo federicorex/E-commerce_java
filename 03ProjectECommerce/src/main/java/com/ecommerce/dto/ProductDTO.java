@@ -4,21 +4,29 @@ import java.util.List;
 
 import com.ecommerce.entities.Order;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class ProductDTO {
 
 	private Long id;
+	@NotEmpty
 	private String name;
+	@NotEmpty
 	private String brand;
+	@NotEmpty
 	private String type;
-	private int quantityInStock;
-	private boolean secondHand;
+	@NotNull
+	private Integer quantityInStock;
+	@NotNull
+	private Boolean secondHand;
 	private List<Order> orders;
 
 	public ProductDTO() {
 		
 	}
 
-	public ProductDTO(String name, String brand, String type, int quantityInStock, boolean secondHand,
+	public ProductDTO(String name, String brand, String type, Integer quantityInStock, boolean secondHand,
 			List<Order> orders) {
 		this.name = name;
 		this.brand = brand;
@@ -60,19 +68,19 @@ public class ProductDTO {
 		this.type = type;
 	}
 	
-	public int getQuantityInStock() {
+	public Integer getQuantityInStock() {
 		return quantityInStock;
 	}
 	
-	public void setQuantityInStock(int quantityInStock) {
+	public void setQuantityInStock(Integer quantityInStock) {
 		this.quantityInStock = quantityInStock;
 	}
 	
-	public boolean isSecondHand() {
+	public Boolean isSecondHand() {
 		return secondHand;
 	}
 	
-	public void setSecondHand(boolean secondHand) {
+	public void setSecondHand(Boolean secondHand) {
 		this.secondHand = secondHand;
 	}
 	

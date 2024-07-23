@@ -126,7 +126,6 @@ public class UserServiceTest {
         doNothing().when(userDAORepository).deleteById(userId);
         
         assertDoesNotThrow(() -> userServiceImpl.deleteUser(userId));
-        assertNotNull(userServiceImpl.deleteUser(userId));
         assertTrue(messagge.getClass().equals(userServiceImpl.deleteUser(userId).getClass()));
     }
 }

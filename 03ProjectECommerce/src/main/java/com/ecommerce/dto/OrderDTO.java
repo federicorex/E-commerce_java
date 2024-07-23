@@ -5,10 +5,14 @@ import java.time.LocalDate;
 import com.ecommerce.entities.Product;
 import com.ecommerce.entities.User;
 
+import jakarta.validation.constraints.NotNull;
+
 public class OrderDTO {
 
 	private Long id;
+	@NotNull
 	private User user;
+	@NotNull
 	private Product product;
 	private LocalDate deliveryDate;
 	

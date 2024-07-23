@@ -30,10 +30,10 @@ public class Product {
 	private String type;
 	
 	@Column(name = "quantityInStock", nullable = false)
-	private int quantityInStock;
+	private Integer quantityInStock;
 	
 	@Column(name = "secondHand", nullable = false)
-	private boolean secondHand;
+	private Boolean secondHand;
 	
 	@JsonManagedReference(value = "order-product")
 //	@JsonIgnore
@@ -44,7 +44,7 @@ public class Product {
 		
 	}
 	
-	public Product(String name, String brand, String type, int quantityInStock, boolean secondHand, List<Order> orders) {
+	public Product(String name, String brand, String type, Integer quantityInStock, Boolean secondHand, List<Order> orders) {
 		super();
 		this.name = name;
 		this.brand = brand;
@@ -86,19 +86,19 @@ public class Product {
 		this.type = type;
 	}
 	
-	public int getQuantityInStock() {
+	public Integer getQuantityInStock() {
 		return quantityInStock;
 	}
 	
-	public void setQuantityInStock(int quantityInStock) {
+	public void setQuantityInStock(Integer quantityInStock) {
 		this.quantityInStock = quantityInStock;
 	}
 	
-	public boolean getSecondHand() {
+	public Boolean getSecondHand() {
 		return secondHand;
 	}
 	
-	public void setSecondHand(boolean secondHand) {
+	public void setSecondHand(Boolean secondHand) {
 		this.secondHand = secondHand;
 	}
 

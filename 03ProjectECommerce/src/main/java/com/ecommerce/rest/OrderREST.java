@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.dto.OrderDTO;
 import com.ecommerce.services.OrderService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("api")
 public class OrderREST {
@@ -52,7 +54,7 @@ public class OrderREST {
 	}
 	
 	@PutMapping("orders")
-	public ResponseEntity<String> updateOrderREST(@RequestBody OrderDTO orderDTO) {
+	public ResponseEntity<String> updateOrderREST(@Valid @RequestBody OrderDTO orderDTO) {
 		try {
 			this.orderService.updateOrder(orderDTO);
 			

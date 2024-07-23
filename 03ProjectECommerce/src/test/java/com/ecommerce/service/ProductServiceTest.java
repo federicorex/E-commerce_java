@@ -126,7 +126,6 @@ public class ProductServiceTest {
         doNothing().when(productDAORepository).deleteById(productId);
         
         assertDoesNotThrow(() -> productServiceImpl.deleteProduct(productId));
-        assertNotNull(productServiceImpl.deleteProduct(productId));
         assertTrue(messagge.getClass().equals(productServiceImpl.deleteProduct(productId).getClass()));
     }
 }
