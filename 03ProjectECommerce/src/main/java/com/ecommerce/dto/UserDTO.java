@@ -5,14 +5,25 @@ import java.util.List;
 
 import com.ecommerce.entities.Order;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+
 public class UserDTO {
 
 	private Long id;
+	@NotEmpty
 	private String name;
+	@NotEmpty
 	private String surname;
+	@NotEmpty
 	private String password;
+	@NotNull
+	@Past
 	private LocalDate dateOfBirth;
+	@NotEmpty
 	private String address;
+	@NotEmpty
 	private String email;
 	private List<Order> orders;
 	

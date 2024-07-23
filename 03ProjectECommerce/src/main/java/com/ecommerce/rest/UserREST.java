@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("api")
 public class UserREST {
@@ -42,14 +44,14 @@ public class UserREST {
 	}
 	
 	@PostMapping("users")
-	public ResponseEntity<String> addUserREST(@RequestBody UserDTO userDTO) {
+	public ResponseEntity<String> addUserREST(@Valid @RequestBody UserDTO userDTO) {
 		this.userService.addUser(userDTO);
 		
 		return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("users")
-	public ResponseEntity<String> updateUserREST(@RequestBody UserDTO userDTO) {
+	public ResponseEntity<String> updateUserREST(@Valid @RequestBody UserDTO userDTO) {
 		try {
 			this.userService.updateUser(userDTO);
 			

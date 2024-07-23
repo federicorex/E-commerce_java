@@ -30,8 +30,8 @@ public class ProductTest {
 		assertEquals("F2 Pro", newProduct.getName());
 		assertEquals("Poco", newProduct.getBrand());
 		assertEquals("Smartphone", newProduct.getType());
-		assertEquals(6, newProduct.getQuantityInStock());
-		assertEquals(false, newProduct.getSecondHand());
+		assertEquals(Integer.valueOf(6), newProduct.getQuantityInStock());
+		assertEquals(Boolean.FALSE, newProduct.getSecondHand());
 		assertEquals(orderList, newProduct.getOrders());
 	}
 	
@@ -65,16 +65,16 @@ public class ProductTest {
 	
 	@Test
 	void testGetQuantityInStock() {
-		product.setQuantityInStock(6);
+		product.setQuantityInStock(Integer.valueOf(6));
 		
-		assertEquals(6, product.getQuantityInStock());
+		assertEquals(Integer.valueOf(6), product.getQuantityInStock());
 	}
 	
 	@Test
 	void testGetSecondHand() {
-		product.setSecondHand(false);
+		product.setSecondHand(Boolean.FALSE);
 		
-		assertEquals(false, product.getSecondHand());
+		assertEquals(Boolean.FALSE, product.getSecondHand());
 	}
 	
 	@Test

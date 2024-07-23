@@ -176,7 +176,6 @@ public class OrderServiceTest {
         doNothing().when(orderDAORepository).deleteById(orderId);
         
         assertDoesNotThrow(() -> orderServiceImpl.deleteOrder(orderId));
-        assertNotNull(orderServiceImpl.deleteOrder(orderId));
         assertTrue(messagge.getClass().equals(orderServiceImpl.deleteOrder(orderId).getClass()));
     }
 }
