@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ecommerce.entities.Order;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -12,18 +13,19 @@ import jakarta.validation.constraints.Past;
 public class UserDTO {
 
 	private Long id;
-	@NotEmpty
+	@NotEmpty(message = "The name must not be empty")
 	private String name;
-	@NotEmpty
+	@NotEmpty(message = "The surname must not be empty")
 	private String surname;
-	@NotEmpty
+	@NotEmpty(message = "The password must not be empty")
 	private String password;
 	@NotNull
 	@Past
 	private LocalDate dateOfBirth;
-	@NotEmpty
+	@NotEmpty(message = "The address must not be empty")
 	private String address;
-	@NotEmpty
+	@NotEmpty(message = "The email must not be empty")
+	@Email
 	private String email;
 	private List<Order> orders;
 	

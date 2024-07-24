@@ -6,17 +6,19 @@ import com.ecommerce.entities.Order;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class ProductDTO {
 
 	private Long id;
-	@NotEmpty
+	@NotEmpty(message = "The name must not be empty")
 	private String name;
-	@NotEmpty
+	@NotEmpty(message = "The brand must not be empty")
 	private String brand;
-	@NotEmpty
+	@NotEmpty(message = "The type must not be empty")
 	private String type;
 	@NotNull
+	@PositiveOrZero
 	private Integer quantityInStock;
 	@NotNull
 	private Boolean secondHand;

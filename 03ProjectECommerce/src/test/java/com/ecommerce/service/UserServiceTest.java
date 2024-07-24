@@ -1,5 +1,6 @@
 package com.ecommerce.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -55,6 +56,12 @@ public class UserServiceTest {
         assertNotNull(userServiceImpl.getAllUsers());
         assertTrue(userDTOList.getClass().equals(userServiceImpl.getAllUsers().getClass()));
     }
+    
+    @Test
+    void testGetUserByIdNullId() {
+        var exception = assertThrows(NullPointerException.class, () -> userServiceImpl.getUserById(null));
+        assertEquals("The userId must be not null", exception.getMessage());
+    }
 
     @Test
     void testGetUserByIdEmptyUser() {
@@ -79,6 +86,12 @@ public class UserServiceTest {
     }
     
     @Test
+    void testAddUserNullUser() {
+    	var exception = assertThrows(NullPointerException.class, () -> userServiceImpl.addUser(null));
+    	assertEquals("The user must be not null", exception.getMessage());
+    }
+    
+    @Test
     void testAddUserLessThan18YearsOld() {
         UserDTO userDTO = new UserDTO();
         userDTO.setDateOfBirth(LocalDate.of(2010, 5, 10));
@@ -96,7 +109,13 @@ public class UserServiceTest {
     }
     
     @Test
-    void testUpdateEmptyUser() {
+    void testUpdateUserNullUser() {
+    	var exception = assertThrows(NullPointerException.class, () -> userServiceImpl.updateUser(null));
+        assertEquals("The user must be not null", exception.getMessage());
+    }
+    
+    @Test
+    void testUpdateUserEmptyUser() {
         UserDTO userDTO = new UserDTO();
         
         when(userDAORepository.findById(null)).thenReturn(Optional.empty());
@@ -116,6 +135,12 @@ public class UserServiceTest {
         assertDoesNotThrow(() -> userServiceImpl.updateUser(userDTO));
         assertNotNull(userServiceImpl.updateUser(userDTO));
         assertTrue(userDTO.getClass().equals(userServiceImpl.updateUser(userDTO).getClass()));
+    }
+    
+    @Test
+    void testDeleteUserNullId() {
+    	var exception = assertThrows(NullPointerException.class, () -> userServiceImpl.deleteUser(null));
+        assertEquals("The userId must be not null", exception.getMessage());
     }
     
     @Test
