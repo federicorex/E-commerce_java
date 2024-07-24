@@ -50,8 +50,18 @@ public class OrderRESTTest {
     }
     
     @Test
-    void testGetOrderByIdEmptyOrderREST() {
-        Long orderId = null;
+    void testGetOrderByIdRESTNullOrderId() {
+        NullPointerException npe = new NullPointerException("The orderId must be not null");
+        
+        when(orderService.getOrderById(null)).thenThrow(npe);
+        
+        assertNull(orderREST.getOrderByIdREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, orderREST.getOrderByIdREST(null).getStatusCode());
+    }
+    
+    @Test
+    void testGetOrderByIdRESTEmptyOrder() {
+        Long orderId = 1L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
         when(orderService.getOrderById(orderId)).thenThrow(nsee);
@@ -72,7 +82,17 @@ public class OrderRESTTest {
     }
     
     @Test
-	void testAddOrderUserOrProductEmptyREST() {
+    void testAddOrderRESTNullOrder() {
+        NullPointerException npe = new NullPointerException("The userId or productId must be not null");
+        
+        when(orderService.addOrder(null, null)).thenThrow(npe);
+        
+        assertEquals("The userId or productId must be not null", orderREST.addOrderREST(null, null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, orderREST.addOrderREST(null, null).getStatusCode());
+    }
+    
+    @Test
+	void testAddOrderRESTUserOrProductEmpty() {
 		Long userId = 6L;
 		Long productId = 6L;
 		NoSuchElementException nsee = new NoSuchElementException("error");
@@ -92,9 +112,19 @@ public class OrderRESTTest {
 		
 		assertEquals(HttpStatus.CREATED, orderREST.addOrderREST(userId, productId).getStatusCode());
 	}
+	
+	@Test
+    void testUpdateOrderRESTNullOrder() {
+        NullPointerException npe = new NullPointerException("The order must be not null");
+        
+        when(orderService.updateOrder(null)).thenThrow(npe);
+        
+        assertEquals("The order must be not null", orderREST.updateOrderREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, orderREST.updateOrderREST(null).getStatusCode());
+    }
     
     @Test
-    void testUpdateOrderemptyOrderREST() {
+    void testUpdateOrderRESTEmptyOrder() {
         OrderDTO orderDTO = new OrderDTO();
         NoSuchElementException nsee = new NoSuchElementException("error");
         
@@ -114,8 +144,18 @@ public class OrderRESTTest {
     }
     
     @Test
-    void testDeleteOrderEmptyOrderREST() {
-        Long orderId = 6L;
+    void testDeleteOrderRESTNullOrderId() {
+        NullPointerException npe = new NullPointerException("The orderId must be not null");
+        
+        when(orderService.deleteOrder(null)).thenThrow(npe);
+        
+        assertNull(orderREST.deleteOrderREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, orderREST.deleteOrderREST(null).getStatusCode());
+    }
+    
+    @Test
+    void testDeleteOrderRESTEmptyOrder() {
+        Long orderId = 1L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
         when(orderService.deleteOrder(orderId)).thenThrow(nsee);

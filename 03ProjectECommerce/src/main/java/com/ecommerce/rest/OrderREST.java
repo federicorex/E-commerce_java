@@ -39,7 +39,9 @@ public class OrderREST {
 		try {
 			return new ResponseEntity<>(this.orderService.getOrderById(orderId), HttpStatus.OK);			
 		} catch(NoSuchElementException noSuchElementException) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);					
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -49,7 +51,9 @@ public class OrderREST {
 			OrderDTO orderDTO = this.orderService.addOrder(userId, productId);
 			return new ResponseEntity<>(orderDTO.toStringOrderCreatedOrUpdated(), HttpStatus.CREATED);
 		} catch(NoSuchElementException noSuchElementException) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);									
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(nullPointerException.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -61,6 +65,8 @@ public class OrderREST {
 			return new ResponseEntity<>(orderDTO.toStringOrderCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(nullPointerException.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -72,6 +78,8 @@ public class OrderREST {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }
