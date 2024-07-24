@@ -38,7 +38,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductDTO getProductById(Long productId) {		
+	public ProductDTO getProductById(Long productId) {
+		if(productId == null) {
+			throw new NullPointerException("The productId must be not null");
+		}
+		
 		Optional<Product> tempProduct = this.productDAORepository.findById(productId);
 		
 		if(tempProduct.isPresent()) {
@@ -57,6 +61,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public ProductDTO addProduct(ProductDTO productDTO) {
+		if(productDTO == null) {
+			throw new NullPointerException("The product must be not null");
+		}
+		
 		Product product = ProductMapper.fromProductDTOToProduct(productDTO);
 		
 		logger.info(GlobalConstants.LOGGER_ADD_PRODUCT_START, productDTO.toString());
@@ -69,6 +77,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public ProductDTO updateProduct(ProductDTO productDTO) {
+		if(productDTO == null) {
+			throw new NullPointerException("The product must be not null");
+		}
+		
 		logger.info(GlobalConstants.LOGGER_UPDATE_PRODUCT_START, productDTO.getId());
 		
 		Optional<Product> tempProduct = this.productDAORepository.findById(productDTO.getId());
@@ -90,6 +102,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public String deleteProduct(Long productId) {
+		if(productId == null) {
+			throw new NullPointerException("The productId must be not null");
+		}
+		
 		logger.info(GlobalConstants.LOGGER_DELETE_PRODUCT_START, productId);
 		
 		Optional<Product> tempProduct = this.productDAORepository.findById(productId);

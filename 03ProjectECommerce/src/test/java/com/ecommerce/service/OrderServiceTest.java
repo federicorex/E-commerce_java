@@ -1,5 +1,6 @@
 package com.ecommerce.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -63,6 +64,12 @@ public class OrderServiceTest {
         assertNotNull(orderServiceImpl.getAllOrders());
         assertTrue(orderDTOList.getClass().equals(orderServiceImpl.getAllOrders().getClass()));
     }
+    
+    @Test
+    void testGetOrderByIdNullId() {
+    	var exception = assertThrows(NullPointerException.class, () -> orderServiceImpl.getOrderById(null));
+    	assertEquals("The orderId must be not null", exception.getMessage());
+    }
 
     @Test
     void testGetOrderByIdEmptyOrder() {
@@ -84,6 +91,24 @@ public class OrderServiceTest {
         assertDoesNotThrow(() -> orderServiceImpl.getOrderById(orderId));
         assertNotNull(orderServiceImpl.getOrderById(orderId));
         assertTrue(orderDTO.getClass().equals(orderServiceImpl.getOrderById(orderId).getClass()));
+    }
+    
+    @Test
+    void testAddOrderNullUserIdAndProductId() {
+    	var exception = assertThrows(NullPointerException.class, () -> orderServiceImpl.addOrder(null, null));
+    	assertEquals("The userId or productId must be not null", exception.getMessage());
+    }
+    
+    @Test
+    void testAddOrderNullProductId() {
+    	var exception = assertThrows(NullPointerException.class, () -> orderServiceImpl.addOrder(5L, null));
+    	assertEquals("The userId or productId must be not null", exception.getMessage());
+    }
+    
+    @Test
+    void testAddOrderNullUserId() {
+    	var exception = assertThrows(NullPointerException.class, () -> orderServiceImpl.addOrder(null, 6L));
+    	assertEquals("The userId or productId must be not null", exception.getMessage());
     }
     
     @Test
@@ -135,7 +160,13 @@ public class OrderServiceTest {
     }
     
     @Test
-    void testUpdateEmptyOrder() {
+    void testUpdateOrderNullOrder() {
+    	var exception = assertThrows(NullPointerException.class, () -> orderServiceImpl.updateOrder(null));
+    	assertEquals("The order must be not null", exception.getMessage());
+    }
+    
+    @Test
+    void testUpdateOrderEmptyOrder() {
         OrderDTO orderDTO = new OrderDTO();
         
         when(orderDAORepository.findById(null)).thenReturn(Optional.empty());
@@ -155,6 +186,12 @@ public class OrderServiceTest {
         assertDoesNotThrow(() -> orderServiceImpl.updateOrder(orderDTO));
         assertNotNull(orderServiceImpl.updateOrder(orderDTO));
         assertTrue(orderDTO.getClass().equals(orderServiceImpl.updateOrder(orderDTO).getClass()));
+    }
+    
+    @Test
+    void testDeleteOrderNullId() {
+    	var exception = assertThrows(NullPointerException.class, () -> orderServiceImpl.deleteOrder(null));
+    	assertEquals("The orderId must be not null", exception.getMessage());
     }
     
     @Test

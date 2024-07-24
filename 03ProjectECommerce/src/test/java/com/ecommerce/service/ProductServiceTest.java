@@ -1,5 +1,6 @@
 package com.ecommerce.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -53,6 +54,12 @@ public class ProductServiceTest {
         assertNotNull(productServiceImpl.getAllProducts());
         assertTrue(productDTOList.getClass().equals(productServiceImpl.getAllProducts().getClass()));
     }
+    
+    @Test
+    void testGetProductByIdNullId() {
+    	var exception = assertThrows(NullPointerException.class, () -> productServiceImpl.getProductById(null));
+    	assertEquals("The productId must be not null", exception.getMessage());
+    }
 
     @Test
     void testGetProductByIdEmptyProduct() {
@@ -77,6 +84,12 @@ public class ProductServiceTest {
     }
     
     @Test
+    void testAddProductNullProduct() {
+    	var exception = assertThrows(NullPointerException.class, () -> productServiceImpl.addProduct(null));
+    	assertEquals("The product must be not null", exception.getMessage());
+    }
+    
+    @Test
     void testAddProduct() {
         ProductDTO productDTO = new ProductDTO();
 
@@ -85,7 +98,13 @@ public class ProductServiceTest {
     }
     
     @Test
-    void testUpdateEmptyProduct() {
+    void testUpdateProductNullProduct() {
+    	var exception = assertThrows(NullPointerException.class, () -> productServiceImpl.updateProduct(null));
+    	assertEquals("The product must be not null", exception.getMessage());
+    }
+    
+    @Test
+    void testUpdateProductEmptyProduct() {
         ProductDTO productDTO = new ProductDTO();
         
         when(productDAORepository.findById(null)).thenReturn(Optional.empty());
@@ -105,6 +124,12 @@ public class ProductServiceTest {
         assertDoesNotThrow(() -> productServiceImpl.updateProduct(productDTO));
         assertNotNull(productServiceImpl.updateProduct(productDTO));
         assertTrue(productDTO.getClass().equals(productServiceImpl.updateProduct(productDTO).getClass()));
+    }
+    
+    @Test
+    void testDeleteProductNullId() {
+    	var exception = assertThrows(NullPointerException.class, () -> productServiceImpl.deleteProduct(null));
+    	assertEquals("The productId must be not null", exception.getMessage());
     }
     
     @Test

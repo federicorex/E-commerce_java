@@ -42,7 +42,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO getUserById(Long userId) {		
+	public UserDTO getUserById(Long userId) {
+		if(userId == null) {
+			throw new NullPointerException("The userId must be not null");
+		}
+		
 		Optional<User> tempUser = this.userDAORepository.findById(userId);
 		
 		if(tempUser.isPresent()) {
@@ -61,6 +65,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public UserDTO addUser(UserDTO userDTO) {
+		if(userDTO == null) {
+			throw new NullPointerException("The user must be not null");
+		}
+		
 		Long eighteenYearsOldLong = 568025136000L;
 		Long todayDateLong = Instant.now().toEpochMilli();
 		Long userDateOfBirthLong = LocalDate.parse(userDTO.getDateOfBirth().toString()).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
@@ -82,6 +90,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public UserDTO updateUser(UserDTO userDTO) {
+		if(userDTO == null) {
+			throw new NullPointerException("The user must be not null");
+		}
+		
 		logger.info(GlobalConstants.LOGGER_UPDATE_USER_START, userDTO.getId());
 		
 		Optional<User> tempUser = this.userDAORepository.findById(userDTO.getId());
@@ -103,6 +115,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public String deleteUser(Long userId) {
+		if(userId == null) {
+			throw new NullPointerException("The userId must be not null");
+		}
+		
 		logger.info(GlobalConstants.LOGGER_DELETE_USER_START, userId);
 		
 		Optional<User> tempUser = this.userDAORepository.findById(userId);
