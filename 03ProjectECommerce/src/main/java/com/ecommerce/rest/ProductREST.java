@@ -40,14 +40,20 @@ public class ProductREST {
 			return new ResponseEntity<>(this.productService.getProductById(productId), HttpStatus.OK);			
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	
 	@PostMapping("products")
 	public ResponseEntity<String> addProductREST(@Valid @RequestBody ProductDTO productDTO) {
-		this.productService.addProduct(productDTO);
-		
-		return new ResponseEntity<>(productDTO.toStringProductCreatedOrUpdated(), HttpStatus.CREATED);
+		try {
+			this.productService.addProduct(productDTO);
+			
+			return new ResponseEntity<>(productDTO.toStringProductCreatedOrUpdated(), HttpStatus.CREATED);
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(nullPointerException.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	@PutMapping("products")
@@ -58,6 +64,8 @@ public class ProductREST {
 			return new ResponseEntity<>(productDTO.toStringProductCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(nullPointerException.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -69,6 +77,8 @@ public class ProductREST {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }

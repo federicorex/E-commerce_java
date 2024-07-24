@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public OrderDTO getOrderById(Long orderId) {
 		if(orderId == null) {
-			throw new NullPointerException("The orderId must be not null");
+			throw new NullPointerException(GlobalConstants.ORDER_ID_NULL);
 		}
 		
 		Optional<Order> tempOrder = this.orderDAORepository.findById(orderId);
@@ -70,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public OrderDTO addOrder(Long userId, Long productId) {
 		if(userId == null || productId == null) {
-			throw new NullPointerException("The userId or productId must be not null");
+			throw new NullPointerException(GlobalConstants.USER_ID_OR_PRODUCT_ID_NULL);
 		}
 		
 		logger.info(GlobalConstants.LOGGER_ADD_ORDER_START, userId, productId);
@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public OrderDTO updateOrder(OrderDTO orderDTO) {
 		if(orderDTO == null) {
-			throw new NullPointerException("The order must be not null");
+			throw new NullPointerException(GlobalConstants.ORDER_NULL);
 		}
 		
 		logger.info(GlobalConstants.LOGGER_UPDATE_ORDER_START, orderDTO.getId());
@@ -124,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public String deleteOrder(Long orderId) {
 		if(orderId == null) {
-			throw new NullPointerException("The orderId must be not null");
+			throw new NullPointerException(GlobalConstants.ORDER_ID_NULL);
 		}
 
 		logger.info(GlobalConstants.LOGGER_DELETE_ORDER_START, orderId);

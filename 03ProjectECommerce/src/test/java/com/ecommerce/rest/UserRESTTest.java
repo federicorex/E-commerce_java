@@ -51,8 +51,18 @@ public class UserRESTTest {
     }
     
     @Test
-    void testGetUserByIdEmptyUserREST() {
-        Long userId = null;
+    void testGetUserByIdRESTNullUserId() {
+        NullPointerException npe = new NullPointerException();
+        
+        when(userService.getUserById(null)).thenThrow(npe);
+        
+        assertNull(userREST.getUserByIdREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, userREST.getUserByIdREST(null).getStatusCode());
+    }
+    
+    @Test
+    void testGetUserByIdRESTEmptyUser() {
+        Long userId = 1L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
         when(userService.getUserById(userId)).thenThrow(nsee);
@@ -73,13 +83,23 @@ public class UserRESTTest {
     }
     
     @Test
-    void testAddUserLessThan18YearsOld() {
+    void testAddUserRESTNullUser() {
+        NullPointerException npe = new NullPointerException("The user must be not null");
+        
+        when(userService.addUser(null)).thenThrow(npe);
+        
+        assertEquals("The user must be not null", userREST.addUserREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, userREST.addUserREST(null).getStatusCode());
+    }
+    
+    @Test
+    void testAddUserRESTLessThan18YearsOld() {
     	UserDTO userDTO = new UserDTO();
-    	LessThanEighteenYearsOldException lteyoe = new LessThanEighteenYearsOldException("error");
+    	LessThanEighteenYearsOldException lteyoe = new LessThanEighteenYearsOldException("You must be at least 18 years old");
     	
     	when(userService.addUser(userDTO)).thenThrow(lteyoe);
     	
-    	assertTrue("".getClass().equals(userREST.addUserREST(userDTO).getBody().getClass()));
+    	assertEquals("You must be at least 18 years old", userREST.addUserREST(userDTO).getBody());
     	assertEquals(HttpStatus.BAD_REQUEST, userREST.addUserREST(userDTO).getStatusCode());
     }
     
@@ -93,7 +113,17 @@ public class UserRESTTest {
     }
     
     @Test
-    void testUpdateUserEmptyUserREST() {
+    void testUpdateUserRESTNullUser() {
+        NullPointerException npe = new NullPointerException("The user must be not null");
+        
+        when(userService.updateUser(null)).thenThrow(npe);
+        
+        assertEquals("The user must be not null", userREST.updateUserREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, userREST.updateUserREST(null).getStatusCode());
+    }
+    
+    @Test
+    void testUpdateUserRESTEmptyUser() {
         UserDTO userDTO = new UserDTO();
         NoSuchElementException nsee = new NoSuchElementException("error");
         
@@ -113,8 +143,18 @@ public class UserRESTTest {
     }
     
     @Test
-    void testDeleteUserEmptyUserREST() {
-        Long userId = 6L;
+    void testDeleteUserRESTNullUserId() {
+        NullPointerException npe = new NullPointerException();
+        
+        when(userService.deleteUser(null)).thenThrow(npe);
+        
+        assertNull(userREST.deleteUserREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, userREST.deleteUserREST(null).getStatusCode());
+    }
+    
+    @Test
+    void testDeleteUserRESTEmptyUser() {
+        Long userId = 1L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
         when(userService.deleteUser(userId)).thenThrow(nsee);

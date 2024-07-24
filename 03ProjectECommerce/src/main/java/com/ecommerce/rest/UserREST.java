@@ -41,6 +41,8 @@ public class UserREST {
 			return new ResponseEntity<>(this.userService.getUserById(userId), HttpStatus.OK);			
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);						
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -52,6 +54,8 @@ public class UserREST {
 			return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.CREATED);
 		} catch(LessThanEighteenYearsOldException lessThanEighteenYearsOld) {
 			return new ResponseEntity<>(lessThanEighteenYearsOld.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch(NullPointerException nullPointerException) {
+		return new ResponseEntity<>(nullPointerException.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -63,6 +67,8 @@ public class UserREST {
 			return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(nullPointerException.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -74,6 +80,8 @@ public class UserREST {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(NoSuchElementException noSuchElementException) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch(NullPointerException nullPointerException) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }

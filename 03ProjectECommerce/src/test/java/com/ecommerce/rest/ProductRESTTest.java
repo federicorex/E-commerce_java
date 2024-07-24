@@ -50,8 +50,18 @@ public class ProductRESTTest {
     }
     
     @Test
-    void testGetProductByIdEmptyProductREST() {
-        Long productId = null;
+    void testGetProductByIdRESTNullProductId() {
+        NullPointerException npe = new NullPointerException();
+        
+        when(productService.getProductById(null)).thenThrow(npe);
+        
+        assertNull(productREST.getProductByIdREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, productREST.getProductByIdREST(null).getStatusCode());
+    }
+    
+    @Test
+    void testGetProductByIdRESTEmptyProduct() {
+        Long productId = 1L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
         when(productService.getProductById(productId)).thenThrow(nsee);
@@ -72,6 +82,16 @@ public class ProductRESTTest {
     }
     
     @Test
+    void testAddProductRESTNullProduct() {
+        NullPointerException npe = new NullPointerException("The product must be not null");
+        
+        when(productService.addProduct(null)).thenThrow(npe);
+        
+        assertEquals("The product must be not null", productREST.addProductREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, productREST.addProductREST(null).getStatusCode());
+    }
+    
+    @Test
     void testAddProductREST() {
         ProductDTO productDTO = new ProductDTO();
         String messagge = "creation";
@@ -81,7 +101,17 @@ public class ProductRESTTest {
     }
     
     @Test
-    void testUpdateProductemptyProductREST() {
+    void testUpdateProductRESTNullProduct() {
+        NullPointerException npe = new NullPointerException("The product must be not null");
+        
+        when(productService.updateProduct(null)).thenThrow(npe);
+        
+        assertEquals("The product must be not null", productREST.updateProductREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, productREST.updateProductREST(null).getStatusCode());
+    }
+    
+    @Test
+    void testUpdateProductRESTEmptyProduct() {
         ProductDTO productDTO = new ProductDTO();
         NoSuchElementException nsee = new NoSuchElementException("error");
         
@@ -101,8 +131,18 @@ public class ProductRESTTest {
     }
     
     @Test
-    void testDeleteProductEmptyProductREST() {
-        Long productId = 6L;
+    void testDeleteProductRESTNullProductId() {
+        NullPointerException npe = new NullPointerException();
+        
+        when(productService.deleteProduct(null)).thenThrow(npe);
+        
+        assertNull(productREST.deleteProductREST(null).getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, productREST.deleteProductREST(null).getStatusCode());
+    }
+    
+    @Test
+    void testDeleteProductRESTEmptyProduct() {
+        Long productId = 1L;
         NoSuchElementException nsee = new NoSuchElementException("error");
         
         when(productService.deleteProduct(productId)).thenThrow(nsee);
