@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 //import static org.junit.Assert.assertEquals;
 //import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -16,11 +18,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -28,6 +33,7 @@ import com.ecommerce.customexceptions.LessThanEighteenYearsOldException;
 import com.ecommerce.dal.UserDAORepository;
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.entities.User;
+import com.ecommerce.mappers.UserMapper;
 import com.ecommerce.services.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,23 +44,33 @@ public class UserServiceTest {
 
     @Mock
     private UserDAORepository userDAORepository;
+    
+    private MockedStatic<UserMapper> userMapperStatic;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+        userMapperStatic = Mockito.mockStatic(UserMapper.class);
+    }
+    
+    @AfterEach
+    void tearDown() {
+    	userMapperStatic.close();
     }
 
     @Test
     void testGetAllUsers() {
         User user = new User();
         List<User> userList = new ArrayList<>();
+        List<UserDTO> userDTOList = new ArrayList<>();
         userList.add(user);
 
         when(userDAORepository.findAll()).thenReturn(userList);
-        List<UserDTO> userDTOList = new ArrayList<>();
 
         assertNotNull(userServiceImpl.getAllUsers());
         assertTrue(userDTOList.getClass().equals(userServiceImpl.getAllUsers().getClass()));
+        
+        verify(userDAORepository, times(2)).findAll();
     }
     
     @Test
@@ -70,6 +86,8 @@ public class UserServiceTest {
         when(userDAORepository.findById(userId)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> userServiceImpl.getUserById(userId));
+        
+        verify(userDAORepository, times(1)).findById(userId);
     }
     
     @Test
@@ -79,10 +97,12 @@ public class UserServiceTest {
         UserDTO userDTO = new UserDTO();
         
         when(userDAORepository.findById(userId)).thenReturn(Optional.of(user));
+        userMapperStatic.when(() -> UserMapper.fromUserToUserDTO(Optional.of(user).get())).thenReturn(userDTO);
 
         assertDoesNotThrow(() -> userServiceImpl.getUserById(userId));
-        assertNotNull(userServiceImpl.getUserById(userId));
-        assertTrue(userDTO.getClass().equals(userServiceImpl.getUserById(userId).getClass()));
+        assertEquals(userDTO, userServiceImpl.getUserById(userId));
+        
+        verify(userDAORepository, times(2)).findById(userId);
     }
     
     @Test
@@ -94,7 +114,10 @@ public class UserServiceTest {
     @Test
     void testAddUserLessThan18YearsOld() {
         UserDTO userDTO = new UserDTO();
+        User user = new User();
         userDTO.setDateOfBirth(LocalDate.of(2010, 5, 10));
+        
+        userMapperStatic.when(() -> UserMapper.fromUserDTOToUser(userDTO)).thenReturn(user);
 
         assertThrows(LessThanEighteenYearsOldException.class, () -> userServiceImpl.addUser(userDTO));
     }
@@ -102,10 +125,15 @@ public class UserServiceTest {
     @Test
     void testAddUser() {
         UserDTO userDTO = new UserDTO();
+        User user = new User();
         userDTO.setDateOfBirth(LocalDate.of(2000, 5, 10));
         
-        assertNotNull(userServiceImpl.addUser(userDTO));
-        assertTrue(userDTO.getClass().equals(userServiceImpl.addUser(userDTO).getClass()));
+        userMapperStatic.when(() -> UserMapper.fromUserDTOToUser(userDTO)).thenReturn(user);
+        when(userDAORepository.save(user)).thenReturn(user);
+        
+        assertEquals(userDTO, userServiceImpl.addUser(userDTO));
+        
+        verify(userDAORepository, times(1)).save(user);
     }
     
     @Test
@@ -117,10 +145,13 @@ public class UserServiceTest {
     @Test
     void testUpdateUserEmptyUser() {
         UserDTO userDTO = new UserDTO();
+        userDTO.setId(1L);
         
-        when(userDAORepository.findById(null)).thenReturn(Optional.empty());
+        when(userDAORepository.findById(userDTO.getId())).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> userServiceImpl.updateUser(userDTO));
+        
+        verify(userDAORepository, times(1)).findById(1L);
     }
     
     @Test
@@ -131,10 +162,13 @@ public class UserServiceTest {
         userDTO.setId(userDTOId);
 
         when(userDAORepository.findById(userDTO.getId())).thenReturn(Optional.of(user));
+        userMapperStatic.when(() -> UserMapper.fromUserDTOToUser(userDTO)).thenReturn(user);
+        when(userDAORepository.save(user)).thenReturn(user);
         
-        assertDoesNotThrow(() -> userServiceImpl.updateUser(userDTO));
-        assertNotNull(userServiceImpl.updateUser(userDTO));
-        assertTrue(userDTO.getClass().equals(userServiceImpl.updateUser(userDTO).getClass()));
+        assertEquals(userDTO, userServiceImpl.updateUser(userDTO));
+        
+        verify(userDAORepository, times(1)).findById(userDTO.getId());
+        verify(userDAORepository, times(1)).save(user);
     }
     
     @Test
@@ -150,18 +184,26 @@ public class UserServiceTest {
         when(userDAORepository.findById(userId)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> userServiceImpl.deleteUser(userId));
+        
+        verify(userDAORepository, times(1)).findById(userId);
     }
     
     @Test
     void testDeleteUser() {
     	Long userId = 6L;
         User user = new User();
-        String messagge = "deletion";
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(userId);
+        String messagge = "The user with id:" + 6 + ", name:" + null + ", surname:" + null + ", dateOfBirth:" + null
+				+ ", address:" + null + ", email:" + null + ", orders:" + null + " is deleted successfully.";
         
         when(userDAORepository.findById(userId)).thenReturn(Optional.of(user));
+        userMapperStatic.when(() -> UserMapper.fromUserToUserDTO(Optional.of(user).get())).thenReturn(userDTO);
         doNothing().when(userDAORepository).deleteById(userId);
         
-        assertDoesNotThrow(() -> userServiceImpl.deleteUser(userId));
-        assertTrue(messagge.getClass().equals(userServiceImpl.deleteUser(userId).getClass()));
+        assertEquals(messagge, userServiceImpl.deleteUser(userId));
+        
+        verify(userDAORepository, times(1)).findById(userId);
+        verify(userDAORepository, times(1)).deleteById(userId);
     }
 }
