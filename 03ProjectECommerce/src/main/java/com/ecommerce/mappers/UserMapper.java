@@ -1,8 +1,11 @@
 package com.ecommerce.mappers;
 
+import org.springframework.stereotype.Component;
+
 import com.ecommerce.dto.UserDTO;
 import com.ecommerce.entities.User;
 
+@Component
 public class UserMapper {
 	
 	public static UserDTO fromUserToUserDTO(User user) {
