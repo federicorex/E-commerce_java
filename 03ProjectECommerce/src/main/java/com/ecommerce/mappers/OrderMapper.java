@@ -1,8 +1,11 @@
 package com.ecommerce.mappers;
 
+import org.springframework.stereotype.Component;
+
 import com.ecommerce.dto.OrderDTO;
 import com.ecommerce.entities.Order;
 
+@Component
 public class OrderMapper {
 	
 	public static OrderDTO fromOrderToOrderDTO(Order order) {

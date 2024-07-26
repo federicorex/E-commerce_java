@@ -70,17 +70,14 @@ public class OrderDTO {
 
 	@Override
 	public String toString() {
-		return "the order with id:" + id + ", user:" + user + ", product:" + product + ", deliveryDate:" + deliveryDate
-				+ " .";
+		return "the order with id:" + id + ", user:" + user + ", product:" + product + ", deliveryDate:" + deliveryDate + " .";
 	}
 
 	public String toStringOrderCreatedOrUpdated() {
-		return "The order with id:" + id + ", user:" + user + ", product:" + product + ", deliveryDate:" + deliveryDate
-				+ " is created or updated successfully";
+		return "The order with id:" + id + ", user:" + user + ", product:" + product + ", deliveryDate:" + deliveryDate + " is created or updated successfully";
 	}
 	
 	public String toStringOrderDeleted() {
-		return "The order with id:" + id + ", user:" + user + ", product:" + product + ", deliveryDate:" + deliveryDate
-				+ " is deleted successfully";
+		return "The order with id:" + id + ", user:" + user + ", product:" + product + ", deliveryDate:" + deliveryDate + " is deleted successfully.";
 	}
 }
