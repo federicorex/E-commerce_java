@@ -110,17 +110,14 @@ public class UserDTO {
 
 	@Override
 	public String toString() {
-		return "the user with id:" + id + ", name:" + name + ", surname:" + surname + ", dateOfBirth:" + dateOfBirth
-				+ ", address:" + address + ", email:" + email + ", orders:" + orders + " .";
+		return "the user with id:" + id + ", name:" + name + ", surname:" + surname + ", dateOfBirth:" + dateOfBirth + ", address:" + address + ", email:" + email + ", orders:" + orders + " .";
 	}
 
 	public String toStringUserCreatedOrUpdated() {
-		return "The user with id:" + id + ", name:" + name + ", surname:" + surname + ", dateOfBirth:" + dateOfBirth
-				+ ", address:" + address + ", email:" + email + ", orders:" + orders + " is created or updated successfully.";
+		return "The user with id:" + id + ", name:" + name + ", surname:" + surname + ", dateOfBirth:" + dateOfBirth + ", address:" + address + ", email:" + email + ", orders:" + orders + " is created or updated successfully.";
 	}
 	
 	public String toStringUserDeleted() {
-		return "The user with id:" + id + ", name:" + name + ", surname:" + surname + ", dateOfBirth:" + dateOfBirth
-				+ ", address:" + address + ", email:" + email + ", orders:" + orders + " is deleted successfully.";
+		return "The user with id:" + id + ", name:" + name + ", surname:" + surname + ", dateOfBirth:" + dateOfBirth + ", address:" + address + ", email:" + email + ", orders:" + orders + " is deleted successfully.";
 	}
 }

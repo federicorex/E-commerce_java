@@ -96,17 +96,14 @@ public class ProductDTO {
 
 	@Override
 	public String toString() {
-		return "the product with id:" + id + ", name:" + name + ", brand:" + brand + ", type:" + type + ", quantityInStock:"
-				+ quantityInStock + ", secondHand:" + secondHand + ", orders:" + orders + " .";
+		return "the product with id:" + id + ", name:" + name + ", brand:" + brand + ", type:" + type + ", quantityInStock:" + quantityInStock + ", secondHand:" + secondHand + ", orders:" + orders + " .";
 	}
 
 	public String toStringProductCreatedOrUpdated() {
-		return "The product with id:" + id + ", name:" + name + ", brand:" + brand + ", type:" + type + ", quantityInStock:"
-				+ quantityInStock + ", secondHand:" + secondHand + ", orders:" + orders + " is created or updated successfully.";
+		return "The product with id:" + id + ", name:" + name + ", brand:" + brand + ", type:" + type + ", quantityInStock:" + quantityInStock + ", secondHand:" + secondHand + ", orders:" + orders + " is created or updated successfully.";
 	}
 	
 	public String toStringProductDeleted() {
-		return "The product with id:" + id + ", name:" + name + ", brand:" + brand + ", type:" + type + ", quantityInStock:"
-				+ quantityInStock + ", secondHand:" + secondHand + ", orders:" + orders + " is deleted successfully.";
+		return "The product with id:" + id + ", name:" + name + ", brand:" + brand + ", type:" + type + ", quantityInStock:" + quantityInStock + ", secondHand:" + secondHand + ", orders:" + orders + " is deleted successfully.";
 	}
 }
