@@ -2,7 +2,8 @@ package com.ecommerce.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -43,31 +44,37 @@ public class OrderRESTTest {
     void testGetAllOrdersREST() {
     	List<OrderDTO> orderDTOList = new ArrayList<>();
     	
-    	when(orderService.getAllOrders()).thenReturn(orderDTOList);    	
+    	when(orderService.getAllOrders()).thenReturn(orderDTOList);	
     	
-    	assertTrue(orderDTOList.getClass().equals(orderREST.getAllOrdersREST().getBody().getClass()));
+    	assertEquals(orderDTOList, orderREST.getAllOrdersREST().getBody());
         assertEquals(HttpStatus.OK, orderREST.getAllOrdersREST().getStatusCode());
+        
+        verify(orderService, times(2)).getAllOrders();
     }
     
     @Test
     void testGetOrderByIdRESTNullOrderId() {
-        NullPointerException npe = new NullPointerException("The orderId must be not null");
+        NullPointerException npe = new NullPointerException();
         
         when(orderService.getOrderById(null)).thenThrow(npe);
         
         assertNull(orderREST.getOrderByIdREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, orderREST.getOrderByIdREST(null).getStatusCode());
+        
+        verify(orderService, times(2)).getOrderById(null);
     }
     
     @Test
     void testGetOrderByIdRESTEmptyOrder() {
         Long orderId = 1L;
-        NoSuchElementException nsee = new NoSuchElementException("error");
+        NoSuchElementException nsee = new NoSuchElementException();
         
         when(orderService.getOrderById(orderId)).thenThrow(nsee);
         
         assertNull(orderREST.getOrderByIdREST(orderId).getBody());
         assertEquals(HttpStatus.NOT_FOUND, orderREST.getOrderByIdREST(orderId).getStatusCode());
+        
+        verify(orderService, times(2)).getOrderById(orderId);
     }
     
     @Test
@@ -77,8 +84,10 @@ public class OrderRESTTest {
         
         when(orderService.getOrderById(orderId)).thenReturn(orderDTO);
         
-        assertTrue(orderDTO.getClass().equals(orderREST.getOrderByIdREST(orderId).getBody().getClass()));
+        assertEquals(orderDTO, orderREST.getOrderByIdREST(orderId).getBody());
         assertEquals(HttpStatus.OK, orderREST.getOrderByIdREST(orderId).getStatusCode());
+        
+        verify(orderService, times(2)).getOrderById(orderId);
     }
     
     @Test
@@ -89,17 +98,22 @@ public class OrderRESTTest {
         
         assertEquals("The userId or productId must be not null", orderREST.addOrderREST(null, null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, orderREST.addOrderREST(null, null).getStatusCode());
+        
+        verify(orderService, times(2)).addOrder(null, null);
     }
     
     @Test
 	void testAddOrderRESTUserOrProductEmpty() {
 		Long userId = 6L;
 		Long productId = 6L;
-		NoSuchElementException nsee = new NoSuchElementException("error");
+		NoSuchElementException nsee = new NoSuchElementException("User with id: " + userId + " or product with id: " + productId + " not found...");
 		
 		when(orderService.addOrder(userId, productId)).thenThrow(nsee);
 		
+		assertEquals("User with id: " + userId + " or product with id: " + productId + " not found...", orderREST.addOrderREST(userId, productId).getBody());
 		assertEquals(HttpStatus.NOT_FOUND, orderREST.addOrderREST(userId, productId).getStatusCode());
+		
+		verify(orderService, times(2)).addOrder(userId, productId);
 	}
 	
 	@Test
@@ -107,13 +121,17 @@ public class OrderRESTTest {
 		Long userId = 6L;
 		Long productId = 6L;
 		OrderDTO orderDTO = new OrderDTO();
+		String message = "The order with id:" + null + ", user:" + null + ", product:" + null + ", deliveryDate:" + null + " is created or updated successfully.";
 		
 		when(orderService.addOrder(userId, productId)).thenReturn(orderDTO);
 		
+		assertEquals(message, orderREST.addOrderREST(userId, productId).getBody());
 		assertEquals(HttpStatus.CREATED, orderREST.addOrderREST(userId, productId).getStatusCode());
+		
+		verify(orderService, times(2)).addOrder(userId, productId);
 	}
-	
-	@Test
+    
+    @Test
     void testUpdateOrderRESTNullOrder() {
         NullPointerException npe = new NullPointerException("The order must be not null");
         
@@ -121,54 +139,72 @@ public class OrderRESTTest {
         
         assertEquals("The order must be not null", orderREST.updateOrderREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, orderREST.updateOrderREST(null).getStatusCode());
+        
+        verify(orderService, times(2)).updateOrder(null);
     }
     
     @Test
     void testUpdateOrderRESTEmptyOrder() {
         OrderDTO orderDTO = new OrderDTO();
-        NoSuchElementException nsee = new NoSuchElementException("error");
+        orderDTO.setId(1L);
+        NoSuchElementException nsee = new NoSuchElementException("Order with orderId: " + orderDTO.getId() + "not found...");
         
         when(orderService.updateOrder(orderDTO)).thenThrow(nsee);
 
-        assertNull(orderREST.updateOrderREST(orderDTO).getBody());
+        assertEquals("Order with orderId: " + orderDTO.getId() + "not found...", orderREST.updateOrderREST(orderDTO).getBody());
         assertEquals(HttpStatus.NOT_FOUND, orderREST.updateOrderREST(orderDTO).getStatusCode());
+        
+        verify(orderService, times(2)).updateOrder(orderDTO);
     }
     
     @Test
     void testUpdateOrderREST() {
         OrderDTO orderDTO = new OrderDTO();
-        String messagge = "update";
+        String messagge = "The order with id:" + null + ", user:" + null + ", product:" + null + ", deliveryDate:" + null + " is created or updated successfully.";
 
-        assertTrue(messagge.getClass().equals(orderREST.updateOrderREST(orderDTO).getBody().getClass()));
+        when(orderService.updateOrder(orderDTO)).thenReturn(orderDTO);
+		
+        assertEquals(messagge, orderREST.updateOrderREST(orderDTO).getBody());
         assertEquals(HttpStatus.OK, orderREST.updateOrderREST(orderDTO).getStatusCode());
+        
+        verify(orderService, times(2)).updateOrder(orderDTO);
     }
     
     @Test
     void testDeleteOrderRESTNullOrderId() {
-        NullPointerException npe = new NullPointerException("The orderId must be not null");
+        NullPointerException npe = new NullPointerException();
         
         when(orderService.deleteOrder(null)).thenThrow(npe);
         
         assertNull(orderREST.deleteOrderREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, orderREST.deleteOrderREST(null).getStatusCode());
+        
+        verify(orderService, times(2)).deleteOrder(null);
     }
     
     @Test
     void testDeleteOrderRESTEmptyOrder() {
         Long orderId = 1L;
-        NoSuchElementException nsee = new NoSuchElementException("error");
+        NoSuchElementException nsee = new NoSuchElementException();
         
         when(orderService.deleteOrder(orderId)).thenThrow(nsee);
         
         assertNull(orderREST.deleteOrderREST(orderId).getBody());
         assertEquals(HttpStatus.NOT_FOUND, orderREST.deleteOrderREST(orderId).getStatusCode());
+        
+        verify(orderService, times(2)).deleteOrder(orderId);
     }
         
     @Test
     void testDeleteOrderREST() {
         Long orderId = 6L;
+        String message = "The order with id:" + orderId + ", user:" + null + ", product:" + null + ", deliveryDate:" + null + " is deleted successfully.";
+        
+        when(orderService.deleteOrder(orderId)).thenReturn(message);
         
         assertNull(orderREST.deleteOrderREST(orderId).getBody());
         assertEquals(HttpStatus.NO_CONTENT, orderREST.deleteOrderREST(orderId).getStatusCode());
+        
+        verify(orderService, times(2)).deleteOrder(orderId);
     }
 }
