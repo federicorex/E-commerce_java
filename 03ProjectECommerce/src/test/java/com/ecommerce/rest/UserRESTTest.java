@@ -2,7 +2,8 @@ package com.ecommerce.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -44,10 +45,12 @@ public class UserRESTTest {
     void testGetAllUsersREST() {
     	List<UserDTO> userDTOList = new ArrayList<>();
     	
-    	when(userService.getAllUsers()).thenReturn(userDTOList);    	
+    	when(userService.getAllUsers()).thenReturn(userDTOList);	
     	
-    	assertTrue(userDTOList.getClass().equals(userREST.getAllUsersREST().getBody().getClass()));
+    	assertEquals(userDTOList, userREST.getAllUsersREST().getBody());
         assertEquals(HttpStatus.OK, userREST.getAllUsersREST().getStatusCode());
+        
+        verify(userService, times(2)).getAllUsers();
     }
     
     @Test
@@ -58,17 +61,21 @@ public class UserRESTTest {
         
         assertNull(userREST.getUserByIdREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, userREST.getUserByIdREST(null).getStatusCode());
+        
+        verify(userService, times(2)).getUserById(null);
     }
     
     @Test
     void testGetUserByIdRESTEmptyUser() {
         Long userId = 1L;
-        NoSuchElementException nsee = new NoSuchElementException("error");
+        NoSuchElementException nsee = new NoSuchElementException();
         
         when(userService.getUserById(userId)).thenThrow(nsee);
         
         assertNull(userREST.getUserByIdREST(userId).getBody());
         assertEquals(HttpStatus.NOT_FOUND, userREST.getUserByIdREST(userId).getStatusCode());
+        
+        verify(userService, times(2)).getUserById(userId);
     }
     
     @Test
@@ -78,8 +85,10 @@ public class UserRESTTest {
         
         when(userService.getUserById(userId)).thenReturn(userDTO);
         
-        assertTrue(userDTO.getClass().equals(userREST.getUserByIdREST(userId).getBody().getClass()));
+        assertEquals(userDTO, userREST.getUserByIdREST(userId).getBody());
         assertEquals(HttpStatus.OK, userREST.getUserByIdREST(userId).getStatusCode());
+        
+        verify(userService, times(2)).getUserById(userId);
     }
     
     @Test
@@ -90,6 +99,8 @@ public class UserRESTTest {
         
         assertEquals("The user must be not null", userREST.addUserREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, userREST.addUserREST(null).getStatusCode());
+        
+        verify(userService, times(2)).addUser(null);
     }
     
     @Test
@@ -101,15 +112,21 @@ public class UserRESTTest {
     	
     	assertEquals("You must be at least 18 years old", userREST.addUserREST(userDTO).getBody());
     	assertEquals(HttpStatus.BAD_REQUEST, userREST.addUserREST(userDTO).getStatusCode());
+    	
+    	verify(userService, times(2)).addUser(userDTO);
     }
     
     @Test
     void testAddUserREST() {
         UserDTO userDTO = new UserDTO();
-        String messagge = "creation";
+        String messagge = "The user with id:" + null + ", name:" + null + ", surname:" + null + ", dateOfBirth:" + null + ", address:" + null + ", email:" + null + ", orders:" + null + " is created or updated successfully.";
 
-        assertTrue(messagge.getClass().equals(userREST.addUserREST(userDTO).getBody().getClass()));
+        when(userService.addUser(userDTO)).thenReturn(userDTO);
+		
+        assertEquals(messagge, userREST.addUserREST(userDTO).getBody());
         assertEquals(HttpStatus.CREATED, userREST.addUserREST(userDTO).getStatusCode());
+        
+        verify(userService, times(2)).addUser(userDTO);
     }
     
     @Test
@@ -120,26 +137,35 @@ public class UserRESTTest {
         
         assertEquals("The user must be not null", userREST.updateUserREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, userREST.updateUserREST(null).getStatusCode());
+        
+        verify(userService, times(2)).updateUser(null);
     }
     
     @Test
     void testUpdateUserRESTEmptyUser() {
         UserDTO userDTO = new UserDTO();
-        NoSuchElementException nsee = new NoSuchElementException("error");
+        userDTO.setId(1L);
+        NoSuchElementException nsee = new NoSuchElementException("User with userId: " + userDTO.getId() + "not found...");
         
         when(userService.updateUser(userDTO)).thenThrow(nsee);
 
-        assertNull(userREST.updateUserREST(userDTO).getBody());
+        assertEquals("User with userId: " + userDTO.getId() + "not found...", userREST.updateUserREST(userDTO).getBody());
         assertEquals(HttpStatus.NOT_FOUND, userREST.updateUserREST(userDTO).getStatusCode());
+        
+        verify(userService, times(2)).updateUser(userDTO);
     }
     
     @Test
     void testUpdateUserREST() {
         UserDTO userDTO = new UserDTO();
-        String messagge = "update";
+        String messagge = "The user with id:" + null + ", name:" + null + ", surname:" + null + ", dateOfBirth:" + null + ", address:" + null + ", email:" + null + ", orders:" + null + " is created or updated successfully.";
+        
+        when(userService.updateUser(userDTO)).thenReturn(userDTO);
 
-        assertTrue(messagge.getClass().equals(userREST.updateUserREST(userDTO).getBody().getClass()));
+		assertEquals(messagge, userREST.updateUserREST(userDTO).getBody());
         assertEquals(HttpStatus.OK, userREST.updateUserREST(userDTO).getStatusCode());
+        
+        verify(userService, times(2)).updateUser(userDTO);
     }
     
     @Test
@@ -150,24 +176,33 @@ public class UserRESTTest {
         
         assertNull(userREST.deleteUserREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, userREST.deleteUserREST(null).getStatusCode());
+        
+        verify(userService, times(2)).deleteUser(null);
     }
     
     @Test
     void testDeleteUserRESTEmptyUser() {
         Long userId = 1L;
-        NoSuchElementException nsee = new NoSuchElementException("error");
+        NoSuchElementException nsee = new NoSuchElementException();
         
         when(userService.deleteUser(userId)).thenThrow(nsee);
         
         assertNull(userREST.deleteUserREST(userId).getBody());
         assertEquals(HttpStatus.NOT_FOUND, userREST.deleteUserREST(userId).getStatusCode());
+        
+        verify(userService, times(2)).deleteUser(userId);
     }
         
     @Test
     void testDeleteUserREST() {
         Long userId = 6L;
+        String message = "The user with id:" + userId + ", name:" + null + ", surname:" + null + ", dateOfBirth:" + null + ", address:" + null + ", email:" + null + ", orders:" + null + " is deleted successfully.";
+        
+        when(userService.deleteUser(userId)).thenReturn(message);
         
         assertNull(userREST.deleteUserREST(userId).getBody());
         assertEquals(HttpStatus.NO_CONTENT, userREST.deleteUserREST(userId).getStatusCode());
+        
+        verify(userService, times(2)).deleteUser(userId);
     }
 }

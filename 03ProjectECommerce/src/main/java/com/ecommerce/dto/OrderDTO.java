@@ -74,7 +74,7 @@ public class OrderDTO {
 	}
 
 	public String toStringOrderCreatedOrUpdated() {
-		return "The order with id:" + id + ", user:" + user + ", product:" + product + ", deliveryDate:" + deliveryDate + " is created or updated successfully";
+		return "The order with id:" + id + ", user:" + user + ", product:" + product + ", deliveryDate:" + deliveryDate + " is created or updated successfully.";
 	}
 	
 	public String toStringOrderDeleted() {

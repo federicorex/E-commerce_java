@@ -2,7 +2,8 @@ package com.ecommerce.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -43,10 +44,12 @@ public class ProductRESTTest {
     void testGetAllProductsREST() {
     	List<ProductDTO> productDTOList = new ArrayList<>();
     	
-    	when(productService.getAllProducts()).thenReturn(productDTOList);    	
+    	when(productService.getAllProducts()).thenReturn(productDTOList);	
     	
-    	assertTrue(productDTOList.getClass().equals(productREST.getAllProductsREST().getBody().getClass()));
+    	assertEquals(productDTOList, productREST.getAllProductsREST().getBody());
         assertEquals(HttpStatus.OK, productREST.getAllProductsREST().getStatusCode());
+        
+        verify(productService, times(2)).getAllProducts();
     }
     
     @Test
@@ -57,17 +60,21 @@ public class ProductRESTTest {
         
         assertNull(productREST.getProductByIdREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, productREST.getProductByIdREST(null).getStatusCode());
+        
+        verify(productService, times(2)).getProductById(null);
     }
     
     @Test
     void testGetProductByIdRESTEmptyProduct() {
         Long productId = 1L;
-        NoSuchElementException nsee = new NoSuchElementException("error");
+        NoSuchElementException nsee = new NoSuchElementException();
         
         when(productService.getProductById(productId)).thenThrow(nsee);
         
         assertNull(productREST.getProductByIdREST(productId).getBody());
         assertEquals(HttpStatus.NOT_FOUND, productREST.getProductByIdREST(productId).getStatusCode());
+        
+        verify(productService, times(2)).getProductById(productId);
     }
     
     @Test
@@ -77,8 +84,10 @@ public class ProductRESTTest {
         
         when(productService.getProductById(productId)).thenReturn(productDTO);
         
-        assertTrue(productDTO.getClass().equals(productREST.getProductByIdREST(productId).getBody().getClass()));
+        assertEquals(productDTO, productREST.getProductByIdREST(productId).getBody());
         assertEquals(HttpStatus.OK, productREST.getProductByIdREST(productId).getStatusCode());
+        
+        verify(productService, times(2)).getProductById(productId);
     }
     
     @Test
@@ -89,15 +98,21 @@ public class ProductRESTTest {
         
         assertEquals("The product must be not null", productREST.addProductREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, productREST.addProductREST(null).getStatusCode());
+        
+        verify(productService, times(2)).addProduct(null);
     }
     
     @Test
     void testAddProductREST() {
         ProductDTO productDTO = new ProductDTO();
-        String messagge = "creation";
+        String messagge = "The product with id:" + null + ", name:" + null + ", brand:" + null + ", type:" + null + ", quantityInStock:" + null + ", secondHand:" + null + ", orders:" + null + " is created or updated successfully.";
+        
+        when(productService.addProduct(productDTO)).thenReturn(productDTO);
 
-        assertTrue(messagge.getClass().equals(productREST.addProductREST(productDTO).getBody().getClass()));
+		assertEquals(messagge, productREST.addProductREST(productDTO).getBody());
         assertEquals(HttpStatus.CREATED, productREST.addProductREST(productDTO).getStatusCode());
+        
+        verify(productService, times(2)).addProduct(productDTO);
     }
     
     @Test
@@ -108,26 +123,35 @@ public class ProductRESTTest {
         
         assertEquals("The product must be not null", productREST.updateProductREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, productREST.updateProductREST(null).getStatusCode());
+        
+        verify(productService, times(2)).updateProduct(null);
     }
     
     @Test
     void testUpdateProductRESTEmptyProduct() {
         ProductDTO productDTO = new ProductDTO();
-        NoSuchElementException nsee = new NoSuchElementException("error");
+        productDTO.setId(1L);
+        NoSuchElementException nsee = new NoSuchElementException("Product with productId: " + productDTO.getId() + "not found...");
         
         when(productService.updateProduct(productDTO)).thenThrow(nsee);
 
-        assertNull(productREST.updateProductREST(productDTO).getBody());
+        assertEquals("Product with productId: " + productDTO.getId() + "not found...", productREST.updateProductREST(productDTO).getBody());
         assertEquals(HttpStatus.NOT_FOUND, productREST.updateProductREST(productDTO).getStatusCode());
+        
+        verify(productService, times(2)).updateProduct(productDTO);
     }
     
     @Test
     void testUpdateProductREST() {
         ProductDTO productDTO = new ProductDTO();
-        String messagge = "update";
+        String messagge = "The product with id:" + null + ", name:" + null + ", brand:" + null + ", type:" + null + ", quantityInStock:" + null + ", secondHand:" + null + ", orders:" + null + " is created or updated successfully.";
+        
+        when(productService.updateProduct(productDTO)).thenReturn(productDTO);
 
-        assertTrue(messagge.getClass().equals(productREST.updateProductREST(productDTO).getBody().getClass()));
+		assertEquals(messagge, productREST.updateProductREST(productDTO).getBody());
         assertEquals(HttpStatus.OK, productREST.updateProductREST(productDTO).getStatusCode());
+        
+        verify(productService, times(2)).updateProduct(productDTO);
     }
     
     @Test
@@ -138,24 +162,33 @@ public class ProductRESTTest {
         
         assertNull(productREST.deleteProductREST(null).getBody());
         assertEquals(HttpStatus.BAD_REQUEST, productREST.deleteProductREST(null).getStatusCode());
+        
+        verify(productService, times(2)).deleteProduct(null);
     }
     
     @Test
     void testDeleteProductRESTEmptyProduct() {
         Long productId = 1L;
-        NoSuchElementException nsee = new NoSuchElementException("error");
+        NoSuchElementException nsee = new NoSuchElementException();
         
         when(productService.deleteProduct(productId)).thenThrow(nsee);
         
         assertNull(productREST.deleteProductREST(productId).getBody());
         assertEquals(HttpStatus.NOT_FOUND, productREST.deleteProductREST(productId).getStatusCode());
+        
+        verify(productService, times(2)).deleteProduct(productId);
     }
         
     @Test
     void testDeleteProductREST() {
         Long productId = 6L;
+        String message = "The product with id:" + productId + ", name:" + null + ", brand:" + null + ", type:" + null + ", quantityInStock:" + null + ", secondHand:" + null + ", orders:" + null + " is deleted successfully.";
+        
+        when(productService.deleteProduct(productId)).thenReturn(message);
         
         assertNull(productREST.deleteProductREST(productId).getBody());
         assertEquals(HttpStatus.NO_CONTENT, productREST.deleteProductREST(productId).getStatusCode());
+        
+        verify(productService, times(2)).deleteProduct(productId);
     }
 }

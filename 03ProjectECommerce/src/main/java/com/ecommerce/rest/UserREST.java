@@ -66,7 +66,7 @@ public class UserREST {
 			
 			return new ResponseEntity<>(userDTO.toStringUserCreatedOrUpdated(), HttpStatus.OK);
 		} catch(NoSuchElementException noSuchElementException) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);								
+			return new ResponseEntity<>(noSuchElementException.getMessage(), HttpStatus.NOT_FOUND);								
 		} catch(NullPointerException nullPointerException) {
 			return new ResponseEntity<>(nullPointerException.getMessage(), HttpStatus.BAD_REQUEST);
 		}
