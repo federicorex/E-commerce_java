@@ -35,7 +35,7 @@ jobs:
       run: mvn -B package --file 03ProjectECommerce/pom.xml
     # Step 4: Run tests with Maven
     - name: Run tests
-      run: mvn test -f pom.xml
+      run: mvn test -f 03ProjectECommerce/pom.xml
       
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
